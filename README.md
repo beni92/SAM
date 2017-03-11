@@ -6,7 +6,7 @@ An educational Phalcon application divided into 2 parts:
 
 Latest stable [Docker](https://www.docker.com/)
 
-On Windows, the project must be under `C:\Users`
+On Windows, the project must be under `C:\Users`, eg `C:\Users\abc\PhpstormProjects\SAM`
 
 ## Getting started
 ```
@@ -46,7 +46,10 @@ docker-compose logs <service name>
 
 ## Cleanup
 ```
+# remove exited containers
 docker rm -v $(docker ps -a -q -f status=exited)
+
+# remove unused images
 docker rmi $(docker images -f "dangling=true" -q)
 ```
 
@@ -136,3 +139,12 @@ then restart the machine:
 ```
 docker-machine restart
 ```
+
+### Which Docker images are we using?
+
+* [library/mariadb](https://hub.docker.com/_/mariadb/)
+* [library/nginx](https://hub.docker.com/_/nginx/)
+* [amqamq/phalcon](https://hub.docker.com/r/amqamq/phalcon/)
+* [amqamq/webtools](https://hub.docker.com/r/amqamq/webtools/)
+
+All are based on `debian:jessie`. We will consider switching to [`alpine`](https://alpinelinux.org/) when `mariadb` gets an official support for it
