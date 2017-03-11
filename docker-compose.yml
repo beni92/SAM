@@ -1,0 +1,45 @@
+version: "2"
+
+services:
+
+  mariadb:
+    image: mariadb:10.1
+    restart: always
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=phalcon
+      - MYSQL_USER=phalcon
+      - MYSQL_PASSWORD=phalcon
+
+  nginx:
+    image: nginx:mainline
+    restart: always
+    ports:
+      - "1080:1080"
+      - "2080:2080"
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./client:/client
+      - ./server:/server
+
+  client:
+    image: amqamq/phalcon:7.0-fpm
+    restart: always
+    working_dir: /client
+    volumes:
+      - ./client:/client
+
+  server:
+    image: amqamq/phalcon:7.0-fpm
+    restart: always
+    working_dir: /server
+    volumes:
+      - ./server:/server
+
+volumes:
+  mysql:
+    driver: local

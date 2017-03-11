@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="1773d831-1944-4a29-af52-a16b9845b31a" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="409">
+                <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+                <folding />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".env" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.env">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="31" lean-forward="false" selection-start-line="0" selection-start-column="31" selection-end-line="0" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="docker-compose.yml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/docker-compose.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="871">
+              <caret line="42" column="12" lean-forward="true" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
+              <folding>
+                <marker date="1489240023627" expanded="true" signature="384:395" ph="1080:1080" />
+                <marker date="1489240023627" expanded="true" signature="420:526" ph="volumes: &lt;3 items&gt;" />
+                <marker date="1489240023627" expanded="true" signature="437:476" ph="./docker/…inx/conf.d" />
+                <marker date="1489240023627" expanded="true" signature="485:501" ph="./client:/client" />
+                <marker date="1489240023627" expanded="true" signature="530:673" ph="client: &lt;5 keys&gt;" />
+                <marker date="1489240023627" expanded="true" signature="549:559" ph="docker/php" />
+                <marker date="1489240023627" expanded="true" signature="571:590" ph="sam/phalcon:7.0-fpm" />
+                <marker date="1489240023627" expanded="true" signature="604:610" ph="always" />
+                <marker date="1489240023627" expanded="true" signature="628:635" ph="/client" />
+                <marker date="1489240023627" expanded="true" signature="640:673" ph="volumes: &lt;1 item&gt;" />
+                <marker date="1489240023627" expanded="true" signature="657:673" ph="./client:/client" />
+                <marker date="1489240023627" expanded="true" signature="677:820" ph="server: &lt;5 keys&gt;" />
+                <marker date="1489240023627" expanded="true" signature="696:706" ph="docker/php" />
+                <marker date="1489240023627" expanded="true" signature="718:737" ph="sam/phalcon:7.0-fpm" />
+                <marker date="1489240023627" expanded="true" signature="751:757" ph="always" />
+                <marker date="1489240023627" expanded="true" signature="775:782" ph="/server" />
+                <marker date="1489240023627" expanded="true" signature="787:820" ph="volumes: &lt;1 item&gt;" />
+                <marker date="1489240023627" expanded="true" signature="804:820" ph="./server:/server" />
+                <marker date="1489240023627" expanded="true" signature="822:857" ph="volumes: &lt;1 key&gt;" />
+                <marker date="1489240023627" expanded="true" signature="833:857" ph="mysql: &lt;1 key&gt;" />
+                <marker date="1489240023627" expanded="true" signature="852:857" ph="local" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$PROJECT_DIR$/docker-compose.yml" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1938" />
+    <option name="height" value="1048" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SAM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SAM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="RemoteServers" />
+  </component>
+  <component name="RunManager" selected="Docker Deployment.Unnamed">
+    <configuration default="true" type="docker-deploy" factoryName="Docker Deployment">
+      <method />
+    </configuration>
+    <configuration default="false" name="Unnamed" type="docker-deploy" factoryName="Docker Deployment" server-name="Docker">
+      <deployment type="docker-compose.yml" path="$PROJECT_DIR$/docker-compose.yml">
+        <settings>
+          <option name="JSONFilePath" value="" />
+          <option name="command" value="" />
+          <option name="entrypoint" value="" />
+          <option name="startBrowserSettings">
+            <browser url="http://192.168.99.100" />
+          </option>
+        </settings>
+      </deployment>
+      <method />
+    </configuration>
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="Docker Deployment.Unnamed" />
+    </list>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1773d831-1944-4a29-af52-a16b9845b31a" name="Default" comment="" />
+      <created>1489074301933</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1489074301933</updated>
+      <workItem from="1489074303781" duration="1277000" />
+      <workItem from="1489076339395" duration="52000" />
+      <workItem from="1489161114497" duration="2163000" />
+      <workItem from="1489237763156" duration="560000" />
+      <workItem from="1489238744395" duration="1078000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="5130000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17239584" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43139407" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="processedProjectFiles" value="true" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docker-compose.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="946">
+          <caret line="43" column="24" lean-forward="false" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+          <folding>
+            <marker date="1489240023627" expanded="true" signature="384:395" ph="1080:1080" />
+            <marker date="1489240023627" expanded="true" signature="420:526" ph="volumes: &lt;3 items&gt;" />
+            <marker date="1489240023627" expanded="true" signature="437:476" ph="./docker/…inx/conf.d" />
+            <marker date="1489240023627" expanded="true" signature="485:501" ph="./client:/client" />
+            <marker date="1489240023627" expanded="true" signature="530:673" ph="client: &lt;5 keys&gt;" />
+            <marker date="1489240023627" expanded="true" signature="549:559" ph="docker/php" />
+            <marker date="1489240023627" expanded="true" signature="571:590" ph="sam/phalcon:7.0-fpm" />
+            <marker date="1489240023627" expanded="true" signature="604:610" ph="always" />
+            <marker date="1489240023627" expanded="true" signature="628:635" ph="/client" />
+            <marker date="1489240023627" expanded="true" signature="640:673" ph="volumes: &lt;1 item&gt;" />
+            <marker date="1489240023627" expanded="true" signature="657:673" ph="./client:/client" />
+            <marker date="1489240023627" expanded="true" signature="677:820" ph="server: &lt;5 keys&gt;" />
+            <marker date="1489240023627" expanded="true" signature="696:706" ph="docker/php" />
+            <marker date="1489240023627" expanded="true" signature="718:737" ph="sam/phalcon:7.0-fpm" />
+            <marker date="1489240023627" expanded="true" signature="751:757" ph="always" />
+            <marker date="1489240023627" expanded="true" signature="775:782" ph="/server" />
+            <marker date="1489240023627" expanded="true" signature="787:820" ph="volumes: &lt;1 item&gt;" />
+            <marker date="1489240023627" expanded="true" signature="804:820" ph="./server:/server" />
+            <marker date="1489240023627" expanded="true" signature="822:857" ph="volumes: &lt;1 key&gt;" />
+            <marker date="1489240023627" expanded="true" signature="833:857" ph="mysql: &lt;1 key&gt;" />
+            <marker date="1489240023627" expanded="true" signature="852:857" ph="local" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="1650">
+            <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docker-compose.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1489240023627" expanded="true" signature="384:395" ph="1080:1080" />
+            <marker date="1489240023627" expanded="true" signature="420:526" ph="volumes: &lt;3 items&gt;" />
+            <marker date="1489240023627" expanded="true" signature="437:476" ph="./docker/…inx/conf.d" />
+            <marker date="1489240023627" expanded="true" signature="485:501" ph="./client:/client" />
+            <marker date="1489240023627" expanded="true" signature="530:673" ph="client: &lt;5 keys&gt;" />
+            <marker date="1489240023627" expanded="true" signature="549:559" ph="docker/php" />
+            <marker date="1489240023627" expanded="true" signature="571:590" ph="sam/phalcon:7.0-fpm" />
+            <marker date="1489240023627" expanded="true" signature="604:610" ph="always" />
+            <marker date="1489240023627" expanded="true" signature="628:635" ph="/client" />
+            <marker date="1489240023627" expanded="true" signature="640:673" ph="volumes: &lt;1 item&gt;" />
+            <marker date="1489240023627" expanded="true" signature="657:673" ph="./client:/client" />
+            <marker date="1489240023627" expanded="true" signature="677:820" ph="server: &lt;5 keys&gt;" />
+            <marker date="1489240023627" expanded="true" signature="696:706" ph="docker/php" />
+            <marker date="1489240023627" expanded="true" signature="718:737" ph="sam/phalcon:7.0-fpm" />
+            <marker date="1489240023627" expanded="true" signature="751:757" ph="always" />
+            <marker date="1489240023627" expanded="true" signature="775:782" ph="/server" />
+            <marker date="1489240023627" expanded="true" signature="787:820" ph="volumes: &lt;1 item&gt;" />
+            <marker date="1489240023627" expanded="true" signature="804:820" ph="./server:/server" />
+            <marker date="1489240023627" expanded="true" signature="822:857" ph="volumes: &lt;1 key&gt;" />
+            <marker date="1489240023627" expanded="true" signature="833:857" ph="mysql: &lt;1 key&gt;" />
+            <marker date="1489240023627" expanded="true" signature="852:857" ph="local" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="409">
+            <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="31" lean-forward="false" selection-start-line="0" selection-start-column="31" selection-end-line="0" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docker-compose.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="871">
+          <caret line="42" column="12" lean-forward="true" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
+          <folding>
+            <marker date="1489240023627" expanded="true" signature="384:395" ph="1080:1080" />
+            <marker date="1489240023627" expanded="true" signature="420:526" ph="volumes: &lt;3 items&gt;" />
+            <marker date="1489240023627" expanded="true" signature="437:476" ph="./docker/…inx/conf.d" />
+            <marker date="1489240023627" expanded="true" signature="485:501" ph="./client:/client" />
+            <marker date="1489240023627" expanded="true" signature="530:673" ph="client: &lt;5 keys&gt;" />
+            <marker date="1489240023627" expanded="true" signature="549:559" ph="docker/php" />
+            <marker date="1489240023627" expanded="true" signature="571:590" ph="sam/phalcon:7.0-fpm" />
+            <marker date="1489240023627" expanded="true" signature="604:610" ph="always" />
+            <marker date="1489240023627" expanded="true" signature="628:635" ph="/client" />
+            <marker date="1489240023627" expanded="true" signature="640:673" ph="volumes: &lt;1 item&gt;" />
+            <marker date="1489240023627" expanded="true" signature="657:673" ph="./client:/client" />
+            <marker date="1489240023627" expanded="true" signature="677:820" ph="server: &lt;5 keys&gt;" />
+            <marker date="1489240023627" expanded="true" signature="696:706" ph="docker/php" />
+            <marker date="1489240023627" expanded="true" signature="718:737" ph="sam/phalcon:7.0-fpm" />
+            <marker date="1489240023627" expanded="true" signature="751:757" ph="always" />
+            <marker date="1489240023627" expanded="true" signature="775:782" ph="/server" />
+            <marker date="1489240023627" expanded="true" signature="787:820" ph="volumes: &lt;1 item&gt;" />
+            <marker date="1489240023627" expanded="true" signature="804:820" ph="./server:/server" />
+            <marker date="1489240023627" expanded="true" signature="822:857" ph="volumes: &lt;1 key&gt;" />
+            <marker date="1489240023627" expanded="true" signature="833:857" ph="mysql: &lt;1 key&gt;" />
+            <marker date="1489240023627" expanded="true" signature="852:857" ph="local" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
