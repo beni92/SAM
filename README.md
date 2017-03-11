@@ -62,7 +62,7 @@ docker rmi $(docker images -f "dangling=true" -q)
 <docker machine ip>:1080
 
 # server
-<docker machine ip>:1080
+<docker machine ip>:2080
 ```
 
 The machine IP can be seen when launching Docker Quickstart or using:
