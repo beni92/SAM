@@ -131,22 +131,7 @@ docker run -it --rm debian:jessie /bin/bash
 
 ## Setting up PhpStorm
 
-1. Get PHP 7.0 locally:
-
-    Windows: download from [windows.php.net/download/](http://windows.php.net/download/) and unzip
-
-    Ubuntu Xenial:
-    ```
-    apt-get install php7.0
-    ```
-
-    OS X:
-    ```
-    brew tap homebrew/php
-    brew install php70
-    ```
-
-2. Clone Phalcon Devtools outside of SAM repository:
+1. Clone Phalcon Devtools outside of SAM repository:
     ```
     cd ~
     git clone https://github.com/phalcon/phalcon-devtools
@@ -155,9 +140,6 @@ docker run -it --rm debian:jessie /bin/bash
 3. In PhpStorm - File - Settings - Languages & Frameworks - PHP:
 
     PHP language level: 7
-
-    CLI Interpreter:  `<path to php>`  
-    eg `C:\php\7.0\php.exe`
 
     Include path: `<path to phalcon-devtools\ide\stubs>`  
     eg `C:\Users\abc\phalcon-devtools\ide\stubs`
