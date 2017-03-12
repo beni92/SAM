@@ -140,6 +140,13 @@ then restart the machine:
 docker-machine restart
 ```
 
+### `docker-compose` returns `invalid bind mount spec` in PhpStorm on Windows
+
+Workaround: set a user environment variable in Control panel:
+```
+COMPOSE_CONVERT_WINDOWS_PATHS=1
+```
+
 ### Which Docker images are we using?
 
 * [library/mariadb](https://hub.docker.com/_/mariadb/)
