@@ -1,6 +1,8 @@
+## SAM Bank
+
 An educational Phalcon application divided into 2 parts:
-- `server`
-- `client`
+- `server` (REST API)
+- `client` (web app)
 
 ## Requirements
 
@@ -15,36 +17,36 @@ cd SAM
 docker-compose up -d
 ```
 
-## Stopping
+### Stopping
 ```
 docker-compose stop
 ```
 
-## Removing
+### Removing
 ```
 docker-compose rm
 ```
 
-## Updating
+### Updating
 ```
 docker-compose pull
 ```
 
-## Status
+### Status
 ```
 docker ps
 
 docker-compose ps
 ```
 
-## Logs
+### Logs
 ```
 docker logs <container id>
 
 docker-compose logs <service name>
 ```
 
-## Cleanup
+### Cleanup
 ```
 # remove exited containers
 docker rm -v $(docker ps -a -q -f status=exited)
@@ -53,16 +55,18 @@ docker rm -v $(docker ps -a -q -f status=exited)
 docker rmi $(docker images -f "dangling=true" -q)
 ```
 
-## Accessing with Toolbox
+## Accessing
+
+### With Toolbox
 ```
 # mysql
 <docker machine ip>:13306
 
 # client
-<docker machine ip>:1080
+http://<docker machine ip>:1080
 
 # server
-<docker machine ip>:2080
+http://<docker machine ip>:2080
 ```
 
 The machine IP can be seen when launching Docker Quickstart or using:
@@ -70,54 +74,56 @@ The machine IP can be seen when launching Docker Quickstart or using:
 docker-machine env
 ```
 
-## Accessing with native Docker
+### With native Docker
 ```
 # mysql
 localhost:13306
 
 # client
-localhost:1080
+http://localhost:1080
 
 # server
-localhost:2080
+http://localhost:2080
 ```
 
-## Accessing from within containers
+### From within containers
 ```
 # mysql
 mariadb:3306
 
 # client
-nginx:1080
+http://nginx:1080
 
 # server
-nginx:2080
+http://nginx:2080
 ```
 
-## Phalcon CLI
+## Tools
+
+### Phalcon CLI
 ```
 cd client
 docker run -it --rm $(pwd):/client amqamq/phalcon phalcon
 ```
 
-## Composer
+### Composer
 ```
 cd client
 docker run -it --rm -v $(pwd):/client amqamq/phalcon composer
 ```
 
-## SASS
+### SASS
 ```
 cd client
 docker run -it --rm -v $(pwd):/client amqamq/webtools sass
 ```
 
-## Exploring container contents
+### Exploring container contents
 ```
 docker run -it --rm <volumes> <image> /bin/bash
 ```
 
-## A quick Debian VM for experiments
+### A quick Debian VM for experiments
 ```
 docker run -it --rm debian:jessie /bin/bash
 ```
@@ -140,14 +146,14 @@ then restart the machine:
 docker-machine restart
 ```
 
-### `docker-compose` returns `invalid bind mount spec` in PhpStorm on Windows
+#### `docker-compose` returns `invalid bind mount spec` in PhpStorm on Windows
 
 Workaround: set a user environment variable in Control panel:
 ```
 COMPOSE_CONVERT_WINDOWS_PATHS=1
 ```
 
-### Which Docker images are we using?
+#### Which Docker images are we using?
 
 * [library/mariadb](https://hub.docker.com/_/mariadb/)
 * [library/nginx](https://hub.docker.com/_/nginx/)
