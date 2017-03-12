@@ -1,8 +1,8 @@
 ## SAM Bank
 
 An educational Phalcon application divided into 2 parts:
-- `server` (REST API)
 - `client` (web app)
+- `server` (REST API)
 
 ## Requirements
 
@@ -29,6 +29,10 @@ docker-compose rm
 
 ### Updating
 ```
+# code
+git pull
+
+# containers
 docker-compose pull
 ```
 
@@ -102,20 +106,17 @@ http://nginx:2080
 
 ### Phalcon CLI
 ```
-cd client
-docker run -it --rm $(pwd):/client amqamq/phalcon phalcon
+docker run -it --rm -v $(pwd)/client:/client amqamq/phalcon phalcon
 ```
 
 ### Composer
 ```
-cd client
-docker run -it --rm -v $(pwd):/client amqamq/phalcon composer
+docker run -it --rm -v $(pwd)/client:/client amqamq/phalcon composer
 ```
 
-### SASS
+### Web tools
 ```
-cd client
-docker run -it --rm -v $(pwd):/client amqamq/webtools sass
+docker run -it --rm -v $(pwd)/client:/client amqamq/webtools [ruby|sass|node|npm|grunt]
 ```
 
 ### Exploring container contents
@@ -146,14 +147,14 @@ then restart the machine:
 docker-machine restart
 ```
 
-#### `docker-compose` returns `invalid bind mount spec` in PhpStorm on Windows
+### `docker-compose` returns `invalid bind mount spec` in PhpStorm on Windows
 
 Workaround: set a user environment variable in Control panel:
 ```
 COMPOSE_CONVERT_WINDOWS_PATHS=1
 ```
 
-#### Which Docker images are we using?
+### Which Docker images are we using?
 
 * [library/mariadb](https://hub.docker.com/_/mariadb/)
 * [library/nginx](https://hub.docker.com/_/nginx/)
