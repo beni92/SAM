@@ -131,7 +131,7 @@ docker run -it --rm debian:jessie /bin/bash
 
 ## Setting up PhpStorm
 
-1. Clone Phalcon Devtools outside of SAM repository:
+1. Clone Phalcon Devtools in your home directory:
     ```
     cd ~
     git clone https://github.com/phalcon/phalcon-devtools
@@ -141,7 +141,7 @@ docker run -it --rm debian:jessie /bin/bash
 
     PHP language level: 7
 
-    Include path: `<path to phalcon-devtools\ide\stubs>`  
+    Include path: `<home dir>\phalcon-devtools\ide\stubs`  
     eg `C:\Users\abc\phalcon-devtools\ide\stubs`
 
 ## FAQ
@@ -154,13 +154,13 @@ Most probably you have just upgraded the Toolbox or VirtualBox. A reboot should 
 
 - the IP is wrong. Make sure to use the one shown by Docker Quickstart
 - the shared folders are broken. Make sure that the mount in VirtualBox machine settings is exactly:
-```
-/c/Users C:\Users
-```
-then restart the machine:
-```
-docker-machine restart
-```
+    ```
+    /c/Users C:\Users
+    ```
+    then restart the machine:
+    ```
+    docker-machine restart
+    ```
 
 ### `docker-compose` returns `invalid bind mount spec` in PhpStorm on Windows
 
@@ -173,7 +173,7 @@ COMPOSE_CONVERT_WINDOWS_PATHS=1
 
 * [library/mariadb](https://hub.docker.com/_/mariadb/)
 * [library/nginx](https://hub.docker.com/_/nginx/)
-* [amqamq/phalcon](https://hub.docker.com/r/amqamq/phalcon/)
+* [amqamq/phalcon](https://hub.docker.com/r/amqamq/phalcon/) (extends [library/php](https://hub.docker.com/_/php/))
 * [amqamq/webtools](https://hub.docker.com/r/amqamq/webtools/)
 
 All are based on `debian:jessie`. We will consider switching to [`alpine`](https://alpinelinux.org/) when `mariadb` gets an official support for it
