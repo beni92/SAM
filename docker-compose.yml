@@ -29,14 +29,12 @@ services:
   client:
     image: amqamq/phalcon:7.0-fpm
     restart: always
-    working_dir: /client
     volumes:
       - ./client:/client
 
   server:
     image: amqamq/phalcon:7.0-fpm
     restart: always
-    working_dir: /server
     volumes:
       - ./server:/server
 
