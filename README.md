@@ -154,10 +154,13 @@ Most probably you have just upgraded the Toolbox or VirtualBox. A reboot should 
 
 - the IP is wrong. Make sure to use the one shown by Docker Quickstart
 - the shared folders are broken. Make sure that the mount in VirtualBox machine settings is exactly:
+
     ```
     /c/Users C:\Users
     ```
+
     then restart the machine:
+    
     ```
     docker-machine restart
     ```
