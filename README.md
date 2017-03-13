@@ -96,10 +96,10 @@ http://localhost:2080
 mariadb:3306
 
 # client
-http://nginx:1080
+http://client:80
 
 # server
-http://nginx:2080
+http://server:80
 ```
 
 ## Tools
@@ -160,7 +160,7 @@ Most probably you have just upgraded the Toolbox or VirtualBox. A reboot should 
     ```
 
     then restart the machine:
-    
+
     ```
     docker-machine restart
     ```
@@ -175,8 +175,7 @@ COMPOSE_CONVERT_WINDOWS_PATHS=1
 ### Which Docker images are we using?
 
 * [library/mariadb](https://hub.docker.com/_/mariadb/)
-* [library/nginx](https://hub.docker.com/_/nginx/)
-* [amqamq/phalcon](https://hub.docker.com/r/amqamq/phalcon/) (extends [library/php](https://hub.docker.com/_/php/))
+* [amqamq/phalcon](https://hub.docker.com/r/amqamq/phalcon/) (based on [library/php](https://hub.docker.com/_/php/) and [library/nginx](https://hub.docker.com/_/nginx/))
 * [amqamq/webtools](https://hub.docker.com/r/amqamq/webtools/)
 
 All are based on `debian:jessie`. We will consider switching to [`alpine`](https://alpinelinux.org/) when `mariadb` gets an official support for it
