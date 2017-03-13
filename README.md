@@ -1,5 +1,7 @@
 ## SAM Bank
 
+[![Travis](https://img.shields.io/travis/beni92/SAM.svg)](https://travis-ci.org/beni92/SAM) [![Codacy](https://img.shields.io/codacy/grade/f0bc608950d54c70940b970fe8046296.svg)](https://www.codacy.com/app/amq/SAM/dashboard)
+
 An educational Phalcon application divided into 2 parts:
 - `client` (web app)
 - `server` (REST API)
@@ -106,17 +108,17 @@ http://server:80
 
 ### Phalcon CLI
 ```
-docker run -it --rm -v $(pwd)/client:/client amqamq/phalcon phalcon
+docker run -it --rm -v $(pwd)/client:/app amqamq/phalcon phalcon
 ```
 
 ### Composer
 ```
-docker run -it --rm -v $(pwd)/client:/client amqamq/phalcon composer
+docker run -it --rm -v $(pwd)/client:/app amqamq/phalcon composer
 ```
 
 ### Web tools
 ```
-docker run -it --rm -v $(pwd)/client:/client amqamq/webtools [ruby|sass|node|npm|grunt]
+docker run -it --rm -v $(pwd)/client:/app amqamq/webtools [ruby|sass|node|npm|grunt|gulp|bower]
 ```
 
 ### Exploring container contents
