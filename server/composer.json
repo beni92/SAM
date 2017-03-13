@@ -1,0 +1,45 @@
+{
+    "name": "beni92/SAM-server",
+    "description": "An educational Phalcon REST API",
+    "version": "0.0.1",
+    "keywords": [
+        "phalcon",
+        "educational"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/beni92/SAM",
+    "authors" : [
+        {
+            "name" : "beni92",
+            "email" : "benpet92@gmail.com"
+        },
+        {
+            "name" : "amq",
+            "email" : "amq@users.noreply.github.com"
+        },
+        {
+            "name" : "ic15b089",
+            "email" : "ic15b089@users.noreply.github.com"
+        },
+        {
+            "name" : "yetisbey",
+            "email" : "yetisbey@users.noreply.github.com"
+        },
+        {
+            "name" : "ic15b006",
+            "email" : "ic15b006@users.noreply.github.com"
+        },
+        {
+            "name" : "amanf",
+            "email" : "amanf@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "ext-phalcon": ">=3.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0",
+        "techpivot/phalcon-ci-installer": "~1.0"
+    }
+}
