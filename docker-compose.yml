@@ -21,7 +21,7 @@ services:
     ports:
       - "1080:80"
     volumes:
-      - ./client:/var/www/html
+      - ./client:/app
 
   server:
     image: amqamq/phalcon:nginx
@@ -29,7 +29,7 @@ services:
     ports:
       - "2080:80"
     volumes:
-      - ./server:/var/www/html
+      - ./server:/app
 
 volumes:
   mysql:
