@@ -22,6 +22,7 @@ services:
       - "1080:80"
     volumes:
       - ./client:/app
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
 
   server:
     image: amqamq/phalcon:nginx
@@ -30,6 +31,7 @@ services:
       - "2080:80"
     volumes:
       - ./server:/app
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
 
 volumes:
   mysql:

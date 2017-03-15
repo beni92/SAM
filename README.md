@@ -146,6 +146,34 @@ docker run -it --rm debian:jessie /bin/bash
     Include path: `<home dir>\phalcon-devtools\ide\stubs`  
     eg `C:\Users\abc\phalcon-devtools\ide\stubs`
 
+## Using Xdebug
+
+1. Save the bookmarks for **start debugger** and **stop debugger** from [jetbrains.com/phpstorm/marklets/](https://www.jetbrains.com/phpstorm/marklets/)
+
+2. In PhpStorm in the top right corner, press **Start listening for PHP debug connections**
+
+3. Set some breakpoint
+
+4. Open the page with the brakepoint, click on the **start debugging** bookmark and reload the page
+
+5. PhpStorm window should become active and will ask you to accept an incoming connection, press **Accept**. Now you should see the variables in Debugger
+
+No extra configuration is required. Xdebug will accept any `remote_host`, `remote_port` and `idekey`
+
+## Changing PHP settings
+
+1. Edit `docker\php\php.ini`, by adding, for example:
+
+    ```
+    memory_limit = 256M
+    ```
+
+2. Restart `docker-compose`:
+
+    ```
+    docker-compose restart
+    ```
+
 ## FAQ
 
 ### Docker Quickstart returns errors
