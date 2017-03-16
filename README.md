@@ -8,7 +8,9 @@ An educational Phalcon application divided into 2 parts:
 
 ## Requirements
 
-Latest stable [Docker](https://www.docker.com/)
+[docker](https://www.docker.com/) >= 1.10.0
+
+[docker-compose](https://docs.docker.com/compose/) >= 1.6.0
 
 On Windows, the project must be under `C:\Users`, eg `C:\Users\abc\PhpstormProjects\SAM`
 
@@ -55,7 +57,7 @@ docker-compose logs <service name>
 ### Cleanup
 ```
 # remove exited containers
-docker rm -v $(docker ps -a -q -f status=exited)
+docker rm -v $(docker ps -f "status=exited" -q -a)
 
 # remove unused images
 docker rmi $(docker images -f "dangling=true" -q)
@@ -123,7 +125,12 @@ docker run -it --rm -v $(pwd)/client:/app amqamq/webtools [ruby|sass|node|npm|gr
 
 ### Exploring container contents
 ```
-docker run -it --rm <volumes> <image> /bin/bash
+docker run -it --rm -v $(pwd)/client:/app amqamq/phalcon:nginx /bin/bash
+```
+
+### Connecting to the same network
+```
+docker run -it --rm --network=$(docker network ls -f "name=sam_default" -q) debian:jessie /bin/bash
 ```
 
 ### A quick Debian VM for experiments
@@ -141,9 +148,9 @@ docker run -it --rm debian:jessie /bin/bash
 
 3. In PhpStorm - File - Settings - Languages & Frameworks - PHP:
 
-    PHP language level: 7
+    **PHP language level**: 7
 
-    Include path: `<home dir>\phalcon-devtools\ide\stubs`  
+    **Include path**: `<home dir>\phalcon-devtools\ide\stubs`  
     eg `C:\Users\abc\phalcon-devtools\ide\stubs`
 
 ## Using Xdebug
@@ -180,6 +187,14 @@ No extra configuration is required. Xdebug will accept any `remote_host`, `remot
 
 Most probably you have just upgraded the Toolbox or VirtualBox. A reboot should solve the problem
 
+### `docker-compose` returns `service 'version' doesn't have any configuration options`
+
+Make sure your `docker-compose` version is 1.6.0 or newer:
+
+```
+docker-compose --version
+```
+
 ### I can't access the web application
 
 - the IP is wrong. Make sure to use the one shown by Docker Quickstart
@@ -194,6 +209,15 @@ Most probably you have just upgraded the Toolbox or VirtualBox. A reboot should 
     ```
     docker-machine restart
     ```
+
+### Web application returns `compileFile ../cache [...] permission denied`
+
+Run on your local machine:
+
+```
+chmod 777 client/cache
+chmod 777 server/cache
+```
 
 ### `docker-compose` returns `invalid bind mount spec` in PhpStorm on Windows
 
