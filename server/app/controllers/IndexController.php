@@ -8,5 +8,21 @@ class IndexController extends ControllerBase
 
     }
 
+    public function authenticationAction() {
+
+    }
+
+    public function depotAction() {
+
+    }
+
+    public function searchAction() {
+
+    }
+
+    public function sellAction() {
+
+    }
+
 }
 

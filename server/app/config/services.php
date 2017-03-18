@@ -83,6 +83,13 @@ $di->setShared('modelsMetadata', function () {
     return new MetaDataAdapter();
 });
 
+$di->setShared('router', function() {
+    $router = new \Phalcon\Mvc\Router();
+    $router->setUriSource($router::URI_SOURCE_SERVER_REQUEST_URI);
+
+    return $router;
+});
+
 /**
  * Register the session flash service with the Twitter Bootstrap classes
  */
