@@ -10,7 +10,7 @@ services:
     volumes:
       - mysql:/var/lib/mysql
     env_file:
-      - .env
+      - dev.env
 
   client:
     image: amqamq/phalcon:nginx
@@ -19,9 +19,9 @@ services:
       - "1080:80"
     volumes:
       - ./client:/app
-      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./client/docker/php-dev.ini:/usr/local/etc/php/php.ini
     env_file:
-      - .env
+      - dev.env
 
   server:
     image: amqamq/phalcon:nginx
@@ -30,9 +30,9 @@ services:
       - "2080:80"
     volumes:
       - ./server:/app
-      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./server/docker/php-dev.ini:/usr/local/etc/php/php.ini
     env_file:
-      - .env
+      - dev.env
 
 volumes:
   mysql:

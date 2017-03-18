@@ -8,29 +8,29 @@ services:
     volumes:
       - mysql:/var/lib/mysql
     env_file:
-      - .env
+      - prod.env
 
   client:
-    build: ../client
-    image: sam101-client
+    build: ./client
+    image: amqamq/phalcon:sam-client
     restart: always
     environment:
-      - VIRTUAL_HOST=${CLIENT_HOST}
-      - LETSENCRYPT_HOST=${CLIENT_HOST}
-      - LETSENCRYPT_EMAIL=${CLIENT_EMAIL}
+      - VIRTUAL_HOST=client.sam101.amq.space
+      - LETSENCRYPT_HOST=client.sam101.amq.space
+      - LETSENCRYPT_EMAIL=amq@users.noreply.github.com
     env_file:
-      - .env
+      - prod.env
 
   server:
-    build: ../server
-    image: sam101-server
+    build: ./server
+    image: amqamq/phalcon:sam-server
     restart: always
     environment:
-      - VIRTUAL_HOST=${SERVER_HOST}
-      - LETSENCRYPT_HOST=${SERVER_HOST}
-      - LETSENCRYPT_EMAIL=${SERVER_EMAIL}
+      - VIRTUAL_HOST=server.sam101.amq.space
+      - LETSENCRYPT_HOST=server.sam101.amq.space
+      - LETSENCRYPT_EMAIL=amq@users.noreply.github.com
     env_file:
-      - .env
+      - prod.env
 
   nginx-proxy:
     image: jwilder/nginx-proxy
