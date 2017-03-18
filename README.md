@@ -165,11 +165,11 @@ docker run -it --rm debian:jessie /bin/bash
 
 5. PhpStorm window should become active and will ask you to accept an incoming connection, press **Accept**. Now you should see the variables in Debugger
 
-No extra configuration is required. Xdebug will accept any `remote_host`, `remote_port` and `idekey`
+No extra configuration is required. Xdebug expects *any* `remote_host`, *any* `idekey` and `remote_port=9000`
 
 ## Changing PHP settings
 
-1. Edit `docker\php\php.ini`, by adding, for example:
+1. Edit `client/docker/php-dev.ini`, by adding, for example:
 
     ```
     memory_limit = 256M
@@ -179,6 +179,42 @@ No extra configuration is required. Xdebug will accept any `remote_host`, `remot
 
     ```
     docker-compose restart
+    ```
+
+## Deploying to production
+
+1. Launch a Linux server with any provider
+
+2. Open ports `22, 80, 443, 2376, 2377, 7946, 7946, 4789`
+
+3. Provision Docker from your local machine:
+
+    ```
+    docker-machine create --driver=generic --generic-ip-address=1.2.3.4 --generic-ssh-key=key.pem --generic-ssh-user=user sam101
+    ```
+
+4. Check the available machines:
+
+    ```
+    docker-machine ls
+    ```
+
+5. Change you local environmental variables to reflect the remote machine:
+
+    ```
+    eval "$(docker-machine env sam101)"
+    ```
+
+6. Check what containers are running on the remote machine (should be none):
+
+    ```
+    docker ps
+    ```
+
+7. Deploy
+
+    ```
+    docker-compose -f docker-compose-prod.yml up -d
     ```
 
 ## FAQ
