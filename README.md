@@ -211,7 +211,9 @@ No extra configuration is required. Xdebug expects *any* `remote_host`, *any* `i
     docker ps
     ```
 
-7. Deploy
+7. Copy `prod.env.example` to `prod.env` and edit it accordingly
+
+8. Deploy
 
     ```
     docker-compose -f docker-compose-prod.yml up -d
