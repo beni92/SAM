@@ -12,7 +12,7 @@ services:
 
   client:
     build: ./client
-    image: amqamq/phalcon:sam-client
+    image: amqamq/sam101:client
     restart: always
     environment:
       - VIRTUAL_HOST=client.sam101.amq.space
@@ -23,7 +23,7 @@ services:
 
   server:
     build: ./server
-    image: amqamq/phalcon:sam-server
+    image: amqamq/sam101:server
     restart: always
     environment:
       - VIRTUAL_HOST=server.sam101.amq.space
@@ -55,8 +55,35 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
+  # optional
+  watchtower:
+    image: v2tec/watchtower
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: --interval 30
+
+  # optional
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    restart: always
+    ports:
+      - 9000:9000
+    environment:
+      - VIRTUAL_PORT=9000
+      - VIRTUAL_HOST=portainer.sam101.amq.space
+      - LETSENCRYPT_HOST=portainer.sam101.amq.space
+      - LETSENCRYPT_EMAIL=amq@users.noreply.github.com
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - portainer:/data
+
 volumes:
   mysql:
     driver: local
   certs:
+    driver: local
+  portainer:
     driver: local

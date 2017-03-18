@@ -219,6 +219,8 @@ No extra configuration is required. Xdebug expects *any* `remote_host`, *any* `i
     docker-compose -f docker-compose-prod.yml up -d
     ```
 
+The deployment includes `v2tec/watchtower` which automatically updates the containers on image pushes (handled by Travis)
+
 ## FAQ
 
 ### Docker Quickstart returns errors

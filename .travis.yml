@@ -1,8 +1,19 @@
 sudo: required
 
+env:
+  global:
+    - DOCKER_USER=amqamq
+    - secure: "laIjI0bkk0xUbxkq3pQL+aaaiztAFIyBCVcMYCKHFdazHPMZxLbPKZvXTB88bOfiTO54daGKpghCnL/29dIj9sLd3kLWjWyMcpB0RVnN6z0S4C8SLOVEQGeCKkrWJwhhkMpaKR8bt9poXSVP2NLyTY76KV9M/th3ArG1x/rIyS9fpRP2JgrB+SJwYEa8Ea4ptzfHA0W7nYVVZpdtQGWWUQ5nFT1R5lHvfaTKdfzNPfbRr4vtJO72RAuJPtqOm29bSwiAJr0QYY/ILkt+fklFyDAlvP5i0gY+DVRqMe4RWG3CA/K0OwZjODv/GIK2HXshFok5b0G0kKjBhjZXkUteTImIxjrdUGC0uQ/UurSBxSN5crwv0rEzppW82knUtmoyxbW9OfXHxFOD1ZZc0Ul2UmFvfNng5Ml96a/fOCW72t3cLbZnhXB+9H56RN1UmYIN+XU6V2uIMJTCwHdeBbEPaOgXM9Sjb/6kVLtql2LHTEl2W0m3fmhwXJ756XXiIGkLXRo7wWYtddDbiunkpGJwVXYCKYt57Y4iz06duuHY9SVMfdE3N4IX05laeL0eLZz1EtrJF7uuQRWPJ+xl+1puVZBE4zIssSLSbrV9tJ1WF9lwPhBmffeJHZAx2Z7ZeMDTpd5sWke9ddCLhdeSkXPQFUMBjzlXJ0YCvI2H4i+MQdA="
+
 services:
   - docker
 
 script:
+  # test dev deployemnt
   - docker-compose up -d
   - docker ps
+
+  # push new prod image
+  - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
+  - docker-compose -f docker-compose-prod.yml build
+  - docker-compose -f docker-compose-prod.yml push
