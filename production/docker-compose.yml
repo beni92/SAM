@@ -1,0 +1,62 @@
+version: "2"
+
+services:
+
+  mariadb:
+    image: mariadb:10.1
+    restart: always
+    volumes:
+      - mysql:/var/lib/mysql
+    env_file:
+      - .env
+
+  client:
+    build: ../client
+    image: sam101-client
+    restart: always
+    environment:
+      - VIRTUAL_HOST=${CLIENT_HOST}
+      - LETSENCRYPT_HOST=${CLIENT_HOST}
+      - LETSENCRYPT_EMAIL=${CLIENT_EMAIL}
+    env_file:
+      - .env
+
+  server:
+    build: ../server
+    image: sam101-server
+    restart: always
+    environment:
+      - VIRTUAL_HOST=${SERVER_HOST}
+      - LETSENCRYPT_HOST=${SERVER_HOST}
+      - LETSENCRYPT_EMAIL=${SERVER_EMAIL}
+    env_file:
+      - .env
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /etc/nginx/conf.d
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - certs:/etc/nginx/certs
+
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt-nginx-proxy-companion
+    restart: always
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+volumes:
+  mysql:
+    driver: local
+  certs:
+    driver: local
