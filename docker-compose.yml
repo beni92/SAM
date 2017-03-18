@@ -9,11 +9,8 @@ services:
       - "13306:3306"
     volumes:
       - mysql:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=phalcon
-      - MYSQL_USER=phalcon
-      - MYSQL_PASSWORD=phalcon
+    env_file:
+      - .env
 
   client:
     image: amqamq/phalcon:nginx
@@ -23,6 +20,8 @@ services:
     volumes:
       - ./client:/app
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    env_file:
+      - .env
 
   server:
     image: amqamq/phalcon:nginx
@@ -32,6 +31,8 @@ services:
     volumes:
       - ./server:/app
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    env_file:
+      - .env
 
 volumes:
   mysql:
