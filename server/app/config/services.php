@@ -12,7 +12,7 @@ use Phalcon\Flash\Direct as Flash;
  * Shared configuration service
  */
 $di->setShared('config', function () {
-    return new \Phalcon\Config\Adapter\Ini(APP_PATH . "/config/config.ini");
+    return include APP_PATH . "/config/config.php";
 });
 
 /**
