@@ -32,6 +32,15 @@ services:
     env_file:
       - prod.env
 
+  server-migration:
+    build: ./server
+    image: amqamq/sam101:server
+    command: phalcon migration run
+    env_file:
+      - prod.env
+    depends_on:
+      - mariadb
+
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
@@ -52,6 +61,14 @@ services:
     restart: always
     volumes_from:
       - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  # optional
+  gc:
+    image: spotify/docker-gc
+    container_name: gc
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
