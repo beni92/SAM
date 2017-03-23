@@ -12,8 +12,21 @@ services:
 
   traefik:
     image: traefik
+    container_name: traefik
     restart: always
-    command: --logLevel=DEBUG --web --docker --docker.exposedbydefault=false --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' --entryPoints='Name:https Address::443 TLS' --acme.entryPoint=https --acme.email=amq@users.noreply.github.com --acme.storage=acme.json --acme.ondemand=false --acme.onhostrule=true
+    command: |-
+      --logLevel=DEBUG
+      --entrypoints='Name:http Address::80'
+      --entrypoints='Name:https Address::443 TLS'
+      --web
+      --docker
+      --docker.exposedbydefault=false
+      --acme
+      --acme.entrypoint=https
+      --acme.email=amq@users.noreply.github.com
+      --acme.storage=acme.json
+      --acme.ondemand=false
+      --acme.onhostrule=true
     ports:
       - "80:80"
       - "443:443"
