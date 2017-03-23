@@ -10,53 +10,82 @@ services:
     env_file:
       - prod.env
 
+  traefik:
+    image: traefik
+    restart: always
+    command: --logLevel=DEBUG --web --docker --docker.exposedbydefault=false --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' --entryPoints='Name:https Address::443 TLS' --acme.entryPoint=https --acme.email=amq@users.noreply.github.com --acme.storage=acme.json --acme.ondemand=false --acme.onhostrule=true
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /dev/null:/traefik.toml
+      - acme:/etc/traefik/acme
+
   client:
     build: ./client
-    image: amqamq/phalcon:sam-client
+    image: amqamq/sam101:client
     restart: always
-    environment:
-      - VIRTUAL_HOST=client.sam101.amq.space
-      - LETSENCRYPT_HOST=client.sam101.amq.space
-      - LETSENCRYPT_EMAIL=amq@users.noreply.github.com
+    labels:
+      - "traefik.enable=true"
+      - "traefik.port=80"
+      - "traefik.backend=client"
+      - "traefik.frontend.rule=Host:client.sam101.amq.space"
+      - "traefik.frontend.entryPoints=http,https"
     env_file:
       - prod.env
 
   server:
     build: ./server
-    image: amqamq/phalcon:sam-server
+    image: amqamq/sam101:server
     restart: always
-    environment:
-      - VIRTUAL_HOST=server.sam101.amq.space
-      - LETSENCRYPT_HOST=server.sam101.amq.space
-      - LETSENCRYPT_EMAIL=amq@users.noreply.github.com
+    labels:
+      - "traefik.enable=true"
+      - "traefik.port=80"
+      - "traefik.backend=server"
+      - "traefik.frontend.rule=Host:server.sam101.amq.space"
+      - "traefik.frontend.entryPoints=http,https"
     env_file:
       - prod.env
 
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - /etc/nginx/conf.d
-      - /etc/nginx/vhost.d
-      - /usr/share/nginx/html
-      - certs:/etc/nginx/certs
+  server-migration:
+    build: ./server
+    image: amqamq/sam101:server
+    command: phalcon migration run
+    env_file:
+      - prod.env
+    depends_on:
+      - mariadb
 
-  letsencrypt-nginx-proxy-companion:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: letsencrypt-nginx-proxy-companion
+  # optional
+  watchtower:
+    image: v2tec/watchtower
+    container_name: watchtower
     restart: always
-    volumes_from:
-      - nginx-proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: --interval 30
+
+  # optional
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - portainer:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.port=9000"
+      - "traefik.backend=portainer"
+      - "traefik.frontend.rule=Host:portainer.sam101.amq.space"
+      - "traefik.frontend.entryPoints=http,https"
 
 volumes:
   mysql:
     driver: local
-  certs:
+  acme:
+    driver: local
+  portainer:
     driver: local

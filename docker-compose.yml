@@ -34,6 +34,17 @@ services:
     env_file:
       - dev.env
 
+  server-migration:
+    image: amqamq/phalcon:nginx
+    command: phalcon migration run
+    volumes:
+      - ./server:/app
+      - ./server/docker/php-dev.ini:/usr/local/etc/php/php.ini
+    env_file:
+      - dev.env
+    depends_on:
+      - mariadb
+
 volumes:
   mysql:
     driver: local

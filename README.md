@@ -38,6 +38,7 @@ git pull
 
 # containers
 docker-compose pull
+docker-compose up -d
 ```
 
 ### Status
@@ -56,11 +57,14 @@ docker-compose logs <service name>
 
 ### Cleanup
 ```
-# remove exited containers
+# exited containers
 docker rm -v $(docker ps -f "status=exited" -q -a)
 
-# remove unused images
+# unused images
 docker rmi $(docker images -f "dangling=true" -q)
+
+# unused volumes
+docker volume rm $(docker volume ls -f "dangling=true" -q)
 ```
 
 ## Accessing
@@ -161,7 +165,7 @@ docker run -it --rm debian:jessie /bin/bash
 
 3. Set some breakpoint
 
-4. Open the page with the brakepoint, click on the **start debugging** bookmark and reload the page
+4. Open the page with the breakpoint, click on the **start debugging** bookmark and reload the page
 
 5. PhpStorm window should become active and will ask you to accept an incoming connection, press **Accept**. Now you should see the variables in Debugger
 
@@ -218,6 +222,8 @@ No extra configuration is required. Xdebug expects *any* `remote_host`, *any* `i
     ```
     docker-compose -f docker-compose-prod.yml up -d
     ```
+
+The deployment includes `v2tec/watchtower` which automatically updates the containers on image pushes (handled by Travis)
 
 ## FAQ
 
