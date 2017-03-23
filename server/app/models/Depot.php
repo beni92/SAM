@@ -8,5 +8,25 @@
  */
 class Depot extends \Phalcon\Mvc\Model
 {
+    private $id;
+
+    /*
+     * This is a List of all the transactions made in this depot
+     */
+    private $transactions;
+
+    /*
+     * This is a list of all stocks in this depot
+     */
+    private $stocks;
+
+    private $value;
+
+    /*
+     * This is the customer who owns this depot
+     */
+    private $owner;
+
+
 
 }

@@ -7,6 +7,8 @@ use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Flash\Direct as Flash;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 
 /**
  * Shared configuration service
@@ -26,6 +28,18 @@ $di->setShared('url', function () {
 
     return $url;
 });
+
+
+$di->set('dispatcher', function() {
+    $eventsManager = new EventsManager();
+
+    $eventsManager->attach("dispatch:beforeDispatch", new SecurityPlugin());
+
+    $dispatcher = new MvcDispatcher();
+    $dispatcher->setEventsManager($eventsManager);
+    return $dispatcher;
+});
+
 
 /**
  * Setting up the view component

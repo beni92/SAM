@@ -8,5 +8,7 @@
  */
 class Stock extends \Phalcon\Mvc\Model
 {
+    private $id;
 
+    private $stockName;
 }

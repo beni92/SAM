@@ -5,6 +5,7 @@ class IndexController extends ControllerBase
 
     public function indexAction()
     {
+        $user = new User();
 
     }
 
