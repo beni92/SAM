@@ -112,34 +112,35 @@ http://server:80
 
 ## Tools
 
+### Console
+```
+docker exec -it sam_server_1 /bin/bash
+
+# for client use "sam_client_1"
+```
+
 ### Phalcon CLI
 ```
-docker run -it --rm -v $(pwd)/client:/app amqamq/phalcon phalcon
+docker exec -it sam_server_1 phalcon
 ```
 
 ### Composer
 ```
-docker run -it --rm -v $(pwd)/client:/app amqamq/phalcon composer
+docker exec -it sam_server_1 composer
 ```
 
 ### Web tools
 ```
-docker run -it --rm -v $(pwd)/client:/app amqamq/webtools [ruby|sass|node|npm|grunt|gulp|bower]
+docker run -it --rm -v $(pwd)/server:/app amqamq/webtools [ruby|sass|node|npm|grunt|gulp|bower]
 ```
 
-### Exploring container contents
+### A quick Debian for experiments, connected to the same network
 ```
-docker run -it --rm -v $(pwd)/client:/app amqamq/phalcon:nginx /bin/bash
-```
-
-### Connecting to the same network
-```
-docker run -it --rm --network=$(docker network ls -f "name=sam_default" -q) debian:jessie /bin/bash
-```
-
-### A quick Debian VM for experiments
-```
-docker run -it --rm debian:jessie /bin/bash
+docker run -it --rm \
+--network=$(docker network ls -f "name=sam_default" -q) \
+-v $(pwd)/server:/app \
+debian:jessie \
+/bin/bash
 ```
 
 ## Setting up PhpStorm
