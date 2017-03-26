@@ -171,6 +171,14 @@ docker run -it --rm debian:jessie /bin/bash
 
 No extra configuration is required. Xdebug expects *any* `remote_host`, *any* `idekey` and `remote_port=9000`
 
+## Adding PHP interpreter
+
+1. PhpStorm - File - Settings - Languages & Frameworks - PHP - CLI Interpreter
+
+2. Plus sign in the top left corner - Remote...
+
+3. Select Docker and set **Image name** to `amqamq/phalcon:nginx`
+
 ## Changing PHP settings
 
 1. Edit `client/docker/php-dev.ini`, by adding, for example:
