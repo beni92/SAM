@@ -33,7 +33,8 @@ $di->setShared('url', function () {
 $di->set('dispatcher', function() {
     $eventsManager = new EventsManager();
 
-    $eventsManager->attach("dispatch:beforeDispatch", new SecurityPlugin());
+    $eventsManager->attach("dispatch:beforeDispatch", new AuthenticationPlugin);
+    $eventsManager->attach("dispatch:beforeDispatch", new SecurityPlugin);
 
     $dispatcher = new MvcDispatcher();
     $dispatcher->setEventsManager($eventsManager);
@@ -100,6 +101,123 @@ $di->setShared('modelsMetadata', function () {
 $di->setShared('router', function() {
     $router = new \Phalcon\Mvc\Router();
     $router->setUriSource($router::URI_SOURCE_SERVER_REQUEST_URI);
+
+    /*
+     * add routes
+     */
+
+    /*
+     * Bank Controller
+     */
+    $router->addPost("/bank", array(
+        "controller" => "bank",
+        "action" => "post"
+    ));
+
+    $router->addGet("/bank/{id}", array(
+        "controller" => "bank",
+        "action" => "get"
+    ));
+
+    /*
+     * User Controller
+     */
+    $router->addPost("/user", array(
+        "controller" => "user",
+        "action" => "post"
+    ));
+
+    $router->addGet("/user/{id}", array(
+        "controller" => "user",
+        "action" => "get"
+    ));
+
+    /*
+     * User Controller
+     */
+    $router->addPost("/customer", array(
+        "controller" => "customer",
+        "action" => "post"
+    ));
+
+    $router->addGet("/customer/{id}", array(
+        "controller" => "customer",
+        "action" => "get"
+    ));
+
+    /*
+     * Employee Controller
+     */
+    $router->addPost("/employee", array(
+        "controller" => "employee",
+        "action" => "post"
+    ));
+
+    $router->addGet("/employee/{id}", array(
+        "controller" => "employee",
+        "action" => "get"
+    ));
+
+    /*
+     * Depot Controller
+     */
+    $router->addPost("/depot", array(
+        "controller" => "depot",
+        "action" => "post"
+    ));
+
+    $router->addGet("/depot/{id}", array(
+        "controller" => "depot",
+        "action" => "get"
+    ));
+
+    /*
+     * OwnedStock Controller
+     */
+    $router->addPost("/ownedstock", array(
+        "controller" => "ownedstock",
+        "action" => "post"
+    ));
+
+    $router->addGet("/ownedstock/{id}", array(
+        "controller" => "ownedstock",
+        "action" => "get"
+    ));
+
+    /*
+     * Stock Controller
+     */
+    $router->addPost("/stock", array(
+        "controller" => "stock",
+        "action" => "post"
+    ));
+
+    $router->addGet("/stock/{param}/{symbol}", array(
+        "controller" => "stock",
+        "action" => "get"
+    ));
+
+    $router->addGet("/stock/{param}", array(
+        "controller" => "stock",
+        "action" => "get"
+    ));
+    /*
+     * Transaction Controller
+     */
+    $router->addPost("/transaction", array(
+        "controller" => "transaction",
+        "action" => "post"
+    ));
+
+    $router->addGet("/transaction/{id}", array(
+        "controller" => "transaction",
+        "action" => "get"
+    ));
+
+    $router->addGet("/transaction/{param}/{amount}/{id}", array(
+        "controller" => "transaction",
+        "action" => "getParam"
+    ));
 
     return $router;
 });

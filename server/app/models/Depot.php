@@ -11,22 +11,112 @@ class Depot extends \Phalcon\Mvc\Model
     private $id;
 
     /*
-     * This is a List of all the transactions made in this depot
-     */
-    private $transactions;
-
-    /*
      * This is a list of all stocks in this depot
      */
-    private $stocks;
-
-    private $value;
+    private $OwnedStocks;
 
     /*
      * This is the customer who owns this depot
      */
-    private $owner;
+    private $customerId;
 
+    /*
+     * Each depot has a budget which can be set by the owner of the depot
+     */
+    private $budget;
+
+    public function initialize() {
+        $this->setSource("Depot");
+
+
+        $this->belongsTo(
+            "customerId",
+            "Customer",
+            "id"
+        );
+
+        $this->hasMany(
+            "stocks",
+            "OwnedStocks",
+            "id"
+        );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOwnedStocks()
+    {
+        return $this->OwnedStocks;
+    }
+
+    /**
+     * @param mixed $OwnedStocks
+     */
+    public function setOwnedStocks($OwnedStocks)
+    {
+        $this->OwnedStocks = $OwnedStocks;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * @param mixed $customerId
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBudget()
+    {
+        return $this->budget;
+    }
+
+    /**
+     * @param mixed $budget
+     */
+    public function setBudget($budget)
+    {
+        $this->budget = $budget;
+    }
+
+    public function changeBudget($difference) {
+        if($difference < 0 && $this->budget + $difference < 0) {
+            return false;
+        } else {
+            $this->budget += $difference;
+            if($this->save() === false){
+                return false;
+            }
+            return true;
+        }
+    }
 
 
 }

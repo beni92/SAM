@@ -5,25 +5,9 @@ class IndexController extends ControllerBase
 
     public function indexAction()
     {
-        $user = new User();
+        $pw = password_hash("sam101", PASSWORD_DEFAULT);
 
+        return true;
     }
-
-    public function authenticationAction() {
-
-    }
-
-    public function depotAction() {
-
-    }
-
-    public function searchAction() {
-
-    }
-
-    public function sellAction() {
-
-    }
-
 }
 

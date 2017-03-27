@@ -13,6 +13,8 @@ class Employee extends \Phalcon\Mvc\Model
     private $userId;
 
     public function initialize() {
+        $this->setSource("Employee");
+
         $this->hasOne(
             "userId",
             "user",

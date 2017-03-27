@@ -12,14 +12,16 @@ class Customer extends \Phalcon\Mvc\Model
 
     private $userId;
 
-    private $depotId;
+    private $depots;
 
     private $budget;
 
-    private $createdByUserId;
+    private $createdByEmployeeId;
 
 
     public function initialize() {
+        $this->setSource("Customer");
+
         $this->hasOne(
             "userId",
             "User",
@@ -27,7 +29,7 @@ class Customer extends \Phalcon\Mvc\Model
         );
 
         $this->hasMany(
-            "depotId",
+            "depots",
             "Depot",
             "id"
         );
@@ -67,17 +69,17 @@ class Customer extends \Phalcon\Mvc\Model
     /**
      * @return mixed
      */
-    public function getDepotId()
+    public function getDepots()
     {
-        return $this->depotId;
+        return $this->depots;
     }
 
     /**
-     * @param mixed $depotId
+     * @param mixed $depots
      */
-    public function setDepotId($depotId)
+    public function setDepots($depots)
     {
-        $this->depotId = $depotId;
+        $this->depots = $depots;
     }
 
     /**
@@ -99,17 +101,17 @@ class Customer extends \Phalcon\Mvc\Model
     /**
      * @return mixed
      */
-    public function getCreatedByUserId()
+    public function getCreatedByEmployeeId()
     {
-        return $this->createdByUserId;
+        return $this->createdByEmployeeId;
     }
 
     /**
-     * @param mixed $createdByUserId
+     * @param mixed $createdByEmployeeId
      */
-    public function setCreatedByUserId($createdByUserId)
+    public function setCreatedByEmployeeId($createdByEmployeeId)
     {
-        $this->createdByUserId = $createdByUserId;
+        $this->createdByEmployeeId = $createdByEmployeeId;
     }
 
 

@@ -15,6 +15,15 @@ return new \Phalcon\Config([
         'dbname'      => getenv('MYSQL_DATABASE'),
         'charset'     => 'utf8',
     ],
+    /*
+    'database' => [
+        'adapter'     => 'Mysql',
+        'host'        => "localhost:13306",
+        'username'    => "root",
+        'password'    => "root",
+        'dbname'      => "phalcon",
+        'charset'     => 'utf8',
+    ],*/
 
     'application' => [
         'appDir'         => APP_PATH . '/',

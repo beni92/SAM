@@ -20,7 +20,17 @@ class User extends \Phalcon\Mvc\Model
 
     private $phone;
 
+    private $bankId;
 
+    public function initialize() {
+        $this->setSource("User");
+
+        $this->hasOne(
+            "bankId",
+            "Bank",
+            "id"
+        );
+    }
 
     /**
      * @return mixed
@@ -134,8 +144,20 @@ class User extends \Phalcon\Mvc\Model
         $this->role = $role;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getBankId()
+    {
+        return $this->bankId;
+    }
 
-
-
+    /**
+     * @param mixed $bankId
+     */
+    public function setBankId($bankId)
+    {
+        $this->bankId = $bankId;
+    }
 
 }

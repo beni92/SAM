@@ -3,12 +3,11 @@
 /**
  * Created by PhpStorm.
  * User: www-data
- * Date: 18.03.17
- * Time: 13:59
+ * Date: 24.03.17
+ * Time: 09:47
  */
-class DepotController extends ControllerBase
+class OwnedStockController extends ControllerBase
 {
-
     public function getAction($id) {
 
     }
@@ -16,5 +15,4 @@ class DepotController extends ControllerBase
     public function postAction() {
 
     }
-
 }

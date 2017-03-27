@@ -8,41 +8,85 @@
  */
 class Transaction extends \Phalcon\Mvc\Model
 {
+    /**
+     * the id of the transaction
+     * @var
+     */
+
     private $id;
 
-    private $stock;
+    /**
+     * the Stock which is bought
+     * @var
+     */
+    private $stockSymbol;
 
-    private $amount;
+    /**
+     * how many stocks where bought
+     * @var
+     */
+    private $shares;
 
+    /**
+     * how much one share cost
+     * @var
+     */
     private $pricePerShare;
 
-    /*
-     * bought or sold
+    /**
+     * bought(0) or sold(1)
+     * @var
      */
     private $direction;
 
-    /*
-     * the customer who made the transaction
+    /**
+     * the user who made the transaction
+     * @var
      */
-    private $customer;
+    private $userId;
 
-    /*
-     * the employee who handled the transaction (optional)
+    /**
+     * the bank which is owner of the transaction
+     * @var
      */
-    private $employee;
+    private $bankId;
+
+    /**
+     * the depot from customer
+     * @var
+     */
+    private $depotId;
+
+
 
     public function initialize() {
+        $this->setSource("Transaction");
 
+        $this->hasOne(
+            "userId",
+            "User",
+            "id"
+        );
 
-        $this->hasOne("employee");
+        $this->hasOne(
+            "stockSymbol",
+            "Stock",
+            "symbol"
+        );
 
-        $this->hasOne("customer");
+        $this->belongsTo(
+            "bankId",
+            "Bank",
+            "id"
+        );
 
-        $this->hasOne("stock");
+        $this->belongsTo(
+            "depotId",
+            "Depot",
+            "id"
+        );
 
     }
-
-
 
     /**
      * @return mixed
@@ -63,33 +107,33 @@ class Transaction extends \Phalcon\Mvc\Model
     /**
      * @return mixed
      */
-    public function getStock()
+    public function getStockSymbol()
     {
-        return $this->stock;
+        return $this->stockSymbol;
     }
 
     /**
-     * @param mixed $stock
+     * @param mixed $stockSymbol
      */
-    public function setStock($stock)
+    public function setStockSymbol($stockSymbol)
     {
-        $this->stock = $stock;
+        $this->stockSymbol = $stockSymbol;
     }
 
     /**
      * @return mixed
      */
-    public function getAmount()
+    public function getShares()
     {
-        return $this->amount;
+        return $this->shares;
     }
 
     /**
-     * @param mixed $amount
+     * @param mixed $shares
      */
-    public function setAmount($amount)
+    public function setShares($shares)
     {
-        $this->amount = $amount;
+        $this->shares = $shares;
     }
 
     /**
@@ -127,36 +171,50 @@ class Transaction extends \Phalcon\Mvc\Model
     /**
      * @return mixed
      */
-    public function getCustomer()
+    public function getUserId()
     {
-        return $this->customer;
+        return $this->userId;
     }
 
     /**
-     * @param mixed $customer
+     * @param mixed $userId
      */
-    public function setCustomer($customer)
+    public function setUserId($userId)
     {
-        $this->customer = $customer;
+        $this->userId = $userId;
     }
 
     /**
      * @return mixed
      */
-    public function getEmployee()
+    public function getBankId()
     {
-        return $this->employee;
+        return $this->bankId;
     }
 
     /**
-     * @param mixed $employee
+     * @param mixed $bankId
      */
-    public function setEmployee($employee)
+    public function setBankId($bankId)
     {
-        $this->employee = $employee;
+        $this->bankId = $bankId;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDepotId()
+    {
+        return $this->depotId;
+    }
 
+    /**
+     * @param mixed $depotId
+     */
+    public function setDepotId($depotId)
+    {
+        $this->depotId = $depotId;
+    }
 
 
 }

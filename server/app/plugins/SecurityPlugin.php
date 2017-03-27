@@ -35,7 +35,7 @@ class SecurityPlugin extends Plugin
                     'Simple rights'
                 ),
                 'employee' => new Role(
-                    'Employee',
+                    'Employees',
                     'Extended rights'
                 )
             ];
@@ -43,13 +43,29 @@ class SecurityPlugin extends Plugin
                 $acl->addRole($role);
             }
 
-            $customerResources = array();
+            $customerResources = array(
+                'customer' => array("get"),
+                'depot' => array("get"),
+                'stock' => array("get"),
+                'ownedstock' => array("get"),
+                'transaction' => array("get"),
+                'user' => array("get")
+            );
 
             foreach ($customerResources as $resource => $actions) {
                 $acl->addResource(new Resource($resource), $actions);
             }
 
-            $employeeResources = array();
+            $employeeResources = array(
+                'customer' => array("get", "post"),
+                'depot' => array("get", "post"),
+                'stock' => array("get"),
+                'ownedstock' => array("get", "post"),
+                'transaction' => array("get"),
+                'user' => array("get", "post"),
+                'bank' => array("get", "post"),
+                'employee' => array("get", "post")
+            );
 
             foreach ($employeeResources as $resource => $actions) {
                 $acl->addResource(new Resource($resource), $actions);
@@ -73,7 +89,7 @@ class SecurityPlugin extends Plugin
                 }
 
                 //Grants Access for customerResources to customers and employees
-                if($role->getName() == 'Customers' || $role->getName() == 'Employee') {
+                if($role->getName() == 'Customers' || $role->getName() == 'Employees') {
                     foreach ($customerResources as $resource => $actions) {
                         foreach ($actions as $action){
                             $acl->allow($role->getName(), $resource, $action);
@@ -106,14 +122,15 @@ class SecurityPlugin extends Plugin
     public function beforeDispatch(Event $event, Dispatcher $dispatcher)
     {
         $auth = $this->session->get('auth');
-        if($auth->role == 'Customers') {
+        if(!$auth) {
+            $role = 'Guests';
+        } else if($auth['role'] == 'Customers') {
             $role = 'Customers';
-        } else if($auth->role == 'Employees') {
+        } else if($auth['role'] == 'Employees') {
             $role = 'Employees';
         } else {
             $role = 'Guests';
         }
-
         $controller = $dispatcher->getControllerName();
         $action = $dispatcher->getActionName();
         $acl = $this->getAcl();
@@ -131,7 +148,7 @@ class SecurityPlugin extends Plugin
                 'action'     => 'show401'
             ));*/
             $this->session->destroy();
-            return false;
+            return "error";
         }
     }
 }
