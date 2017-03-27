@@ -65,6 +65,8 @@ services:
       - "traefik.frontend.entryPoints=http,https"
     env_file:
       - prod.env
+    depends_on:
+      - server-migration
 
   server-migration:
     build: ./server
