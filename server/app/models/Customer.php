@@ -1,5 +1,6 @@
 <?php
 namespace Sam\Server\Models;
+use Sam\Server\Models\User;
 
 /**
  * Created by PhpStorm.
@@ -25,14 +26,16 @@ class Customer extends \Phalcon\Mvc\Model
 
         $this->hasOne(
             "userId",
-            "User",
-            "id"
+            "Sam\\Server\\Models\\User",
+            "id",
+            array("alias" => "User")
         );
 
         $this->hasMany(
             "depots",
-            "Depot",
-            "id"
+            "Sam\\Server\\Models\\Depot",
+            "id",
+            array("alias" => "Depot")
         );
     }
     /**

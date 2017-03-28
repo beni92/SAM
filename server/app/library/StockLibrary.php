@@ -30,6 +30,8 @@ class StockLibrary
     const WSDL = "http://edu.dedisys.org/ds-finance/ws/TradingService?wsdl";
 
 
+
+
     /**
      *
      *
@@ -41,7 +43,6 @@ class StockLibrary
      */
     public static function buy($symbol, $shares, $depotId, $auth) {
         $depot = Depot::findFirst(array("id = :id:", "bind" => array("id" => $depotId)));
-
         /*
          * checks
          * if the owner of the depot is logged in
@@ -49,15 +50,15 @@ class StockLibrary
          * if an employee who is from the same bank as the customer is logged in
          */
         if($depot && (
-                ($auth["role"] == "Customers" && $auth["user"]->id == $depot->getCustomerId()) ||
-                ($auth["role"] == "Employees" && $auth["user"]->user->getBankId() == $depot->customer->user->getBankId())
+                ($auth["role"] == "Customers" && $auth["user"]->getId() == $depot->getCustomerId()) ||
+                ($auth["role"] == "Employees" && $auth["user"]->User->getBankId() == $depot->Customer->User->getBankId())
             )) {
 
             /**
              * get the bank of the authenticated user
              * @var $bank Bank
              */
-            $bank = $auth["user"]->user->bank;
+            $bank = $auth["user"]->User->Bank;
             /**
              * gets the stock from the exchange
              * @var $stocks array
@@ -156,7 +157,7 @@ class StockLibrary
             $transaction->setShares($shares);
             $transaction->setDepotId($depotId);
             $transaction->setPricePerShare($boughtPrice);
-            $transaction->setBankId($auth["user"]->user->getBankId());
+            $transaction->setBankId($auth["user"]->User->getBankId());
             $transaction->setDirection(0);                          //direction for buy = 0
             $transaction->setUserId($auth["user"]->userId);
             /*
@@ -222,7 +223,7 @@ class StockLibrary
         /**
          * @var $depot Depot
          */
-        $depot = $ownedStock->depot;
+        $depot = $ownedStock->Depot;
         /*
          * checks
          * if the owner of the depot is logged in
@@ -230,13 +231,13 @@ class StockLibrary
          * if an employee who is from the same bank as the customer is logged in
          */
         if($depot && (
-                ($auth["role"] == "Customers" && $auth["user"]->id == $depot->getCustomerId()) ||
-                ($auth["role"] == "Employees" && $auth["user"]->user->getBankId() == $depot->customer->user->getBankId())
+                ($auth["role"] == "Customers" && $auth["user"]->getId() == $depot->getCustomerId()) ||
+                ($auth["role"] == "Employees" && $auth["user"]->User->getBankId() == $depot->Customer->User->getBankId())
             )) {
             /**
              * @var $bank Bank
              */
-            $bank = $auth->user->bank;
+            $bank = $auth->User->Bank;
 
             /*
              * if there are less shares in the owned stock then in the invoice
@@ -272,7 +273,7 @@ class StockLibrary
             $transaction->setPricePerShare($soldPrice);
             $transaction->setBankId($bank->getId());
             $transaction->setDirection(1);                          //direction for sell = 1
-            $transaction->setUserId($auth["user"]->userId);
+            $transaction->setUserId($auth["user"]->getUserId());
             /*
              * saves the transaction in the database
              */

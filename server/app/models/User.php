@@ -28,8 +28,9 @@ class User extends \Phalcon\Mvc\Model
 
         $this->hasOne(
             "bankId",
-            "Bank",
-            "id"
+            "\\Sam\\Server\\Models\\Bank",
+            "id",
+            array("alias" => "Bank")
         );
     }
 

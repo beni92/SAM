@@ -131,7 +131,7 @@ $di->setShared('router', function() {
         "action" => "post"
     ));
 
-    $router->addGet("/user/{id}", array(
+    $router->addGet("/user/{loginNr}", array(
         "controller" => "user",
         "action" => "get"
     ));

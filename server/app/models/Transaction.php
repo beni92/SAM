@@ -65,26 +65,30 @@ class Transaction extends \Phalcon\Mvc\Model
 
         $this->hasOne(
             "userId",
-            "User",
-            "id"
+            "Sam\\Server\\Models\\User",
+            "id",
+            array("alias" => "User")
         );
 
         $this->hasOne(
             "stockSymbol",
-            "Stock",
-            "symbol"
+            "Sam\\Server\\Models\\Stock",
+            "symbol",
+            array("alias" => "Stock")
         );
 
         $this->belongsTo(
             "bankId",
-            "Bank",
-            "id"
+            "Sam\\Server\\Models\\Bank",
+            "id",
+            array("alias" => "Bank")
         );
 
         $this->belongsTo(
             "depotId",
-            "Depot",
-            "id"
+            "Sam\\Server\\Models\\Depot",
+            "id",
+            array("alias" => "Depot")
         );
 
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Sam\Server\Models;
 
+use Sam\Server\Models\User;
 /**
  * Created by PhpStorm.
  * User: www-data
@@ -18,8 +19,9 @@ class Employee extends \Phalcon\Mvc\Model
 
         $this->hasOne(
             "userId",
-            "user",
-            "id"
+            "Sam\\Server\\Models\\User",
+            "id",
+            array("alias" => "User")
         );
     }
 

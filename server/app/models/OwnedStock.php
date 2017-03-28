@@ -24,14 +24,16 @@ class OwnedStock extends \Phalcon\Mvc\Model
 
         $this->hasOne(
             "stockSymbol",
-            "Stock",
-            "id"
+            "Sam\\Server\\Models\\Stock",
+            "id",
+            array("alias" => "Stock")
         );
 
         $this->belongsTo(
             "depotId",
-            "Depot",
-            "id"
+            "Sam\\Server\\Models\\Depot",
+            "id",
+            array("alias" => "Depot")
         );
     }
 

@@ -140,7 +140,7 @@ class SecurityPlugin extends Plugin
                 'controller' => 'errors',
                 'action'     => 'show404'
             ]);*/
-            return false;
+            return "hahaha";
         }
         $allowed = $acl->isAllowed($role, $controller, $action);
         if (!$allowed) {

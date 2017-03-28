@@ -26,8 +26,9 @@ class Bank extends \Phalcon\Mvc\Model
 
         $this->hasMany(
             "transactions",
-            "Transaction",
-            "id"
+            "Sam\\Server\\Models\\Transaction",
+            "id",
+            array("alias" => "Transaction")
         );
     }
 

@@ -32,14 +32,17 @@ class Depot extends \Phalcon\Mvc\Model
 
         $this->belongsTo(
             "customerId",
-            "Customer",
-            "id"
+            "Sam\\Server\\Models\\Customer",
+            "id",
+            array("alias" => "Customer")
+
         );
 
         $this->hasMany(
             "stocks",
-            "OwnedStocks",
-            "id"
+            "Sam\\Server\\Models\\OwnedStocks",
+            "id",
+            array("alias" => "OwnedStock")
         );
     }
 

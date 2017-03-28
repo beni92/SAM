@@ -3,6 +3,7 @@ namespace Sam\Server\Controllers;
 
 use Sam\Server\Models\Transaction;
 use Sam\Server\Models\Customer;
+use Sam\Server\Models\User;
 
 /**
  * Created by PhpStorm.
@@ -21,7 +22,8 @@ class TransactionController extends ControllerBase
             $auth = $this->session->get("auth");
             $customer = Customer::findFirst(array("id = :id:", "bind" => array("id" => $id)));
 
-            if(($auth["role"] == "Employees" && $auth["user"]->user->bankId == $customer->user->bankId) || $customer->getId() == $auth["user"]->getId()) {
+
+            if(($auth["role"] == "Employees" && $auth["user"]->User->bankId == $customer->User->bankId) || $customer->getId() == $auth["user"]->getId()) {
                 return json_encode(Transaction::find(array("userId = :id:",  "limit" => $amount, "bind" => array("id", $customer->getId()))));
             }
         }
