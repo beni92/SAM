@@ -1,4 +1,5 @@
 <?php
+namespace Sam\Server\Plugins;
 
 use Phalcon\Acl;
 use Phalcon\Acl\Role;

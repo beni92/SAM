@@ -1,4 +1,5 @@
 <?php
+namespace Sam\Server\Controllers;
 
 class IndexController extends ControllerBase
 {

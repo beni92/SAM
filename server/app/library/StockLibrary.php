@@ -1,4 +1,18 @@
 <?php
+namespace Sam\Server\Libraries;
+
+use Phalcon\Mvc\Model\TransactionInterface;
+use Sam\Server\Models\OwnedStock;
+use Sam\Server\Models\Depot;
+use Sam\Server\Models\Bank;
+use Sam\Server\Models\Customer;
+use Sam\Server\Models\Transaction;
+use Sam\Server\Models\User;
+use Sam\Server\Models\Stock;
+use Sam\Server\Models\Employee;
+
+
+
 
 use Phalcon\Mvc\Model\Transaction\Manager as TxManager;
 
@@ -19,10 +33,10 @@ class StockLibrary
     /**
      *
      *
-     * @param $symbol the symbol of the stock
-     * @param $shares how many shares the customer wants to buy
-     * @param $depotId the id of the depot in which the stock will be saved
-     * @param $auth the authentication of the session
+     * @param $symbol string the symbol of the stock
+     * @param $shares int how many shares the customer wants to buy
+     * @param $depotId int the id of the depot in which the stock will be saved
+     * @param $auth \stdClass the authentication of the session
      * @return bool|Transaction if an error happens false is returned else the transaction is returned
      */
     public static function buy($symbol, $shares, $depotId, $auth) {
@@ -46,17 +60,20 @@ class StockLibrary
             $bank = $auth["user"]->user->bank;
             /**
              * gets the stock from the exchange
-             * @var $stock Stock
+             * @var $stocks array
              */
-            $stock = self::getStocksBySymbols(array($symbol));
+            $stocks = self::getStocksBySymbols(array($symbol));
 
             /*
              * checks if the search for the stock was successful
              */
-            if(!$stock || count($stock) != 1) {
+            if(!$stocks || count($stocks) != 1) {
                 return false;
             }else {
-                $stock = $stock[0];
+                /**
+                 * @var $stock Stock
+                 */
+                $stock = $stocks[0];
             }
 
             /*
@@ -194,14 +211,14 @@ class StockLibrary
      * sells a part of the ownedstock given
      * @param $ownedStock OwnedStock the stock of which some shares shall be sold
      * @param $shares int the amount of shares to sell
-     * @param $auth stdClass the authentication of the logged in user
+     * @param $auth \stdClass the authentication of the logged in user
      * @return bool|Transaction
      */
     public static function sell($ownedStock, $shares, $auth) {
         /**
          * @var $symbol string the symbol of the stock to sell
          */
-        $symbol = $ownedStock->getSymbol();
+        $symbol = $ownedStock->getStockSymbol();
         /**
          * @var $depot Depot
          */
@@ -285,10 +302,10 @@ class StockLibrary
 
     /**
      * creates a soap client and returns it
-     * @return SoapClient SoapClient
+     * @return \SoapClient SoapClient
      */
     private static function getSoapClient() {
-        $client = new SoapClient(self::WSDL, [
+        $client = new \SoapClient(self::WSDL, [
             'login' => self::USER,
             'password' => self::PASS,
             'user_agent' => self::AGENT]);
@@ -296,7 +313,7 @@ class StockLibrary
     }
 
     /**
-     * @param $quotes stdClass is a stdClass with at least the following parameters:
+     * @param $quotes \stdClass is a stdClass with at least the following parameters:
      * symbol, companyName, floatShares, lastTradePrice, marketCapitalization, stockExchange, lastTradeTime
      * @return array
      */
@@ -349,8 +366,8 @@ class StockLibrary
 
     /**
      * creates a Stock and saves it in the db
-     * @param $quote the quote from the wsdl call
-     * @param $dbTransaction the open transaction in which this data set is saved to the db
+     * @param $quote \stdClass the quote from the wsdl call
+     * @param $dbTransaction TransactionInterface the open transaction in which this data set is saved to the db
      * @return Stock returns an instance of a Stock
      */
     private static function quoteToStock($quote, $dbTransaction) {
@@ -425,7 +442,7 @@ class StockLibrary
             $depot->setBudget($depot->getBudget() + ($soldPrice * $shares - $boughtPrice * $shares));
             $depot->save();
         } else {
-            $depot->changeBudget($soldPrice * shares);
+            $depot->changeBudget($soldPrice * $shares);
         }
     }
 

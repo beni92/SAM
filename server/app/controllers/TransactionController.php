@@ -1,4 +1,8 @@
 <?php
+namespace Sam\Server\Controllers;
+
+use Sam\Server\Models\Transaction;
+use Sam\Server\Models\Customer;
 
 /**
  * Created by PhpStorm.

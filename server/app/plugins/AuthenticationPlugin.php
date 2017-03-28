@@ -1,4 +1,9 @@
 <?php
+namespace Sam\Server\Plugins;
+
+use Sam\Server\Models\User;
+use Sam\Server\Models\Employee;
+use Sam\Server\Models\Customer;
 
 /**
  * Created by PhpStorm.
@@ -12,7 +17,7 @@ class AuthenticationPlugin extends \Phalcon\Mvc\User\Plugin
      *
      * this method is used to authenticate the user and return the authenticated user
      * @param $basicAuth array the basic authentication header from the request
-     * @return bool|static returns false when user not found or not authenticated if user authenticated returns the user
+     * @return bool|array returns false when user not found or not authenticated if user authenticated returns the user
      */
     private function authenticateUser($basicAuth=[]) {
 

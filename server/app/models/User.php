@@ -1,4 +1,5 @@
 <?php
+namespace Sam\Server\Models;
 
 /**
  * Created by PhpStorm.

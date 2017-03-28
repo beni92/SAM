@@ -1,5 +1,6 @@
 <?php
-
+use Sam\Server\Plugins\SecurityPlugin;
+use Sam\Server\Plugins\AuthenticationPlugin;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\Url as UrlResolver;
@@ -38,6 +39,9 @@ $di->set('dispatcher', function() {
 
     $dispatcher = new MvcDispatcher();
     $dispatcher->setEventsManager($eventsManager);
+
+    $dispatcher->setDefaultNamespace("Sam\\Server\\Controllers");
+
     return $dispatcher;
 });
 

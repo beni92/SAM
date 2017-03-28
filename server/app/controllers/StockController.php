@@ -1,5 +1,7 @@
 <?php
-
+namespace Sam\Server\Controllers;
+use Sam\Server\Libraries\StockLibrary;
+use Sam\Server\Models\OwnedStock;
 /**
  * Created by PhpStorm.
  * User: www-data

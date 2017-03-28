@@ -1,5 +1,7 @@
 <?php
+namespace Sam\Server\Controllers;
 
+use Sam\Server\Models\Bank;
 /**
  * Created by PhpStorm.
  * User: www-data

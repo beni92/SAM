@@ -1,4 +1,5 @@
 <?php
+namespace Sam\Server\Controllers;
 
 use Phalcon\Mvc\Controller;
 
