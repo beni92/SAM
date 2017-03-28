@@ -306,10 +306,14 @@ class StockLibrary
      * @return \SoapClient SoapClient
      */
     private static function getSoapClient() {
-        $client = new \SoapClient(self::WSDL, [
-            'login' => self::USER,
-            'password' => self::PASS,
-            'user_agent' => self::AGENT]);
+        $client = new \SoapClient(
+            self::WSDL,
+            [
+                'login' => self::USER,
+                'password' => self::PASS,
+                'user_agent' => self::AGENT
+            ]
+        );
         return $client;
     }
 
