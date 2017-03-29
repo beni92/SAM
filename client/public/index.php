@@ -40,3 +40,5 @@ try {
     echo $e->getMessage() . '<br>';
     echo '<pre>' . $e->getTraceAsString() . '</pre>';
 }
+
+echo "hi!";

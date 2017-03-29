@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 
 services:
 
@@ -13,12 +13,16 @@ services:
       - mysql:/var/lib/mysql
     env_file:
       - prod.env
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
   traefik:
     image: traefik
-    container_name: traefik
     restart: always
     command: |-
+      -c /dev/null
       --logLevel=DEBUG
       --entrypoints='Name:http Address::80'
       --entrypoints='Name:https Address::443 TLS'
@@ -37,7 +41,6 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /dev/null:/traefik.toml
       - acme:/etc/traefik/acme
 
   client:
@@ -80,7 +83,6 @@ services:
   # optional
   watchtower:
     image: v2tec/watchtower
-    container_name: watchtower
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -89,7 +91,6 @@ services:
   # optional
   portainer:
     image: portainer/portainer
-    container_name: portainer
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
