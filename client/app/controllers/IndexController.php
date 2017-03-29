@@ -1,4 +1,7 @@
 <?php
+namespace Sam\Client\Controllers;
+
+use Sam\Client\Plugins\RestPlugin;
 
 /**
  * Class IndexController
@@ -23,52 +26,28 @@ class IndexController extends ControllerBase
         $this->loadAssets();
     }
 
-    public function loginAction() {
-        if($this->preRequisits($forward = false)) {
-            $username = $this->request->getPost("username", ["trim", "string"]);
+    public function loginAction(){
+
+        if($this->request->isPost() && $this->security->checkToken()) {
+            $username = $this->request->getPost("username");
             $password = $this->request->getPost("password");
-
-            $passed = true;
-            $errorMessages = [];
-
-            if(!empty($username)) {
-    			if($this->request->getPost("username") != $username) {
-                    $passed = false;
-                    $errorMessages["username"] = "Username has wrong format!";
-                }else {
-                    if(strlen($username) > 255) {
-                        $passed = false;
-                        $errorMessages["username"] = "Username is too long!";
-                    } else {
-                        if(strlen(trim($username)) < 3) {
-                            $passed = false;
-                            $errorMessages["username"] = "Please enter a username which consists of at least 3 characters!";
-                        }
-                    }
-                }
-    		}
-
-            if(!empty($password)) {
-                if(strlen($password) < 6) {
-                    $passed = false;
-                    $errorMessages["password"] = "Your password must be at least 6 characters long!";
-                }
-            }
-
-            if($passed === true && count($errorMessages) == 0) {
-                $password = password_hash($password, PASSWORD_DEFAULT);
-                $res = User::login($username, $password);
-                if($res === true) {
-
-                } else {
-                    $this->view->message = $res;
-                }
+            /**
+             * @var $server RestPlugin
+             */
+            $server = $this->getDI()->get("server");
+            if($server->login($username, $password) === true) {
+                $this->dispatcher->forward(array(
+                    "controller" => "dashboard",
+                    "action" => "index"
+                ));
             } else {
-                $this->view->message = $errorMessages;
+                $this->dispatcher->forward(array(
+                    "controller" => "index",
+                    "action" => "index"
+                ));
             }
-
-
         }
     }
+
 }
 

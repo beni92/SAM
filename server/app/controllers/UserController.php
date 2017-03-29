@@ -13,14 +13,27 @@ use Sam\Server\Models\Employee;
  */
 class UserController extends ControllerBase
 {
-    public function getAction($loginNr) {
+    public function getAction($loginNr, $param = false) {
         $auth = $this->session->get("auth");
         $user = User::findFirst(array("loginNr = :lnr:", "bind" => array("lnr" => $loginNr)));
+
 
         if($user && $auth &&
             ($auth["role"] == "Customers" && $auth["user"]->user->getLoginNr() == $loginNr) ||
             ($auth["role"] == "Employees" && $auth["user"]->user->getBankId() ==  $user->getBankId())) {
-            return json_encode($user);
+            if($param) {
+                switch ($param) {
+                    case "role":
+                        $retId = $auth['role'] == "Customers" ? "customerId" : "employeeId";
+                        return json_encode(array("role"=>$auth["role"], $retId =>  $auth['user']->getId()));
+                        break;
+                    default:
+                        return json_encode(array("error"=>"wrong parameter"));
+                        break;
+                }
+            } else {
+                return json_encode($user);
+            }
         }
         else {
             if($auth === false || $auth["role"] != "Customers" || $auth["role"] != "Employees")
@@ -35,6 +48,8 @@ class UserController extends ControllerBase
             return json_encode(array("error" => "internal error"));
         }
     }
+
+
 
     public function postAction() {
 

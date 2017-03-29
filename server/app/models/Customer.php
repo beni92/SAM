@@ -35,7 +35,7 @@ class Customer extends \Phalcon\Mvc\Model
             "depots",
             "Sam\\Server\\Models\\Depot",
             "id",
-            array("alias" => "Depot")
+            array("alias" => "Depots")
         );
     }
     /**
@@ -73,7 +73,7 @@ class Customer extends \Phalcon\Mvc\Model
     /**
      * @return mixed
      */
-    public function getDepots()
+    public function getDepotList()
     {
         return $this->depots;
     }
@@ -81,7 +81,7 @@ class Customer extends \Phalcon\Mvc\Model
     /**
      * @param mixed $depots
      */
-    public function setDepots($depots)
+    public function setDepotList($depots)
     {
         $this->depots = $depots;
     }

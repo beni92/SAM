@@ -1,5 +1,8 @@
 <?php
 
+use Sam\Client\Plugins\SecurityPlugin as SecPlugin;
+use Sam\Client\Plugins\RestPlugin;
+
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\Url as UrlResolver;
@@ -14,10 +17,12 @@ use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 $di->set('dispatcher', function() {
     $eventsManager = new EventsManager();
 
-    $eventsManager->attach("dispatch:beforeExecuteRoute", new SecurityPlugin);
+    $eventsManager->attach("dispatch:beforeDispatch", new SecPlugin);
 
     $dispatcher = new MvcDispatcher();
     $dispatcher->setEventsManager($eventsManager);
+
+    $dispatcher->setDefaultNamespace("Sam\\Client\\Controllers");
     return $dispatcher;
 });
 
@@ -39,6 +44,18 @@ $di->setShared('url', function () {
     $url->setBaseUri($config->application->baseUri);
 
     return $url;
+});
+
+$di->setShared('server', function() {
+    $restPlugin = new RestPlugin;
+    return $restPlugin;
+});
+
+$di->setShared('router', function() {
+    $router = new \Phalcon\Mvc\Router();
+    $router->setUriSource($router::URI_SOURCE_SERVER_REQUEST_URI);
+
+    return $router;
 });
 
 /**

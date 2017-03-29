@@ -2,6 +2,8 @@
 namespace Sam\Server\Controllers;
 
 use Sam\Server\Models\Customer;
+use Sam\Server\Models\Depot;
+use Sam\Server\Models\OwnedStock;
 
 /**
  * Created by PhpStorm.
@@ -12,7 +14,9 @@ use Sam\Server\Models\Customer;
 class CustomerController extends ControllerBase
 {
     public function getAction($id) {
-        $ret = json_encode(Customer::findFirst(["id=:id:", 'bind' => ["id"=>$id]]));
+        $customer = Customer::findFirst(["id=:id:", 'bind' => ["id"=>$id]]);
+        $depots = Depot::find(array("customerId = :id:", "bind" => array("id" => $customer->getId())));
+        $ret = json_encode(array("return" => array($customer, $depots)));
         return $ret;
     }
 

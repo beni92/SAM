@@ -1,4 +1,5 @@
 <?php
+namespace Sam\Client\Controllers;
 
 /**
  * Created by PhpStorm.
@@ -10,14 +11,15 @@ class ErrorController extends ControllerBase
 {
 
     public function show404Action() {
-
+        $var = 1;
     }
 
     public function show401Action() {
-
+        $var = 1;
     }
 
     public function show500Action() {
+        $var = 1;
 
     }
 

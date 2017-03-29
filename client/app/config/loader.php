@@ -11,4 +11,14 @@ $loader->registerDirs(
         $config->application->modelsDir,
         $config->application->pluginsDir
     ]
-)->register();
+);
+
+$loader->registerNamespaces(
+    [
+        "Sam\\Client\\Controllers" => $config->application->controllersDir,
+        "Sam\\Client\\Models" => $config->application->modelsDir,
+        "Sam\\Client\\Plugins" => $config->application->pluginsDir
+    ]
+);
+
+$loader->register();

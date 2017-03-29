@@ -3,7 +3,7 @@
         <img src="" alt="logo" class="sign-logo">
     </div>
     <div class="sign-form">
-        {{ form() }}
+        {{ form("index/login", "method": "post") }}
         <div class="sign-form-group">
             <label for="username">Username</label>
             <div>

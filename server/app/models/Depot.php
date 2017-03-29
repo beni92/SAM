@@ -30,7 +30,7 @@ class Depot extends \Phalcon\Mvc\Model
         $this->setSource("Depot");
 
 
-        $this->belongsTo(
+        $this->hasOne(
             "customerId",
             "Sam\\Server\\Models\\Customer",
             "id",
@@ -42,7 +42,7 @@ class Depot extends \Phalcon\Mvc\Model
             "stocks",
             "Sam\\Server\\Models\\OwnedStocks",
             "id",
-            array("alias" => "OwnedStock")
+            array("alias" => "OwnedStocks")
         );
     }
 
@@ -65,7 +65,7 @@ class Depot extends \Phalcon\Mvc\Model
     /**
      * @return mixed
      */
-    public function getOwnedStocks()
+    public function getOwnedStocksList()
     {
         return $this->OwnedStocks;
     }
@@ -73,9 +73,9 @@ class Depot extends \Phalcon\Mvc\Model
     /**
      * @param mixed $OwnedStocks
      */
-    public function setOwnedStocks($OwnedStocks)
+    public function addOwnedStock($ownedStock)
     {
-        $this->OwnedStocks = $OwnedStocks;
+        $this->OwnedStocks[] = $ownedStock;
     }
 
     /**
