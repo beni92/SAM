@@ -9,9 +9,12 @@
 namespace Sam\Client\Controllers;
 
 
+use Sam\Client\Plugins\RestPlugin;
+
 class DashboardController extends ControllerBase
 {
     public function indexAction() {
+        $this->getDI()->get("server")->loadCustomerInfo();
         $this->view->user = $this->session->get("auth");
     }
 }

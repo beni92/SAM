@@ -59,6 +59,11 @@ class User
      */
     private $phone;
 
+    /**
+     * @var $extId int
+     */
+    private $extId;
+
 
     public function login($username, $password) {
         if(!empty($username) && !empty($password)) {
@@ -225,6 +230,22 @@ class User
     public function setPhone($phone)
     {
         $this->phone = $phone;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExtId()
+    {
+        return $this->extId;
+    }
+
+    /**
+     * @param int $extId
+     */
+    public function setExtId($extId)
+    {
+        $this->extId = $extId;
     }
 
 

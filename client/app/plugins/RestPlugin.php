@@ -53,15 +53,29 @@ class RestPlugin extends Plugin
     }
 
     public function login($loginName, $password) {
+        /*
+         * get the config
+         */
         $config = $this->di->get("config");
+
+        /*
+         * gets a user by its login name
+         */
         $res = self::callAPI("GET", "user/".$loginName, $loginName, $password);
 
+        /*
+         * if $res has a value transform the json of the answer to
+         * an stdClass object
+         */
         if($res) {
             $res = json_decode($res);
         } else {
             return false;
         }
 
+        /*
+         * check if error is set in the json object
+         */
         if(isset($res->error)) {
             return false;
         }
@@ -78,17 +92,48 @@ class RestPlugin extends Plugin
         $user->setId($res->id);
         $user->setPhone($res->phone);
 
+        /*
+         * request to get the role of the user
+         */
         $newRes = self::callAPI("GET", "user/".$loginName."/role", $loginName, $password);
+
+        /*
+         * if newres has no value or error is set
+         * return false
+         *
+         * else decode the json to a stdclass object
+         */
         if(!$newRes || isset($newRes->error)) {
             return false;
         } else {
             $newRes = json_decode($newRes);
         }
 
+        /*
+         * sets the role of the user
+         */
         $user->setRole($newRes->role);
+        $user->setExtId($newRes->extId);
+        /*
+         * sets the authentication of the session
+         */
+        $this->session->set("auth", $user);
+
+        return $this->loadCustomerInfo();
+    }
+
+    public function loadCustomerInfo() {
+        $config = $this->di->get("config");
+        /**
+         * @var $user User
+         */
+        $user = $this->session->get('auth');
+
+
         if($user->getRole() == $config->roles->customers) {
-            $cRes = self::callAPI("GET", "customer/".$newRes->customerId, $loginName, $password);
-            if(!$cRes || isset($cRes->error)) {
+            $cRes = self::callAPI("GET", "customer/" . $user->getExtId(), $user->getLoginName(), $user->getPassword());
+
+            if (!$cRes || isset($cRes->error)) {
                 return false;
             } else {
                 $cRes = json_decode($cRes);
@@ -100,10 +145,10 @@ class RestPlugin extends Plugin
                 $depot->setBudget($value->budget);
                 $user->addDepot($depot);
             }
+            $this->session->set("auth", $user);
+            return true;
         }
-        $this->session->set("auth", $user);
-
-        return true;
+        return false;
     }
 
 }
