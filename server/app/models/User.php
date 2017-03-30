@@ -23,6 +23,8 @@ class User extends \Phalcon\Mvc\Model
 
     private $bankId;
 
+    private $createdByEmployeeId;
+
     public function initialize() {
         $this->setSource("User");
 
@@ -31,6 +33,13 @@ class User extends \Phalcon\Mvc\Model
             "\\Sam\\Server\\Models\\Bank",
             "id",
             array("alias" => "Bank")
+        );
+
+        $this->hasOne(
+            "createdByEmployeeId",
+            "\\Sam\\Server\\Models\\Employee",
+            "id",
+            array("alias" => "createdBy")
         );
     }
 
@@ -133,22 +142,6 @@ class User extends \Phalcon\Mvc\Model
     /**
      * @return mixed
      */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
-     * @param mixed $role
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getBankId()
     {
         return $this->bankId;
@@ -160,6 +153,22 @@ class User extends \Phalcon\Mvc\Model
     public function setBankId($bankId)
     {
         $this->bankId = $bankId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedByEmployeeId()
+    {
+        return $this->createdByEmployeeId;
+    }
+
+    /**
+     * @param mixed $createdByEmployeeId
+     */
+    public function setCreatedByEmployeeId($createdByEmployeeId)
+    {
+        $this->createdByEmployeeId = $createdByEmployeeId;
     }
 
 }

@@ -18,9 +18,6 @@ class Customer extends \Phalcon\Mvc\Model
 
     private $budget;
 
-    private $createdByEmployeeId;
-
-
     public function initialize() {
         $this->setSource("Customer");
 
@@ -38,6 +35,7 @@ class Customer extends \Phalcon\Mvc\Model
             array("alias" => "Depots")
         );
     }
+
     /**
      * @return mixed
      */
@@ -101,25 +99,4 @@ class Customer extends \Phalcon\Mvc\Model
     {
         $this->budget = $budget;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedByEmployeeId()
-    {
-        return $this->createdByEmployeeId;
-    }
-
-    /**
-     * @param mixed $createdByEmployeeId
-     */
-    public function setCreatedByEmployeeId($createdByEmployeeId)
-    {
-        $this->createdByEmployeeId = $createdByEmployeeId;
-    }
-
-
-
-
-
 }

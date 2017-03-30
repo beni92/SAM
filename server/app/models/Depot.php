@@ -14,7 +14,7 @@ class Depot extends \Phalcon\Mvc\Model
     /*
      * This is a list of all stocks in this depot
      */
-    private $OwnedStocks;
+    private $ownedStocks;
 
     /*
      * This is the customer who owns this depot
@@ -39,8 +39,8 @@ class Depot extends \Phalcon\Mvc\Model
         );
 
         $this->hasMany(
-            "stocks",
-            "Sam\\Server\\Models\\OwnedStocks",
+            "ownedStocks",
+            "Sam\\Server\\Models\\OwnedStock",
             "id",
             array("alias" => "OwnedStocks")
         );
@@ -67,7 +67,7 @@ class Depot extends \Phalcon\Mvc\Model
      */
     public function getOwnedStocksList()
     {
-        return $this->OwnedStocks;
+        return $this->ownedStocks;
     }
 
     /**
@@ -75,7 +75,7 @@ class Depot extends \Phalcon\Mvc\Model
      */
     public function addOwnedStock($ownedStock)
     {
-        $this->OwnedStocks[] = $ownedStock;
+        $this->ownedStocks[] = $ownedStock;
     }
 
     /**
