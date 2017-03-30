@@ -2,6 +2,10 @@
     <div class="sign-header">
         <img src="" alt="logo" class="sign-logo">
     </div>
+
+    <div style="color:#00FF">
+        <h3> User Login </h3>
+    </div>
     <div class="sign-form">
         {{ form("index/login", "method": "post") }}
         <div class="sign-form-group">
