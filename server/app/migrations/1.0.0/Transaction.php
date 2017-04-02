@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class OwnedstockMigration_116
+ * Class TransactionMigration_100
  */
-class OwnedstockMigration_116 extends Migration
+class TransactionMigration_100 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class OwnedstockMigration_116 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('OwnedStock', [
+        $this->morphTable('Transaction', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,73 +30,100 @@ class OwnedstockMigration_116 extends Migration
                         ]
                     ),
                     new Column(
-                        'stockSymbol',
+                        'stockId',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
+                            'size' => 11,
                             'after' => 'id'
+                        ]
+                    ),
+                    new Column(
+                        'amoutn',
+                        [
+                            'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
+                            'size' => 11,
+                            'after' => 'stockId'
                         ]
                     ),
                     new Column(
                         'pricePerShare',
                         [
                             'type' => Column::TYPE_DECIMAL,
-                            'default' => "0",
                             'notNull' => true,
                             'size' => 10,
-                            'after' => 'stockSymbol'
+                            'after' => 'amoutn'
                         ]
                     ),
                     new Column(
-                        'shares',
+                        'direction',
                         [
                             'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 11,
+                            'size' => 1,
                             'after' => 'pricePerShare'
                         ]
                     ),
                     new Column(
-                        'depotId',
+                        'customerId',
                         [
                             'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
                             'size' => 11,
-                            'after' => 'shares'
+                            'after' => 'direction'
+                        ]
+                    ),
+                    new Column(
+                        'employeeId',
+                        [
+                            'type' => Column::TYPE_INTEGER,
+                            'size' => 11,
+                            'after' => 'customerId'
                         ]
                     )
                 ],
                 'indexes' => [
                     new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('fk_OwnedStock_1_idx', ['depotId'], null),
-                    new Index('fk_OwnedStock_2_idx', ['stockSymbol'], null)
+                    new Index('fk_Transaction_1_idx', ['customerId'], null),
+                    new Index('fk_Transaction_2_idx', ['employeeId'], null),
+                    new Index('fk_Transaction_3_idx', ['stockId'], null)
                 ],
                 'references' => [
                     new Reference(
-                        'fk_OwnedStock_1',
+                        'fk_Transaction_1',
                         [
-                            'referencedTable' => 'Depot',
-                            'columns' => ['depotId'],
+                            'referencedTable' => 'Customer',
+                            'columns' => ['customerId'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',
                             'onDelete' => 'RESTRICT'
                         ]
                     ),
                     new Reference(
-                        'fk_OwnedStock_2',
+                        'fk_Transaction_2',
+                        [
+                            'referencedTable' => 'Employee',
+                            'columns' => ['employeeId'],
+                            'referencedColumns' => ['id'],
+                            'onUpdate' => 'RESTRICT',
+                            'onDelete' => 'RESTRICT'
+                        ]
+                    ),
+                    new Reference(
+                        'fk_Transaction_3',
                         [
                             'referencedTable' => 'Stock',
-                            'columns' => ['stockSymbol'],
-                            'referencedColumns' => ['symbol'],
-                            'onUpdate' => 'NO ACTION',
-                            'onDelete' => 'NO ACTION'
+                            'columns' => ['stockId'],
+                            'referencedColumns' => ['id'],
+                            'onUpdate' => 'RESTRICT',
+                            'onDelete' => 'RESTRICT'
                         ]
                     )
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '4',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
                     'TABLE_COLLATION' => 'latin1_swedish_ci'
                 ],

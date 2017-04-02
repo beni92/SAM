@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class BankMigration_106
+ * Class EmployeeMigration_100
  */
-class BankMigration_106 extends Migration
+class EmployeeMigration_100 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class BankMigration_106 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('Bank', [
+        $this->morphTable('Employee', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,30 +30,34 @@ class BankMigration_106 extends Migration
                         ]
                     ),
                     new Column(
-                        'name',
+                        'userId',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
+                            'size' => 11,
                             'after' => 'id'
-                        ]
-                    ),
-                    new Column(
-                        'volume',
-                        [
-                            'type' => Column::TYPE_DECIMAL,
-                            'notNull' => true,
-                            'size' => 10,
-                            'after' => 'name'
                         ]
                     )
                 ],
                 'indexes' => [
-                    new Index('PRIMARY', ['id'], 'PRIMARY')
+                    new Index('PRIMARY', ['id'], 'PRIMARY'),
+                    new Index('userId_UNIQUE', ['userId'], 'UNIQUE')
+                ],
+                'references' => [
+                    new Reference(
+                        'fk_Employee_1',
+                        [
+                            'referencedTable' => 'User',
+                            'columns' => ['userId'],
+                            'referencedColumns' => ['id'],
+                            'onUpdate' => 'NO ACTION',
+                            'onDelete' => 'NO ACTION'
+                        ]
+                    )
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '1',
+                    'AUTO_INCREMENT' => '4',
                     'ENGINE' => 'InnoDB',
                     'TABLE_COLLATION' => 'latin1_swedish_ci'
                 ],

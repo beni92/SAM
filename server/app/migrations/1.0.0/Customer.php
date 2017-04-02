@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class EmployeeMigration_116
+ * Class CustomerMigration_100
  */
-class EmployeeMigration_116 extends Migration
+class CustomerMigration_100 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class EmployeeMigration_116 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('Employee', [
+        $this->morphTable('Customer', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,34 +30,54 @@ class EmployeeMigration_116 extends Migration
                         ]
                     ),
                     new Column(
+                        'budget',
+                        [
+                            'type' => Column::TYPE_DECIMAL,
+                            'default' => "0",
+                            'notNull' => true,
+                            'size' => 10,
+                            'after' => 'id'
+                        ]
+                    ),
+                    new Column(
+                        'createdByEmployeeId',
+                        [
+                            'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
+                            'size' => 11,
+                            'after' => 'budget'
+                        ]
+                    ),
+                    new Column(
                         'userId',
                         [
                             'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
                             'size' => 11,
-                            'after' => 'id'
+                            'after' => 'createdByEmployeeId'
                         ]
                     )
                 ],
                 'indexes' => [
                     new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('userId_UNIQUE', ['userId'], 'UNIQUE')
+                    new Index('userId_UNIQUE', ['userId'], 'UNIQUE'),
+                    new Index('fk_Customer_2_idx', ['createdByEmployeeId'], null)
                 ],
                 'references' => [
                     new Reference(
-                        'fk_Employee_1',
+                        'fk_Customer_2',
                         [
-                            'referencedTable' => 'User',
-                            'columns' => ['userId'],
+                            'referencedTable' => 'Employee',
+                            'columns' => ['createdByEmployeeId'],
                             'referencedColumns' => ['id'],
-                            'onUpdate' => 'NO ACTION',
-                            'onDelete' => 'NO ACTION'
+                            'onUpdate' => 'RESTRICT',
+                            'onDelete' => 'RESTRICT'
                         ]
                     )
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '7',
+                    'AUTO_INCREMENT' => '2',
                     'ENGINE' => 'InnoDB',
                     'TABLE_COLLATION' => 'latin1_swedish_ci'
                 ],

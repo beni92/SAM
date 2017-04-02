@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class StockMigration_116
+ * Class StockMigration_100
  */
-class StockMigration_116 extends Migration
+class StockMigration_100 extends Migration
 {
     /**
      * Define the table structure
@@ -20,11 +20,12 @@ class StockMigration_116 extends Migration
         $this->morphTable('Stock', [
                 'columns' => [
                     new Column(
-                        'symbol',
+                        'id',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
+                            'autoIncrement' => true,
+                            'size' => 11,
                             'first' => true
                         ]
                     ),
@@ -34,13 +35,14 @@ class StockMigration_116 extends Migration
                             'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
                             'size' => 255,
-                            'after' => 'symbol'
+                            'after' => 'id'
                         ]
                     ),
                     new Column(
                         'lastTradePrice',
                         [
                             'type' => Column::TYPE_DECIMAL,
+                            'notNull' => true,
                             'size' => 10,
                             'after' => 'companyName'
                         ]
@@ -49,6 +51,7 @@ class StockMigration_116 extends Migration
                         'lastTradeTime',
                         [
                             'type' => Column::TYPE_DATETIME,
+                            'notNull' => true,
                             'size' => 1,
                             'after' => 'lastTradePrice'
                         ]
@@ -63,28 +66,39 @@ class StockMigration_116 extends Migration
                         ]
                     ),
                     new Column(
+                        'symbol',
+                        [
+                            'type' => Column::TYPE_VARCHAR,
+                            'notNull' => true,
+                            'size' => 45,
+                            'after' => 'stockExchange'
+                        ]
+                    ),
+                    new Column(
                         'floatShares',
                         [
                             'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
                             'size' => 11,
-                            'after' => 'stockExchange'
+                            'after' => 'symbol'
                         ]
                     ),
                     new Column(
                         'marketCapitalization',
                         [
                             'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
                             'size' => 11,
                             'after' => 'floatShares'
                         ]
                     )
                 ],
                 'indexes' => [
-                    new Index('PRIMARY', ['symbol'], 'PRIMARY')
+                    new Index('PRIMARY', ['id'], 'PRIMARY')
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
                     'TABLE_COLLATION' => 'latin1_swedish_ci'
                 ],

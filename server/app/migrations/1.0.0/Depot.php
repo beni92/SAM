@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class DepotMigration_116
+ * Class DepotMigration_100
  */
-class DepotMigration_116 extends Migration
+class DepotMigration_100 extends Migration
 {
     /**
      * Define the table structure
@@ -66,7 +66,7 @@ class DepotMigration_116 extends Migration
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '4',
+                    'AUTO_INCREMENT' => '2',
                     'ENGINE' => 'InnoDB',
                     'TABLE_COLLATION' => 'latin1_swedish_ci'
                 ],
