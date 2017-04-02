@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class OwnedstockMigration_200
+ * Class DepotMigration_201
  */
-class OwnedstockMigration_200 extends Migration
+class DepotMigration_201 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class OwnedstockMigration_200 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('OwnedStock', [
+        $this->morphTable('Depot', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,53 +30,34 @@ class OwnedstockMigration_200 extends Migration
                         ]
                     ),
                     new Column(
-                        'stockSymbol',
+                        'customerId',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
+                            'size' => 11,
                             'after' => 'id'
                         ]
                     ),
                     new Column(
-                        'pricePerShare',
+                        'budget',
                         [
-                            'type' => Column::TYPE_DECIMAL,
-                            'default' => "0",
+                            'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
-                            'size' => 10,
-                            'after' => 'stockSymbol'
-                        ]
-                    ),
-                    new Column(
-                        'shares',
-                        [
-                            'type' => Column::TYPE_INTEGER,
-                            'notNull' => true,
-                            'size' => 11,
-                            'after' => 'pricePerShare'
-                        ]
-                    ),
-                    new Column(
-                        'depotId',
-                        [
-                            'type' => Column::TYPE_INTEGER,
-                            'notNull' => true,
-                            'size' => 11,
-                            'after' => 'shares'
+                            'size' => 45,
+                            'after' => 'customerId'
                         ]
                     )
                 ],
                 'indexes' => [
                     new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('fk_OwnedStock_1_idx', ['depotId'], null)
+                    new Index('fk_Depot_1_idx', ['customerId'], null)
                 ],
                 'references' => [
                     new Reference(
-                        'fk_OwnedStock_1',
+                        'fk_Depot_1',
                         [
-                            'referencedTable' => 'Depot',
-                            'columns' => ['depotId'],
+                            'referencedTable' => 'Customer',
+                            'columns' => ['customerId'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',
                             'onDelete' => 'RESTRICT'
@@ -87,7 +68,7 @@ class OwnedstockMigration_200 extends Migration
                     'TABLE_TYPE' => 'BASE TABLE',
                     'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
-                    'TABLE_COLLATION' => 'latin1_swedish_ci'
+                    'TABLE_COLLATION' => 'utf8mb4_general_ci'
                 ],
             ]
         );

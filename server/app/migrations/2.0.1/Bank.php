@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class BankMigration_200
+ * Class BankMigration_201
  */
-class BankMigration_200 extends Migration
+class BankMigration_201 extends Migration
 {
     /**
      * Define the table structure
@@ -53,9 +53,9 @@ class BankMigration_200 extends Migration
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '3',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
-                    'TABLE_COLLATION' => 'latin1_swedish_ci'
+                    'TABLE_COLLATION' => 'utf8mb4_general_ci'
                 ],
             ]
         );

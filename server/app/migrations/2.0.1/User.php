@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class UserMigration_200
+ * Class UserMigration_201
  */
-class UserMigration_200 extends Migration
+class UserMigration_201 extends Migration
 {
     /**
      * Define the table structure
@@ -80,9 +80,9 @@ class UserMigration_200 extends Migration
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '7',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
-                    'TABLE_COLLATION' => 'latin1_swedish_ci'
+                    'TABLE_COLLATION' => 'utf8mb4_general_ci'
                 ],
             ]
         );

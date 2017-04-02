@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class DepotMigration_200
+ * Class CustomerMigration_201
  */
-class DepotMigration_200 extends Migration
+class CustomerMigration_201 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class DepotMigration_200 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('Depot', [
+        $this->morphTable('Customer', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,34 +30,45 @@ class DepotMigration_200 extends Migration
                         ]
                     ),
                     new Column(
-                        'customerId',
+                        'budget',
                         [
-                            'type' => Column::TYPE_INTEGER,
+                            'type' => Column::TYPE_DECIMAL,
+                            'default' => "0",
                             'notNull' => true,
-                            'size' => 11,
+                            'size' => 10,
                             'after' => 'id'
                         ]
                     ),
                     new Column(
-                        'budget',
+                        'createdByEmployeeId',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
-                            'after' => 'customerId'
+                            'size' => 11,
+                            'after' => 'budget'
+                        ]
+                    ),
+                    new Column(
+                        'userId',
+                        [
+                            'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
+                            'size' => 11,
+                            'after' => 'createdByEmployeeId'
                         ]
                     )
                 ],
                 'indexes' => [
                     new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('fk_Depot_1_idx', ['customerId'], null)
+                    new Index('userId_UNIQUE', ['userId'], 'UNIQUE'),
+                    new Index('fk_Customer_2_idx', ['createdByEmployeeId'], null)
                 ],
                 'references' => [
                     new Reference(
-                        'fk_Depot_1',
+                        'fk_Customer_2',
                         [
-                            'referencedTable' => 'Customer',
-                            'columns' => ['customerId'],
+                            'referencedTable' => 'Employee',
+                            'columns' => ['createdByEmployeeId'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',
                             'onDelete' => 'RESTRICT'
@@ -66,9 +77,9 @@ class DepotMigration_200 extends Migration
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '2',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
-                    'TABLE_COLLATION' => 'latin1_swedish_ci'
+                    'TABLE_COLLATION' => 'utf8mb4_general_ci'
                 ],
             ]
         );
