@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class StockMigration_100
+ * Class OwnedstockMigration_200
  */
-class StockMigration_100 extends Migration
+class OwnedstockMigration_200 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class StockMigration_100 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('Stock', [
+        $this->morphTable('OwnedStock', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,71 +30,58 @@ class StockMigration_100 extends Migration
                         ]
                     ),
                     new Column(
-                        'companyName',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 255,
-                            'after' => 'id'
-                        ]
-                    ),
-                    new Column(
-                        'lastTradePrice',
-                        [
-                            'type' => Column::TYPE_DECIMAL,
-                            'notNull' => true,
-                            'size' => 10,
-                            'after' => 'companyName'
-                        ]
-                    ),
-                    new Column(
-                        'lastTradeTime',
-                        [
-                            'type' => Column::TYPE_DATETIME,
-                            'notNull' => true,
-                            'size' => 1,
-                            'after' => 'lastTradePrice'
-                        ]
-                    ),
-                    new Column(
-                        'stockExchange',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 255,
-                            'after' => 'lastTradeTime'
-                        ]
-                    ),
-                    new Column(
-                        'symbol',
+                        'stockSymbol',
                         [
                             'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
                             'size' => 45,
-                            'after' => 'stockExchange'
+                            'after' => 'id'
                         ]
                     ),
                     new Column(
-                        'floatShares',
+                        'pricePerShare',
+                        [
+                            'type' => Column::TYPE_DECIMAL,
+                            'default' => "0",
+                            'notNull' => true,
+                            'size' => 10,
+                            'after' => 'stockSymbol'
+                        ]
+                    ),
+                    new Column(
+                        'shares',
                         [
                             'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
                             'size' => 11,
-                            'after' => 'symbol'
+                            'after' => 'pricePerShare'
                         ]
                     ),
                     new Column(
-                        'marketCapitalization',
+                        'depotId',
                         [
                             'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
                             'size' => 11,
-                            'after' => 'floatShares'
+                            'after' => 'shares'
                         ]
                     )
                 ],
                 'indexes' => [
-                    new Index('PRIMARY', ['id'], 'PRIMARY')
+                    new Index('PRIMARY', ['id'], 'PRIMARY'),
+                    new Index('fk_OwnedStock_1_idx', ['depotId'], null)
+                ],
+                'references' => [
+                    new Reference(
+                        'fk_OwnedStock_1',
+                        [
+                            'referencedTable' => 'Depot',
+                            'columns' => ['depotId'],
+                            'referencedColumns' => ['id'],
+                            'onUpdate' => 'RESTRICT',
+                            'onDelete' => 'RESTRICT'
+                        ]
+                    )
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',

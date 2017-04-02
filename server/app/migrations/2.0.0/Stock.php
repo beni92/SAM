@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class UserMigration_100
+ * Class StockMigration_200
  */
-class UserMigration_100 extends Migration
+class StockMigration_200 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class UserMigration_100 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('User', [
+        $this->morphTable('Stock', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,57 +30,75 @@ class UserMigration_100 extends Migration
                         ]
                     ),
                     new Column(
-                        'loginNr',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 45,
-                            'after' => 'id'
-                        ]
-                    ),
-                    new Column(
-                        'firstname',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 45,
-                            'after' => 'loginNr'
-                        ]
-                    ),
-                    new Column(
-                        'lastname',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 45,
-                            'after' => 'firstname'
-                        ]
-                    ),
-                    new Column(
-                        'password',
+                        'companyName',
                         [
                             'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
                             'size' => 255,
-                            'after' => 'lastname'
+                            'after' => 'id'
                         ]
                     ),
                     new Column(
-                        'phone',
+                        'lastTradePrice',
+                        [
+                            'type' => Column::TYPE_DECIMAL,
+                            'notNull' => true,
+                            'size' => 10,
+                            'after' => 'companyName'
+                        ]
+                    ),
+                    new Column(
+                        'lastTradeTime',
+                        [
+                            'type' => Column::TYPE_DATETIME,
+                            'notNull' => true,
+                            'size' => 1,
+                            'after' => 'lastTradePrice'
+                        ]
+                    ),
+                    new Column(
+                        'stockExchange',
                         [
                             'type' => Column::TYPE_VARCHAR,
+                            'notNull' => true,
+                            'size' => 255,
+                            'after' => 'lastTradeTime'
+                        ]
+                    ),
+                    new Column(
+                        'symbol',
+                        [
+                            'type' => Column::TYPE_VARCHAR,
+                            'notNull' => true,
                             'size' => 45,
-                            'after' => 'password'
+                            'after' => 'stockExchange'
+                        ]
+                    ),
+                    new Column(
+                        'floatShares',
+                        [
+                            'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
+                            'size' => 11,
+                            'after' => 'symbol'
+                        ]
+                    ),
+                    new Column(
+                        'marketCapitalization',
+                        [
+                            'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
+                            'size' => 11,
+                            'after' => 'floatShares'
                         ]
                     )
                 ],
                 'indexes' => [
-                    new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('loginNr_UNIQUE', ['loginNr'], 'UNIQUE')
+                    new Index('PRIMARY', ['id'], 'PRIMARY')
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '7',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
                     'TABLE_COLLATION' => 'latin1_swedish_ci'
                 ],

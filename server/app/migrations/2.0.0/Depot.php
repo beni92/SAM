@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class BankMigration_100
+ * Class DepotMigration_200
  */
-class BankMigration_100 extends Migration
+class DepotMigration_200 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class BankMigration_100 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('Bank', [
+        $this->morphTable('Depot', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,30 +30,43 @@ class BankMigration_100 extends Migration
                         ]
                     ),
                     new Column(
-                        'name',
+                        'customerId',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
+                            'size' => 11,
                             'after' => 'id'
                         ]
                     ),
                     new Column(
-                        'volume',
+                        'budget',
                         [
-                            'type' => Column::TYPE_DECIMAL,
+                            'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
-                            'size' => 10,
-                            'after' => 'name'
+                            'size' => 45,
+                            'after' => 'customerId'
                         ]
                     )
                 ],
                 'indexes' => [
-                    new Index('PRIMARY', ['id'], 'PRIMARY')
+                    new Index('PRIMARY', ['id'], 'PRIMARY'),
+                    new Index('fk_Depot_1_idx', ['customerId'], null)
+                ],
+                'references' => [
+                    new Reference(
+                        'fk_Depot_1',
+                        [
+                            'referencedTable' => 'Customer',
+                            'columns' => ['customerId'],
+                            'referencedColumns' => ['id'],
+                            'onUpdate' => 'RESTRICT',
+                            'onDelete' => 'RESTRICT'
+                        ]
+                    )
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '3',
+                    'AUTO_INCREMENT' => '2',
                     'ENGINE' => 'InnoDB',
                     'TABLE_COLLATION' => 'latin1_swedish_ci'
                 ],

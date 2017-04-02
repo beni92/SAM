@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class DepotMigration_100
+ * Class CustomerMigration_200
  */
-class DepotMigration_100 extends Migration
+class CustomerMigration_200 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class DepotMigration_100 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('Depot', [
+        $this->morphTable('Customer', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,34 +30,45 @@ class DepotMigration_100 extends Migration
                         ]
                     ),
                     new Column(
-                        'customerId',
+                        'budget',
                         [
-                            'type' => Column::TYPE_INTEGER,
+                            'type' => Column::TYPE_DECIMAL,
+                            'default' => "0",
                             'notNull' => true,
-                            'size' => 11,
+                            'size' => 10,
                             'after' => 'id'
                         ]
                     ),
                     new Column(
-                        'budget',
+                        'createdByEmployeeId',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
-                            'after' => 'customerId'
+                            'size' => 11,
+                            'after' => 'budget'
+                        ]
+                    ),
+                    new Column(
+                        'userId',
+                        [
+                            'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
+                            'size' => 11,
+                            'after' => 'createdByEmployeeId'
                         ]
                     )
                 ],
                 'indexes' => [
                     new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('fk_Depot_1_idx', ['customerId'], null)
+                    new Index('userId_UNIQUE', ['userId'], 'UNIQUE'),
+                    new Index('fk_Customer_2_idx', ['createdByEmployeeId'], null)
                 ],
                 'references' => [
                     new Reference(
-                        'fk_Depot_1',
+                        'fk_Customer_2',
                         [
-                            'referencedTable' => 'Customer',
-                            'columns' => ['customerId'],
+                            'referencedTable' => 'Employee',
+                            'columns' => ['createdByEmployeeId'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',
                             'onDelete' => 'RESTRICT'

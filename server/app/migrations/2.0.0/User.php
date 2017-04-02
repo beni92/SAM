@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class OwnedstockMigration_100
+ * Class UserMigration_200
  */
-class OwnedstockMigration_100 extends Migration
+class UserMigration_200 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class OwnedstockMigration_100 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('OwnedStock', [
+        $this->morphTable('User', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,7 +30,7 @@ class OwnedstockMigration_100 extends Migration
                         ]
                     ),
                     new Column(
-                        'stockSymbol',
+                        'loginNr',
                         [
                             'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
@@ -39,53 +39,48 @@ class OwnedstockMigration_100 extends Migration
                         ]
                     ),
                     new Column(
-                        'pricePerShare',
+                        'firstname',
                         [
-                            'type' => Column::TYPE_DECIMAL,
-                            'default' => "0",
+                            'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
-                            'size' => 10,
-                            'after' => 'stockSymbol'
+                            'size' => 45,
+                            'after' => 'loginNr'
                         ]
                     ),
                     new Column(
-                        'shares',
+                        'lastname',
                         [
-                            'type' => Column::TYPE_INTEGER,
+                            'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
-                            'size' => 11,
-                            'after' => 'pricePerShare'
+                            'size' => 45,
+                            'after' => 'firstname'
                         ]
                     ),
                     new Column(
-                        'depotId',
+                        'password',
                         [
-                            'type' => Column::TYPE_INTEGER,
+                            'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
-                            'size' => 11,
-                            'after' => 'shares'
+                            'size' => 255,
+                            'after' => 'lastname'
+                        ]
+                    ),
+                    new Column(
+                        'phone',
+                        [
+                            'type' => Column::TYPE_VARCHAR,
+                            'size' => 45,
+                            'after' => 'password'
                         ]
                     )
                 ],
                 'indexes' => [
                     new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('fk_OwnedStock_1_idx', ['depotId'], null)
-                ],
-                'references' => [
-                    new Reference(
-                        'fk_OwnedStock_1',
-                        [
-                            'referencedTable' => 'Depot',
-                            'columns' => ['depotId'],
-                            'referencedColumns' => ['id'],
-                            'onUpdate' => 'RESTRICT',
-                            'onDelete' => 'RESTRICT'
-                        ]
-                    )
+                    new Index('loginNr_UNIQUE', ['loginNr'], 'UNIQUE')
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '1',
+                    'AUTO_INCREMENT' => '7',
                     'ENGINE' => 'InnoDB',
                     'TABLE_COLLATION' => 'latin1_swedish_ci'
                 ],
