@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class StockMigration_106
+ * Class CustomerMigration_201
  */
-class StockMigration_106 extends Migration
+class CustomerMigration_201 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class StockMigration_106 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('Stock', [
+        $this->morphTable('Customer', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,77 +30,56 @@ class StockMigration_106 extends Migration
                         ]
                     ),
                     new Column(
-                        'companyName',
+                        'budget',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_DECIMAL,
+                            'default' => "0",
                             'notNull' => true,
-                            'size' => 255,
+                            'size' => 10,
                             'after' => 'id'
                         ]
                     ),
                     new Column(
-                        'lastTradePrice',
-                        [
-                            'type' => Column::TYPE_DECIMAL,
-                            'notNull' => true,
-                            'size' => 10,
-                            'after' => 'companyName'
-                        ]
-                    ),
-                    new Column(
-                        'lastTradeTime',
-                        [
-                            'type' => Column::TYPE_DATETIME,
-                            'notNull' => true,
-                            'size' => 1,
-                            'after' => 'lastTradePrice'
-                        ]
-                    ),
-                    new Column(
-                        'stockExchange',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 255,
-                            'after' => 'lastTradeTime'
-                        ]
-                    ),
-                    new Column(
-                        'symbol',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 45,
-                            'after' => 'stockExchange'
-                        ]
-                    ),
-                    new Column(
-                        'floatShares',
+                        'createdByEmployeeId',
                         [
                             'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
                             'size' => 11,
-                            'after' => 'symbol'
+                            'after' => 'budget'
                         ]
                     ),
                     new Column(
-                        'marketCapitalization',
+                        'userId',
                         [
                             'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
                             'size' => 11,
-                            'after' => 'floatShares'
+                            'after' => 'createdByEmployeeId'
                         ]
                     )
                 ],
                 'indexes' => [
-                    new Index('PRIMARY', ['id'], 'PRIMARY')
+                    new Index('PRIMARY', ['id'], 'PRIMARY'),
+                    new Index('userId_UNIQUE', ['userId'], 'UNIQUE'),
+                    new Index('fk_Customer_2_idx', ['createdByEmployeeId'], null)
+                ],
+                'references' => [
+                    new Reference(
+                        'fk_Customer_2',
+                        [
+                            'referencedTable' => 'Employee',
+                            'columns' => ['createdByEmployeeId'],
+                            'referencedColumns' => ['id'],
+                            'onUpdate' => 'RESTRICT',
+                            'onDelete' => 'RESTRICT'
+                        ]
+                    )
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
                     'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
-                    'TABLE_COLLATION' => 'latin1_swedish_ci'
+                    'TABLE_COLLATION' => 'utf8mb4_general_ci'
                 ],
             ]
         );

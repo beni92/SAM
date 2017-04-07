@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class StockMigration_116
+ * Class UserMigration_201
  */
-class StockMigration_116 extends Migration
+class UserMigration_201 extends Migration
 {
     /**
      * Define the table structure
@@ -17,76 +17,72 @@ class StockMigration_116 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('Stock', [
+        $this->morphTable('User', [
                 'columns' => [
                     new Column(
-                        'symbol',
+                        'id',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
+                            'autoIncrement' => true,
+                            'size' => 11,
                             'first' => true
                         ]
                     ),
                     new Column(
-                        'companyName',
+                        'loginNr',
+                        [
+                            'type' => Column::TYPE_VARCHAR,
+                            'notNull' => true,
+                            'size' => 45,
+                            'after' => 'id'
+                        ]
+                    ),
+                    new Column(
+                        'firstname',
+                        [
+                            'type' => Column::TYPE_VARCHAR,
+                            'notNull' => true,
+                            'size' => 45,
+                            'after' => 'loginNr'
+                        ]
+                    ),
+                    new Column(
+                        'lastname',
+                        [
+                            'type' => Column::TYPE_VARCHAR,
+                            'notNull' => true,
+                            'size' => 45,
+                            'after' => 'firstname'
+                        ]
+                    ),
+                    new Column(
+                        'password',
                         [
                             'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
                             'size' => 255,
-                            'after' => 'symbol'
+                            'after' => 'lastname'
                         ]
                     ),
                     new Column(
-                        'lastTradePrice',
-                        [
-                            'type' => Column::TYPE_DECIMAL,
-                            'size' => 10,
-                            'after' => 'companyName'
-                        ]
-                    ),
-                    new Column(
-                        'lastTradeTime',
-                        [
-                            'type' => Column::TYPE_DATETIME,
-                            'size' => 1,
-                            'after' => 'lastTradePrice'
-                        ]
-                    ),
-                    new Column(
-                        'stockExchange',
+                        'phone',
                         [
                             'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 255,
-                            'after' => 'lastTradeTime'
-                        ]
-                    ),
-                    new Column(
-                        'floatShares',
-                        [
-                            'type' => Column::TYPE_INTEGER,
-                            'size' => 11,
-                            'after' => 'stockExchange'
-                        ]
-                    ),
-                    new Column(
-                        'marketCapitalization',
-                        [
-                            'type' => Column::TYPE_INTEGER,
-                            'size' => 11,
-                            'after' => 'floatShares'
+                            'size' => 45,
+                            'after' => 'password'
                         ]
                     )
                 ],
                 'indexes' => [
-                    new Index('PRIMARY', ['symbol'], 'PRIMARY')
+                    new Index('PRIMARY', ['id'], 'PRIMARY'),
+                    new Index('loginNr_UNIQUE', ['loginNr'], 'UNIQUE')
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
-                    'TABLE_COLLATION' => 'latin1_swedish_ci'
+                    'TABLE_COLLATION' => 'utf8mb4_general_ci'
                 ],
             ]
         );

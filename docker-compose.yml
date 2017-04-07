@@ -24,6 +24,8 @@ services:
     volumes:
       - ./client:/app
       - ./client/docker/php-dev.ini:/usr/local/etc/php/php.ini
+    environment:
+      - PHP_IDE_CONFIG=serverName=client
     env_file:
       - dev.env
 
@@ -35,6 +37,8 @@ services:
     volumes:
       - ./server:/app
       - ./server/docker/php-dev.ini:/usr/local/etc/php/php.ini
+    environment:
+      - PHP_IDE_CONFIG=serverName=server
     env_file:
       - dev.env
     depends_on:
@@ -42,7 +46,7 @@ services:
 
   server-migration:
     image: amqamq/phalcon:nginx
-    command: phalcon migration run
+    command: bash -c "sleep 10 && phalcon migration run"
     volumes:
       - ./server:/app
       - ./server/docker/php-dev.ini:/usr/local/etc/php/php.ini

@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class EmployeeMigration_116
+ * Class BankMigration_201
  */
-class EmployeeMigration_116 extends Migration
+class BankMigration_201 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class EmployeeMigration_116 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('Employee', [
+        $this->morphTable('Bank', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,36 +30,32 @@ class EmployeeMigration_116 extends Migration
                         ]
                     ),
                     new Column(
-                        'userId',
+                        'name',
                         [
-                            'type' => Column::TYPE_INTEGER,
+                            'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
-                            'size' => 11,
+                            'size' => 45,
                             'after' => 'id'
+                        ]
+                    ),
+                    new Column(
+                        'volume',
+                        [
+                            'type' => Column::TYPE_DECIMAL,
+                            'notNull' => true,
+                            'size' => 10,
+                            'after' => 'name'
                         ]
                     )
                 ],
                 'indexes' => [
-                    new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('userId_UNIQUE', ['userId'], 'UNIQUE')
-                ],
-                'references' => [
-                    new Reference(
-                        'fk_Employee_1',
-                        [
-                            'referencedTable' => 'User',
-                            'columns' => ['userId'],
-                            'referencedColumns' => ['id'],
-                            'onUpdate' => 'NO ACTION',
-                            'onDelete' => 'NO ACTION'
-                        ]
-                    )
+                    new Index('PRIMARY', ['id'], 'PRIMARY')
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '7',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
-                    'TABLE_COLLATION' => 'latin1_swedish_ci'
+                    'TABLE_COLLATION' => 'utf8mb4_general_ci'
                 ],
             ]
         );

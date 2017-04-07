@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class UserMigration_106
+ * Class DepotMigration_201
  */
-class UserMigration_106 extends Migration
+class DepotMigration_201 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class UserMigration_106 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('User', [
+        $this->morphTable('Depot', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,59 +30,45 @@ class UserMigration_106 extends Migration
                         ]
                     ),
                     new Column(
-                        'loginNr',
+                        'customerId',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
+                            'size' => 11,
                             'after' => 'id'
                         ]
                     ),
                     new Column(
-                        'firstname',
+                        'budget',
                         [
                             'type' => Column::TYPE_VARCHAR,
                             'notNull' => true,
                             'size' => 45,
-                            'after' => 'loginNr'
-                        ]
-                    ),
-                    new Column(
-                        'lastname',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 45,
-                            'after' => 'firstname'
-                        ]
-                    ),
-                    new Column(
-                        'password',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 255,
-                            'after' => 'lastname'
-                        ]
-                    ),
-                    new Column(
-                        'phone',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'size' => 45,
-                            'after' => 'password'
+                            'after' => 'customerId'
                         ]
                     )
                 ],
                 'indexes' => [
                     new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('loginNr_UNIQUE', ['loginNr'], 'UNIQUE')
+                    new Index('fk_Depot_1_idx', ['customerId'], null)
+                ],
+                'references' => [
+                    new Reference(
+                        'fk_Depot_1',
+                        [
+                            'referencedTable' => 'Customer',
+                            'columns' => ['customerId'],
+                            'referencedColumns' => ['id'],
+                            'onUpdate' => 'RESTRICT',
+                            'onDelete' => 'RESTRICT'
+                        ]
+                    )
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '3',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
-                    'TABLE_COLLATION' => 'latin1_swedish_ci'
+                    'TABLE_COLLATION' => 'utf8mb4_general_ci'
                 ],
             ]
         );
