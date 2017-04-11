@@ -46,8 +46,15 @@ $di->setShared('url', function () {
     return $url;
 });
 
+
+/*
+ * initializes the Rest Plugin
+ */
 $di->setShared('server', function() {
     $restPlugin = new RestPlugin;
+    /*
+     * returns an instance of the rest plugin
+     */
     return $restPlugin;
 });
 
