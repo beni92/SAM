@@ -37,16 +37,28 @@ class SecurityPlugin extends Plugin {
 
         $acl = $this->getAcl($config);
 
+        if (!$acl->isResource($controller)) {
+            $dispatcher->forward(
+                [
+                    "controller" => "error",
+                    "action"	 => "show404"
+                ]
+            );
+            return;
+        }
+
+
+
         $allowed = $acl->isAllowed($role, $controller, $action);
 
         if(!$allowed) {
-
-
             $dispatcher->forward(
                 [
                     "controller" => "error",
                     "action"	 => "show401"
-                ]);
+                ]
+            );
+            return;
         }
     }
 

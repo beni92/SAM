@@ -1,6 +1,10 @@
-<div class="sign-container">
+<div class="sign-container" style="width: 150px; margin: 0 auto;">
     <div class="sign-header">
-        <img src="" alt="logo" class="sign-logo">
+        <img src="imgs/02.png" alt="logo" class="sign-logo" style="width: 100%">
+    </div>
+
+    <div style="color:#0000FF; ">
+        <h3> User Login </h3>
     </div>
     <div class="sign-form">
         {{ form("index/login", "method": "post") }}

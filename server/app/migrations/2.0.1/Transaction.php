@@ -6,9 +6,9 @@ use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
 
 /**
- * Class UserMigration_116
+ * Class TransactionMigration_201
  */
-class UserMigration_116 extends Migration
+class TransactionMigration_201 extends Migration
 {
     /**
      * Define the table structure
@@ -17,7 +17,7 @@ class UserMigration_116 extends Migration
      */
     public function morph()
     {
-        $this->morphTable('User', [
+        $this->morphTable('Transaction', [
                 'columns' => [
                     new Column(
                         'id',
@@ -30,78 +30,91 @@ class UserMigration_116 extends Migration
                         ]
                     ),
                     new Column(
-                        'loginNr',
+                        'stockId',
                         [
-                            'type' => Column::TYPE_VARCHAR,
+                            'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
-                            'size' => 45,
+                            'size' => 11,
                             'after' => 'id'
                         ]
                     ),
                     new Column(
-                        'firstname',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 45,
-                            'after' => 'loginNr'
-                        ]
-                    ),
-                    new Column(
-                        'lastname',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 45,
-                            'after' => 'firstname'
-                        ]
-                    ),
-                    new Column(
-                        'password',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'notNull' => true,
-                            'size' => 255,
-                            'after' => 'lastname'
-                        ]
-                    ),
-                    new Column(
-                        'phone',
-                        [
-                            'type' => Column::TYPE_VARCHAR,
-                            'size' => 45,
-                            'after' => 'password'
-                        ]
-                    ),
-                    new Column(
-                        'bankId',
+                        'amoutn',
                         [
                             'type' => Column::TYPE_INTEGER,
                             'notNull' => true,
                             'size' => 11,
-                            'after' => 'phone'
+                            'after' => 'stockId'
                         ]
                     ),
                     new Column(
-                        'createdByEmployeeId',
+                        'pricePerShare',
+                        [
+                            'type' => Column::TYPE_DECIMAL,
+                            'notNull' => true,
+                            'size' => 10,
+                            'after' => 'amoutn'
+                        ]
+                    ),
+                    new Column(
+                        'direction',
+                        [
+                            'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
+                            'size' => 1,
+                            'after' => 'pricePerShare'
+                        ]
+                    ),
+                    new Column(
+                        'customerId',
+                        [
+                            'type' => Column::TYPE_INTEGER,
+                            'notNull' => true,
+                            'size' => 11,
+                            'after' => 'direction'
+                        ]
+                    ),
+                    new Column(
+                        'employeeId',
                         [
                             'type' => Column::TYPE_INTEGER,
                             'size' => 11,
-                            'after' => 'bankId'
+                            'after' => 'customerId'
                         ]
                     )
                 ],
                 'indexes' => [
                     new Index('PRIMARY', ['id'], 'PRIMARY'),
-                    new Index('loginNr_UNIQUE', ['loginNr'], 'UNIQUE'),
-                    new Index('fk_User_3', ['createdByEmployeeId'], null)
+                    new Index('fk_Transaction_1_idx', ['customerId'], null),
+                    new Index('fk_Transaction_2_idx', ['employeeId'], null),
+                    new Index('fk_Transaction_3_idx', ['stockId'], null)
                 ],
                 'references' => [
                     new Reference(
-                        'fk_User_3',
+                        'fk_Transaction_1',
+                        [
+                            'referencedTable' => 'Customer',
+                            'columns' => ['customerId'],
+                            'referencedColumns' => ['id'],
+                            'onUpdate' => 'RESTRICT',
+                            'onDelete' => 'RESTRICT'
+                        ]
+                    ),
+                    new Reference(
+                        'fk_Transaction_2',
                         [
                             'referencedTable' => 'Employee',
-                            'columns' => ['createdByEmployeeId'],
+                            'columns' => ['employeeId'],
+                            'referencedColumns' => ['id'],
+                            'onUpdate' => 'RESTRICT',
+                            'onDelete' => 'RESTRICT'
+                        ]
+                    ),
+                    new Reference(
+                        'fk_Transaction_3',
+                        [
+                            'referencedTable' => 'Stock',
+                            'columns' => ['stockId'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',
                             'onDelete' => 'RESTRICT'
@@ -110,9 +123,9 @@ class UserMigration_116 extends Migration
                 ],
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
-                    'AUTO_INCREMENT' => '16',
+                    'AUTO_INCREMENT' => '1',
                     'ENGINE' => 'InnoDB',
-                    'TABLE_COLLATION' => 'latin1_swedish_ci'
+                    'TABLE_COLLATION' => 'utf8mb4_general_ci'
                 ],
             ]
         );

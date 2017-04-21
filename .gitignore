@@ -3,5 +3,6 @@ prod.env
 **/adminer.php
 **/vendor/
 
-.idea
+.idea/*
+!.idea/php.xml
 !.idea/codeStyleSettings.xml

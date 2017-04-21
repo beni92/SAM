@@ -71,7 +71,7 @@ services:
   server-migration:
     build: ./server
     image: amqamq/sam101:server
-    command: phalcon migration run
+    command: bash -c "sleep 10 && phalcon migration run"
     env_file:
       - prod.env
     depends_on:

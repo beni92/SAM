@@ -13,7 +13,7 @@ return new \Phalcon\Config([
         'username'    => getenv('MYSQL_USER'),
         'password'    => getenv('MYSQL_PASSWORD'),
         'dbname'      => getenv('MYSQL_DATABASE'),
-        'charset'     => 'utf8',
+        'charset'     => 'utf8mb4',
     ],
     /*
     'database' => [
@@ -22,7 +22,7 @@ return new \Phalcon\Config([
         'username'    => "root",
         'password'    => "root",
         'dbname'      => "phalcon",
-        'charset'     => 'utf8',
+        'charset'     => 'utf8mb4',
     ],*/
 
     'application' => [

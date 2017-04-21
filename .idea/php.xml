@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpProjectServersManager">
+    <servers>
+      <server host="_" id="a7aac936-e73c-4d49-8466-910c6c907a8f" name="server" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$/server" remote-root="/app" />
+        </path_mappings>
+      </server>
+      <server host="_" id="984bad26-b6d2-485f-9a5b-f29de8225a5c" name="client" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$/client" remote-root="/app" />
+        </path_mappings>
+      </server>
+    </servers>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7" />
+</project>
