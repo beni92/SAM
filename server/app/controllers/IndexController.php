@@ -1,6 +1,7 @@
 <?php
 namespace Sam\Server\Controllers;
 
+use Phalcon\Db\Column;
 use Sam\Server\Models\Bank;
 use Sam\Server\Models\Customer;
 use Sam\Server\Models\Depot;
@@ -22,8 +23,9 @@ class IndexController extends ControllerBase
             $this->db->begin();
 
             $bank = new Bank();
-            $bank->setName("MullhollandDriveBank");
+            $bank->setName("Mullhollanddrive Bank");
             $bank->setVolume(1000000000);
+
             if($bank->save() === false) {
                 $this->db->rollback();
                 return json_encode(array("error"=> "could not create bank"));
@@ -57,12 +59,11 @@ class IndexController extends ControllerBase
             $user1->setPhone($phone1);
             $user1->setLoginNr($loginNr1);
 
+
             if($user->save() === false) {
                 $this->db->rollback();
                 return json_encode(array("error" => "user could not be created", "code" => 00));
             }
-
-
 
             $employee = new Employee();
             $employee->setUserId($user->getId());
@@ -90,6 +91,7 @@ class IndexController extends ControllerBase
             $customer->setBudget(50000);
             if($customer->save() === false) {
                 $this->db->rollback();
+
                 return json_encode(array("error" => "user could not be created", "code" => 01));
             }
 
@@ -101,12 +103,14 @@ class IndexController extends ControllerBase
                 return json_encode(array("error" => "depot could not be created", "code" => 03));
             }
 
+
+
             $this->db->commit();
 
             return json_encode("initial data-sets created");
         }
 
-        return json_encode("nothing happend");
+        return json_encode("{}");
     }
 }
 
