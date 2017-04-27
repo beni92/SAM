@@ -43,6 +43,24 @@ class User extends \Phalcon\Mvc\Model
         );
     }
 
+    public function isEmployee() {
+        $res = Employee::findFirst(array("userId = :id:", 'bind' => array("id" => $this->id)));
+        if(!empty($res)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isCustomer() {
+        $res = Customer::findFirst(array("userId = :id:", 'bind' => array("id" => $this->id)));
+        if(!empty($res)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @return mixed
      */

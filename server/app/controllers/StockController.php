@@ -17,7 +17,7 @@ class StockController extends ControllerBase
 
 
     public function getAction($param, $symbol = false) {
-        if($symbol && $param == "symbol") {
+        if($symbol && $param === "symbol") {
             return json_encode(StockLibrary::getStocksBySymbols(explode(":", $symbol)));
         } else if($symbol && $param == "history") {
             return json_encode(StockLibrary::getStockHistoryBySymbol($symbol));
@@ -27,28 +27,82 @@ class StockController extends ControllerBase
     }
 
     public function postAction() {
+        $config = $this->di->get("config");
+
         $direction = $this->request->getPost("direction");
         $shares = $this->request->getPost("shares");
+        $symbol = $this->request->getPost("symbol");
+        $depotId = $this->request->getPost("depotId");
         /*
          * $direction = 0 => buy
          * $direction = 1 => sell
          */
         if($direction == 0) {
-
-            $symbol = $this->request->getPost("symbol");
-            $depotId = $this->request->getPost("depotId");
-
             //pps = price per share
-            $transaction = StockLibrary::buy($symbol, $shares, $depotId, $this->session->get("auth"));
+            $transaction = StockLibrary::buy($symbol, $shares, $depotId, $this->session->get("auth"), $config);
             return json_encode($transaction);
 
         } else if($direction == 1) {
-            $ownedStockId = $this->request->getPost("ownedStockId");
-            $ownedStock = OwnedStock::findFirst(array("id = :id:", "bind" => array("id" => $ownedStockId)));
+            $depotId = $this->request->getPost("depotId");
+            $ownedStocks = OwnedStock::find(array("depotId = :id: and stockSymbol = :symbol:", "bind" => array("id" => $depotId, "symbol" => $symbol)));
+            /*
+             * a decrementing counter of the shares left to sell
+             */
+            $restToSell = $shares;
+            $counter = 0;
+            /*
+             * the maximum of owned shares
+             */
+            $maxToSell = 0;
 
-            $transaction = StockLibrary::sell($ownedStock, $shares, $this->session->get("auth"));
-            return json_encode($transaction);
 
+            /**
+             * adds all shares of the owned stocks
+             * @var OwnedStock $ownedStock */
+            foreach ($ownedStocks as $ownedStock) {
+                $maxToSell += $ownedStock->getShares();
+            }
+            /*
+             * if the customer tries to sell more stocks then he ownes
+             * an error is returned
+             */
+            if($maxToSell < $shares) {
+                return json_encode(array("error" => "not enough shares owned"));
+            }
+            /*
+             * every ownedStock creates its own transaction
+             * if in this depot are 3 owned stocks of each 10 shares
+             * and the customer wants to sell 25 shares
+             * there are going to be 3 transactions.
+             * in the first transaction 10 will be sold
+             * in the second transaction 10 will be sold
+             * and in the third transaction 5 shares will be sold
+             */
+            $transactions = array();
+            /*
+             * as long as restToSell is bigger than 0 shares are going to sold
+             */
+            while($restToSell > 0) {
+                /** @var OwnedStock $ownedStock */
+                $ownedStock = $ownedStocks[$counter];
+
+                /*
+                 * if the the owned stock of the current iteration has more or equal shares then
+                 * rest to sell, all the shares of the shares of the ownedStock are sold
+                 * else
+                 * only the the amount of shares which are left to sell (restToSel) are sold and restToSell is set to 0
+                 */
+                if($restToSell >= $ownedStock->getShares()) {
+                    $restToSell -=$ownedStock->getShares();
+                    $transactions[] = StockLibrary::sell($ownedStock, $ownedStock->getShares(), $this->session->get("auth"), $config);
+                } else {
+                    $transactions[] = StockLibrary::sell($ownedStock, $restToSell, $this->session->get("auth"), $config);
+                    $restToSell = 0;
+                }
+                $counter++;
+            }
+
+            return json_encode($transactions);
         } else {
             return json_encode(array("error"=>"Wrong direction!"));
         }

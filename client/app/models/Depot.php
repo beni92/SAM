@@ -15,6 +15,11 @@ class Depot
     private $id;
 
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
      * @var OwnedStock
      */
     private $ownedStocks;
@@ -72,6 +77,21 @@ class Depot
         $this->budget = $budget;
     }
 
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
 
 
 }

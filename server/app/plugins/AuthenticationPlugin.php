@@ -59,10 +59,10 @@ class AuthenticationPlugin extends \Phalcon\Mvc\User\Plugin
      * @param $loginNr int
      * @return bool if the user is allowed to access data true is returned else false
      */
-    public static function isAllowedUser($user, $auth, $loginNr, $config) {
-        if($user && $auth &&
-            ($auth["role"] == $config->roles->customers && $auth["user"]->user->getLoginNr() == $loginNr) ||
-            self::isAllowedEmployee($auth, $user->getBankId(), $config)) {
+    public static function isAllowedUser($user, $auth, $loginNr, $config, $bankId = false) {
+        if(!empty($auth) && (($auth["role"] == $config->roles->customers && $auth["user"]->user->getLoginNr() == $loginNr) ||
+                (!empty($user) && self::isAllowedEmployee($auth, $user->getBankId(), $config)) ||
+                (!empty($bankId) && self::isAllowedEmployee($auth, $bankId, $config)))) {
             return true;
         } else {
             return false;

@@ -1,6 +1,9 @@
 <?php
 namespace Sam\Server\Controllers;
 
+use Sam\Server\Models\Employee;
+use Sam\Server\Models\Transaction;
+
 /**
  * Created by PhpStorm.
  * User: www-data
@@ -16,6 +19,12 @@ class EmployeeController extends ControllerBase
     }
 
     public function getAction($id) {
+        /**
+         * gets the last few transactions
+         */
+        $employee = Employee::findFirst(array("id = :id:",  "bind" => array("id" => $id)));
+        $transactions = Transaction::find(array("employeeId = :id:", "order" => "timestamp", "limit" => "10", "bind" => array("id" => $id)));
+        return json_encode(array("employee" => $employee, "transactions" => $transactions));
 
     }
 

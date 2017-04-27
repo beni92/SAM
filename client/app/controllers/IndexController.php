@@ -34,7 +34,11 @@ class IndexController extends ControllerBase
 
     public function loginAction(){
 
-        if($this->request->isPost() && $this->security->checkToken()) {
+        /*
+         * Destroys a previous session
+         */
+        $this->session->destroy();
+        if($this->request->isPost() /*&& $this->security->checkToken(null, null, false)*/) {
             $username = $this->request->getPost("username");
             $password = $this->request->getPost("password");
             /**
@@ -47,13 +51,16 @@ class IndexController extends ControllerBase
                     "controller" => "dashboard",
                     "action" => "index"
                 ));
+                return;
             } else {
                 $this->dispatcher->forward(array(
                     "controller" => "index",
                     "action" => "index"
                 ));
+                return;
             }
         }
+
         $this->dispatcher->forward(array(
             "controller" => "error",
             "action" => "show401"

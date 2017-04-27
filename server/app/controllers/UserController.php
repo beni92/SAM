@@ -1,6 +1,7 @@
 <?php
 namespace Sam\Server\Controllers;
 
+use Phalcon\Mvc\Model\Query;
 use Sam\Server\Models\User;
 use Sam\Server\Models\Customer;
 use Sam\Server\Models\Employee;
@@ -29,8 +30,9 @@ class UserController extends ControllerBase
          * gets the authenticated user
          */
         $auth = $this->session->get("auth");
-        /*
+        /**
          * get the requested user by its loginNr
+         * @var $user User
          */
         $user = User::findFirst(array("loginNr = :lnr:", "bind" => array("lnr" => $loginNr)));
 
@@ -38,7 +40,7 @@ class UserController extends ControllerBase
          * checks if the authenticated user is allowed to access the data
          */
         if(AuthenticationPlugin::isAllowedUser($user, $auth, $loginNr, $config) === true) {
-            if($param) {
+            if(!empty($param)) {
                 switch ($param) {
                     /*
                      * if the param is role return the role of the user and as additional return value add the id
@@ -53,7 +55,7 @@ class UserController extends ControllerBase
                      * we return an error here
                      */
                     default:
-                        return json_encode(array("error"=>"wrong parameter"));
+                        return json_encode(array("error"=>"wrong parameter", "code" => "13"));
                         break;
                 }
             } else {
@@ -65,18 +67,18 @@ class UserController extends ControllerBase
              * if the user is not authenticated return the an error message with not authenticated
              */
             if($auth === false || $auth["role"] != $config->roles->customers || $auth["role"] != $config->roles->employees)
-                return json_encode(array("error" => "not authenticated"));
+                return json_encode(array("error" => "not authenticated", "code" => "11"));
             /*
              * checks if the problem is that the user is not allowed to access the data
              */
             if(AuthenticationPlugin::isAllowedUser($user, $auth, $loginNr, $config) === false) {
-                return json_encode(array("error" => "not authorised"));
+                return json_encode(array("error" => "not authorised", "code" => "12"));
             }
 
             /*
              * if non of the above fitted a weired unexpected internal error occurred
              */
-            return json_encode(array("error" => "internal error"));
+            return json_encode(array("error" => "internal error", "code" => "14"));
         }
     }
 
@@ -116,7 +118,7 @@ class UserController extends ControllerBase
 
             if($user->save() === false) {
                 $this->db->rollback();
-                return json_encode(array("error" => "user could not be created", "code" => 00));
+                return json_encode(array("error" => "user could not be created", "code" => 00, "user" => $user));
             }
 
             if($role == $config->roles->customers) {
@@ -140,7 +142,7 @@ class UserController extends ControllerBase
             }
 
             $this->db->commit();
-
+            return json_encode(array("success" => "user successfully created"));
         } else {
             return json_encode(array("error" => "only employees allowed to create user", "code" => 05));
         }

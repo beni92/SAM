@@ -82,6 +82,9 @@ class SecurityPlugin extends Plugin
             }
 
             //Grant access to public areas to both users and guests
+            /**
+             * @var $role Role
+             */
             foreach ($roles as $role) {
                 foreach ($publicResources as $resource => $actions) {
                     foreach ($actions as $action){

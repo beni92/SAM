@@ -9,6 +9,7 @@
 namespace Sam\Client\Controllers;
 
 
+use Sam\Client\Models\User;
 use Sam\Client\Plugins\RestPlugin;
 
 class DashboardController extends ControllerBase
@@ -20,7 +21,61 @@ class DashboardController extends ControllerBase
     }
 
     public function indexAction() {
-        $this->getDI()->get("server")->loadCustomerInfo();
+
         $this->view->user = $this->session->get("auth");
+    }
+
+    public function customerAction($loginName = false) {
+        /**
+         * @var $user User
+         */
+        $user = $this->session->get("auth");
+        /**
+         * @var $server RestPlugin
+         */
+        $server = $this->getDI()->get("server");
+
+
+        $search = $this->request->get("search");
+        $depot = $this->request->get("depot");
+
+        if($loginName === false) {
+            $customers = $server->getCustomers();
+            $this->view->customers = $customers;
+        } else if($loginName !== false && !isset($search) && !isset($depot)) {
+            $customer = $server->getCustomer($loginName);
+            $this->view->customer = $customer;
+        } else if($loginName !== false && isset($search)) {
+            $customers = $server->findCustomers($search);
+            $this->view->customers = $customers;
+        } else if($loginName !== false && isset($depot)) {
+            $depot = $server->getDepot($depot, $loginName);
+            $this->view->depot = $depot;
+        }
+
+    }
+
+    public function addCustomerAction() {
+        if($this->request->isGet()) {
+
+        } else if($this->request->isPost()) {
+            $loginName = $this->request->getPost("loginName");
+            $password = $this->request->getPost("password");
+            $firstname = $this->request->getPost("firstname");
+            $lastname = $this->request->getPost("lastname");
+            $phone = $this->request->getPost("phone");
+
+            if(!empty($loginName) && !empty($password) && !empty($firstname) && !empty($lastname)) {
+                $server = $this->getDI()->get("server");
+                $res = $server->addCustomer($loginName, $password, $firstname, $lastname, $phone);
+                if(isset($res->success)) {
+                    $this->dispatcher->forward(array(
+                        "controller" => "dashboard",
+                        "action" => "index"
+                    ));
+                    return;
+                }
+            }
+        }
     }
 }

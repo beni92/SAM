@@ -58,6 +58,7 @@ class SecurityPlugin extends Plugin {
                     "action"	 => "show401"
                 ]
             );
+            $this->session->destroy();
             return;
         }
     }
@@ -85,7 +86,7 @@ class SecurityPlugin extends Plugin {
 
         //create employee resources
         $employeeRes = [
-            "dashboard" => ["index"]
+            "dashboard" => ["index", "customer", "addCustomer"]
         ];
 
         foreach ($employeeRes as $key => $value) {

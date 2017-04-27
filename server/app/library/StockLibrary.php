@@ -1,6 +1,7 @@
 <?php
 namespace Sam\Server\Libraries;
 
+use Phalcon\Exception;
 use Phalcon\Mvc\Model\TransactionInterface;
 use Sam\Server\Models\OwnedStock;
 use Sam\Server\Models\Depot;
@@ -39,26 +40,49 @@ class StockLibrary
      * @param $shares int how many shares the customer wants to buy
      * @param $depotId int the id of the depot in which the stock will be saved
      * @param $auth \stdClass the authentication of the session
+     * @param $config \stdClass the configuration of the program
      * @return bool|Transaction if an error happens false is returned else the transaction is returned
      */
-    public static function buy($symbol, $shares, $depotId, $auth) {
+    public static function buy($symbol, $shares, $depotId, $auth, $config) {
+
+        /*
+         * if one of the below is missing return false
+         */
+        if(empty($auth) || empty($config)) {
+            return false;
+        }
+        /** @var Depot $depot */
         $depot = Depot::findFirst(array("id = :id:", "bind" => array("id" => $depotId)));
+        if(empty($depot)) {
+            return false;
+        }
+        /** @var Customer $customer */
+        $customer = $depot->Customer;
+        if(empty($customer)) {
+            return false;
+        }
+        /** @var User $user */
+        $user = $customer->User;
+        if(empty($user)) {
+            return false;
+        }
+
+
         /*
          * checks
          * if the owner of the depot is logged in
          * or
          * if an employee who is from the same bank as the customer is logged in
          */
-        if($depot && (
-                ($auth["role"] == "Customers" && $auth["user"]->getId() == $depot->getCustomerId()) ||
-                ($auth["role"] == "Employees" && $auth["user"]->User->getBankId() == $depot->Customer->User->getBankId())
-            )) {
+        if(($auth["role"] === $config->roles->customers && $auth["user"]->getId() === $depot->getCustomerId()) ||
+                ($auth["role"] === $config->roles->employees && $auth["user"]->User->getBankId() === $user->getBankId())) {
 
             /**
              * get the bank of the authenticated user
              * @var $bank Bank
              */
             $bank = $auth["user"]->User->Bank;
+
             /**
              * gets the stock from the exchange
              * @var $stocks array
@@ -153,17 +177,22 @@ class StockLibrary
              * ATTENTION: this is a transaction in cash flow not to the database
              */
             $transaction = new Transaction();
-            $transaction->setStockSymbol($stock->getSymbol());
+            $transaction->setSymbol($stock->getSymbol());
             $transaction->setShares($shares);
             $transaction->setDepotId($depotId);
             $transaction->setPricePerShare($boughtPrice);
             $transaction->setBankId($auth["user"]->User->getBankId());
             $transaction->setDirection(0);                          //direction for buy = 0
-            $transaction->setUserId($auth["user"]->userId);
+            $transaction->setCustomerId($customer->getId());
+            if($auth["role"] === $config->roles->employees) {
+                $transaction->setEmployeeId($auth['user']->getId());
+            }
             /*
              * saves the transaction in the database
              */
-            $transaction->save();
+            if($transaction->save() === false) {
+                return false;
+            }
             return $transaction;
         } else {
             return false;
@@ -215,15 +244,35 @@ class StockLibrary
      * @param $auth \stdClass the authentication of the logged in user
      * @return bool|Transaction
      */
-    public static function sell($ownedStock, $shares, $auth) {
-        /**
-         * @var $symbol string the symbol of the stock to sell
+    public static function sell($ownedStock, $shares, $auth, $config) {
+        /*
+         * if one of the below is missing return false
          */
-        $symbol = $ownedStock->getStockSymbol();
+        if(empty($auth) || empty($config)) {
+            return false;
+        }
         /**
          * @var $depot Depot
          */
         $depot = $ownedStock->Depot;
+        if(empty($depot)) {
+            return false;
+        }
+        /** @var Customer $customer */
+        $customer = $depot->Customer;
+        if(empty($customer)) {
+            return false;
+        }
+        /** @var User $user */
+        $user = $customer->User;
+        if(empty($user)) {
+            return false;
+        }
+
+        /**
+         * @var $symbol string the symbol of the stock to sell
+         */
+        $symbol = $ownedStock->getStockSymbol();
         /*
          * checks
          * if the owner of the depot is logged in
@@ -231,13 +280,13 @@ class StockLibrary
          * if an employee who is from the same bank as the customer is logged in
          */
         if($depot && (
-                ($auth["role"] == "Customers" && $auth["user"]->getId() == $depot->getCustomerId()) ||
-                ($auth["role"] == "Employees" && $auth["user"]->User->getBankId() == $depot->Customer->User->getBankId())
+                ($auth["role"] == $config->roles->customers && $auth["user"]->getId() == $depot->getCustomerId()) ||
+                ($auth["role"] == $config->roles->employees && $auth["user"]->User->getBankId() == $user->getBankId())
             )) {
             /**
              * @var $bank Bank
              */
-            $bank = $auth->User->Bank;
+            $bank = $auth['user']->User->Bank;
 
             /*
              * if there are less shares in the owned stock then in the invoice
@@ -246,56 +295,64 @@ class StockLibrary
             if($ownedStock->getShares() < $shares) {
                 $shares = $ownedStock->getShares();
             }
-
-            /*
+            try {
+                /*
              * sells the stock with the amount of shares to the stock exchange
              */
-            $soldPrice = self::getSoapClient()->sell(array("symbol"=>$symbol, "shares"=>$shares));
-            /*
-             * changes the volume from the bank
-             */
-            $bank->changeVolume($soldPrice * $shares);
-            /*
-             * changes the budget of the depot
-             */
-            $depot->changeBudget($soldPrice * $shares);
+                $soldPrice = self::getSoapClient()->sell(array("symbol"=>$symbol, "shares"=>$shares))->return;
+                /*
+                 * changes the volume from the bank
+                 */
+                $bank->changeVolume($soldPrice * $shares);
+                /*
+                 * changes the budget of the depot
+                 */
+                $depot->changeBudget($soldPrice * $shares);
 
 
-            /*
-             * creates the transaction for the history of the bank
-             *
-             * ATTENTION: this is a transaction in cash flow not to the database
-             */
-            $transaction = new Transaction();
-            $transaction->setStockSymbol($symbol);
-            $transaction->setShares($shares);
-            $transaction->setDepotId($depot->getId());
-            $transaction->setPricePerShare($soldPrice);
-            $transaction->setBankId($bank->getId());
-            $transaction->setDirection(1);                          //direction for sell = 1
-            $transaction->setUserId($auth["user"]->getUserId());
-            /*
-             * saves the transaction in the database
-             */
-            $transaction->save();
+                /*
+                 * creates the transaction for the history of the bank
+                 *
+                 * ATTENTION: this is a transaction in cash flow not to the database
+                 */
+                $transaction = new Transaction();
+                $transaction->setSymbol($symbol);
+                $transaction->setShares($shares);
+                $transaction->setDepotId($depot->getId());
+                $transaction->setPricePerShare($soldPrice);
+                $transaction->setBankId($bank->getId());
+                $transaction->setDirection(1);                          //direction for sell = 1
+                $transaction->setCustomerId($customer->getId());
+                if($auth["role"] === $config->roles->employees) {
+                    $transaction->setEmployeeId($auth['user']->getId());
+                }
+                /*
+                 * saves the transaction in the database
+                 */
+                $transaction->save();
 
-            /*
-             * reduces the amount of shares of the owned stock
-             */
-            $ownedStock->setShares($ownedStock->getShares() - $shares);
-            /*
-             * checks if there are no more shares left in the owned stock and deletes
-             * it if true
-             * else
-             * the owned stock with the reduced amount of shares is saved
-             */
-            if($ownedStock->getShares() == 0) {
-                $ownedStock->delete();
-            } else {
-                $ownedStock->save();
+                /*
+                 * reduces the amount of shares of the owned stock
+                 */
+                $ownedStock->setShares($ownedStock->getShares() - $shares);
+                /*
+                 * checks if there are no more shares left in the owned stock and deletes
+                 * it if true
+                 * else
+                 * the owned stock with the reduced amount of shares is saved
+                 */
+                if($ownedStock->getShares() == 0) {
+                    $ownedStock->delete();
+                } else {
+                    $ownedStock->save();
+                }
+
+                return $transaction;
+            } catch (\Exception $ex) {
+
+                return false;
             }
 
-            return $transaction;
         } else {
             return false;
         }

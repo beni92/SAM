@@ -20,7 +20,7 @@ class Transaction extends \Phalcon\Mvc\Model
      * the Stock which is bought
      * @var
      */
-    private $stockSymbol;
+    private $symbol;
 
     /**
      * how many stocks where bought
@@ -41,10 +41,16 @@ class Transaction extends \Phalcon\Mvc\Model
     private $direction;
 
     /**
-     * the user who made the transaction
+     * the customer who owns/owned the transacted shares
      * @var
      */
-    private $userId;
+    private $customerId;
+
+    /**
+     * the employee who made the transaction
+     * @var
+     */
+    private $employeeId;
 
     /**
      * the bank which is owner of the transaction
@@ -59,15 +65,28 @@ class Transaction extends \Phalcon\Mvc\Model
     private $depotId;
 
 
+    /**
+     * the timestamp of the transaction
+     * @var
+     */
+    private $timestamp;
+
 
     public function initialize() {
         $this->setSource("Transaction");
 
         $this->hasOne(
-            "userId",
-            "Sam\\Server\\Models\\User",
+            "customerId",
+            "Sam\\Server\\Models\\Customer",
             "id",
-            array("alias" => "User")
+            array("alias" => "Customer")
+        );
+
+        $this->hasOne(
+            "employeeId",
+            "Sam\\Server\\Models\\Employee",
+            "id",
+            array("alias" => "Employee")
         );
 
         $this->hasOne(
@@ -112,17 +131,17 @@ class Transaction extends \Phalcon\Mvc\Model
     /**
      * @return mixed
      */
-    public function getStockSymbol()
+    public function getSymbol()
     {
-        return $this->stockSymbol;
+        return $this->symbol;
     }
 
     /**
-     * @param mixed $stockSymbol
+     * @param mixed $symbol
      */
-    public function setStockSymbol($stockSymbol)
+    public function setSymbol($symbol)
     {
-        $this->stockSymbol = $stockSymbol;
+        $this->symbol = $symbol;
     }
 
     /**
@@ -176,22 +195,6 @@ class Transaction extends \Phalcon\Mvc\Model
     /**
      * @return mixed
      */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param mixed $userId
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getBankId()
     {
         return $this->bankId;
@@ -219,6 +222,54 @@ class Transaction extends \Phalcon\Mvc\Model
     public function setDepotId($depotId)
     {
         $this->depotId = $depotId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * @param mixed $customerId
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmployeeId()
+    {
+        return $this->employeeId;
+    }
+
+    /**
+     * @param mixed $employeeId
+     */
+    public function setEmployeeId($employeeId)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
+
+    /**
+     * @param mixed $timestamp
+     */
+    public function setTimestamp($timestamp)
+    {
+        $this->timestamp = $timestamp;
     }
 
 

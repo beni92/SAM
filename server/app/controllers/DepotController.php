@@ -1,6 +1,11 @@
 <?php
 namespace Sam\Server\Controllers;
 
+use Sam\Server\Models\Customer;
+use Sam\Server\Models\Depot;
+use Sam\Server\Models\User;
+use Sam\Server\Plugins\AuthenticationPlugin;
+
 /**
  * Created by PhpStorm.
  * User: www-data
@@ -16,8 +21,41 @@ class DepotController extends ControllerBase
     }
 
 
-    public function getAction($id) {
+    public function getAction($loginName, $id) {
+        $config = $this->di->get("config");
 
+        $auth = $this->session->get("auth");
+        /**
+         * @var $depot Depot
+         */
+        $depot = Depot::findFirst(array("id = :id:", "bind" => array("id" => $id)));
+        if(empty($depot)) {
+            return json_encode(array("error" => "Request error", "code" => "42"));
+        }
+        $ownedStocks = $depot->getOwnedStocks();
+        /**
+         * @var $customer Customer
+         */
+        $customer = $depot->getCustomer();
+        if(empty($customer)) {
+            return json_encode(array("error" => "Request error", "code" => "43"));
+        }
+        /**
+         * @var $user User
+         */
+        $user = $customer->getUser();
+        if(empty($user)) {
+            return json_encode(array("error" => "Request error", "code" => "44"));
+        }
+        if($user->getLoginNr() !== $loginName) {
+            return json_encode(array("error" => "Request error", "code" => "41"));
+        }
+
+        if(AuthenticationPlugin::isAllowedUser($user, $auth, $user->getLoginNr(), $config)) {
+            return json_encode(array("depot" => $depot, "customer" => $customer, "user" => $user, "ownedStocks" => $ownedStocks));
+        } else {
+            return json_encode(array("error" => "not authorised", "code" => "40"));
+        }
     }
 
     public function postAction() {

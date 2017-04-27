@@ -29,7 +29,8 @@ class TransactionController extends ControllerBase
             $customer = Customer::findFirst(array("id = :id:", "bind" => array("id" => $id)));
 
 
-            if(($auth["role"] == "Employees" && $auth["user"]->User->bankId == $customer->User->bankId) || $customer->getId() == $auth["user"]->getId()) {
+            if(($auth["role"] == "Employees" && $auth["user"]->User->bankId == $customer->User->bankId) ||
+                $customer->getId() == $auth["user"]->getId()) {
                 return json_encode(Transaction::find(array("userId = :id:",  "limit" => $amount, "bind" => array("id", $customer->getId()))));
             }
         }

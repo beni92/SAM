@@ -103,7 +103,7 @@ $di->setShared('modelsMetadata', function () {
 });
 
 $di->setShared('router', function() {
-    $router = new \Phalcon\Mvc\Router();
+    $router = new \Phalcon\Mvc\Router(false);
     $router->setUriSource($router::URI_SOURCE_SERVER_REQUEST_URI);
 
     /*
@@ -154,6 +154,16 @@ $di->setShared('router', function() {
         "action" => "get"
     ));
 
+    $router->addGet("/customer/{id}/{param}", array(
+        "controller" => "customer",
+        "action" => "get"
+    ));
+
+    $router->addGet("/customer", array(
+        "controller" => "customer",
+        "action" => "get"
+    ));
+
     /*
      * Employee Controller
      */
@@ -175,7 +185,7 @@ $di->setShared('router', function() {
         "action" => "post"
     ));
 
-    $router->addGet("/depot/{id}", array(
+    $router->addGet("/depot/{loginName}/{id}", array(
         "controller" => "depot",
         "action" => "get"
     ));

@@ -64,11 +64,21 @@ class User
      */
     private $extId;
 
+    /**
+     * @var $transactions array(Transaction)
+     */
+    private $transactions;
+
+    public function __construct()
+    {
+        $this->setTransactions(array());
+    }
 
     public function login($username, $password) {
         if(!empty($username) && !empty($password)) {
             $this->setLoginName($username);
             $this->setPassword($password);
+
         }
     }
 
@@ -247,6 +257,23 @@ class User
     {
         $this->extId = $extId;
     }
+
+    /**
+     * @return array
+     */
+    public function getTransactions(): array
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * @param array $transactions
+     */
+    public function setTransactions(array $transactions)
+    {
+        $this->transactions = $transactions;
+    }
+
 
 
 }
