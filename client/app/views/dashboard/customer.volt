@@ -4,6 +4,7 @@
         {{ form("dashboard/customer/search", "method":"GET") }}
         <label for="search">Search</label>
         {{ text_field("search", "placeholder":"Search ...") }}
+        <input type="hidden" class="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}">
         {{ submit_button("Find") }}
         {{ end_form() }}
     <ul>

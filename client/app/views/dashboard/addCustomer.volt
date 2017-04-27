@@ -15,7 +15,7 @@
 
     <label for="password">Password</label>
     {{ password_field("password", "placeholder":"Password ...") }}
-
+    <input type="hidden" class="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}">
     {{ submit_button("Add") }}
 {{ end_form() }}
 </div>

@@ -77,7 +77,8 @@ class SecurityPlugin extends Plugin {
 
         //create customer resources
         $customerRes = [
-            "dashboard" => ["index"]
+            "dashboard" => ["index"],
+
         ];
 
         foreach ($customerRes as $key => $value) {
@@ -96,7 +97,7 @@ class SecurityPlugin extends Plugin {
 
         //create public resources
         $publicRes = [
-            "index" => ["index", "login"],
+            "index" => ["index", "login", "logout"],
             "error" => ["show401", "show404", "show500"]
         ];
 

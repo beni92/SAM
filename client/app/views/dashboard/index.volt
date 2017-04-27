@@ -25,7 +25,7 @@
 <h2>Transactions</h2>
 <ul>
     {% for transaction in user.getTransactions() %}
-    <li><a href="">Tranaction {{ transaction.id }}</a></li>
+    <li><a href="">Transaction {{ transaction.id }}</a></li>
     {% endfor %}
 </ul>
 
@@ -37,6 +37,7 @@
     <li><a href="">Create Depot</a></li>
     <li><a href="">Add Money</a></li>
     <li><a href="">Remove Money</a></li>
+    <li><a href="{{ url('index/logout') }}">Logout</a></li>
 </ul>
 {% endif %}
 {% if user.getRole() === config.roles.employees %}
@@ -45,5 +46,6 @@
     <li><a href="{{ url('dashboard/addCustomer') }}">Add Customer</a></li>
     <li><a href="{{ url('dashboard/addEmployee') }}">Add Employee</a></li>
     <li><a href="">Get Volume</a></li>
+    <li><a href="{{ url('index/logout') }}">Logout</a></li>
 </ul>
 {% endif %}

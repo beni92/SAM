@@ -1,6 +1,7 @@
 <?php
 namespace Sam\Client\Controllers;
 
+use Sam\Client\Models\User;
 use Sam\Client\Plugins\RestPlugin;
 
 /**
@@ -29,6 +30,14 @@ class IndexController extends ControllerBase
 
     public function indexAction()
     {
+        /** @var User $auth */
+        $auth = $this->session->get("auth");
+        if(!empty($auth)) {
+            $this->dispatcher->forward(array(
+                "controller" => "dashboard",
+                "action" => "index"
+            ));
+        }
         $this->loadAssets();
     }
 
@@ -37,7 +46,6 @@ class IndexController extends ControllerBase
         /*
          * Destroys a previous session
          */
-        $this->session->destroy();
         if($this->request->isPost() /*&& $this->security->checkToken(null, null, false)*/) {
             $username = $this->request->getPost("username");
             $password = $this->request->getPost("password");
@@ -64,6 +72,14 @@ class IndexController extends ControllerBase
         $this->dispatcher->forward(array(
             "controller" => "error",
             "action" => "show401"
+        ));
+    }
+
+    public function logoutAction() {
+        $this->session->destroy(true);
+        $this->dispatcher->forward(array(
+            "controller" => "index",
+            "action" => "index"
         ));
     }
 
