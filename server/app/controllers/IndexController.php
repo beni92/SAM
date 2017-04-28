@@ -17,7 +17,7 @@ class IndexController extends ControllerBase
     }
 
 
-    public function indexAction($init = false)
+    public function indexAction($init = "init")
     {
         if($init == "init") {
             $this->db->begin();

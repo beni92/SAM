@@ -110,6 +110,11 @@ $di->setShared('router', function() {
      * add routes
      */
 
+    $router->addGet("/init", array(
+        "controller" => "index",
+        "action" => "index"
+    ));
+
     /*
      * Bank Controller
      */
