@@ -69,6 +69,9 @@ class User
      */
     private $transactions;
 
+    /** @var  string */
+    private $address;
+
     public function __construct()
     {
         $this->setTransactions(array());
@@ -274,6 +277,21 @@ class User
         $this->transactions = $transactions;
     }
 
+    /**
+     * @return string
+     */
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress(string $address)
+    {
+        $this->address = $address;
+    }
 
 
 }

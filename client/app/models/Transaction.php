@@ -69,7 +69,7 @@ class Transaction
 
     /**
      * the timestamp of the transaction
-     * @var \DateTime
+     * @var string
      */
     private $timestamp;
 
@@ -84,7 +84,7 @@ class Transaction
      * @param int $employeeId
      * @param int $bankId
      * @param int $depotId
-     * @param \DateTime $timestamp
+     * @param string $timestamp
      */
     public function __construct(
         $id,
@@ -96,7 +96,7 @@ class Transaction
         $employeeId,
         $bankId,
         $depotId,
-        \DateTime $timestamp
+        $timestamp
     ) {
         $this->id = $id;
         $this->stockSymbol = $stockSymbol;
@@ -256,17 +256,17 @@ class Transaction
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getTimestamp(): \DateTime
+    public function getTimestamp(): string
     {
         return $this->timestamp;
     }
 
     /**
-     * @param \DateTime $timestamp
+     * @param string $timestamp
      */
-    public function setTimestamp(\DateTime $timestamp)
+    public function setTimestamp($timestamp)
     {
         $this->timestamp = $timestamp;
     }

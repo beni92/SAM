@@ -43,7 +43,6 @@ class StockController extends ControllerBase
             return json_encode($transaction);
 
         } else if($direction == 1) {
-            $depotId = $this->request->getPost("depotId");
             $ownedStocks = OwnedStock::find(array("depotId = :id: and stockSymbol = :symbol:", "bind" => array("id" => $depotId, "symbol" => $symbol)));
             /*
              * a decrementing counter of the shares left to sell

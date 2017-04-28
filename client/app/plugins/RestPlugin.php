@@ -3,6 +3,8 @@ namespace Sam\Client\Plugins;
 
 use Phalcon\Mvc\User\Plugin;
 use Sam\Client\Models\Depot;
+use Sam\Client\Models\OwnedStock;
+use Sam\Client\Models\Stock;
 use Sam\Client\Models\Transaction;
 use Sam\Client\Models\User;
 
@@ -129,38 +131,22 @@ class RestPlugin extends Plugin
 
 
         if($user->getRole() == $config->roles->employees) {
-            $cRes = self::callAPI("GET", "employee/" . $user->getExtId(), $user->getLoginName(), $user->getPassword());
+            $eRes = self::callAPI("GET", "employee/" . $user->getExtId(), $user->getLoginName(), $user->getPassword());
 
-            $cRes = $this->stdClassFromJson($cRes);
-            if($cRes === false) {
+            $eRes = $this->stdClassFromJson($eRes);
+            if($eRes === false) {
                 return false;
             }
 
-            $transactions = array();
-            /**
-             * @var $transaction \stdClass
-             */
-            foreach ($cRes->return->transactions as $transaction) {
-                $intTrans = new Transaction(
-                    $transaction->id,
-                    $transaction->stockSymbol,
-                    $transaction->shares,
-                    $transaction->pricePerShare,
-                    $transaction->direction,
-                    $transaction->customerId,
-                    $transaction->employeeId,
-                    $transaction->bankId,
-                    $transaction->depotId,
-                    new \Datetime($transaction->timestamp));
-                $transaction[] = $intTrans;
-            }
-
+            $transactions = $this->transactionsFromStdClass($eRes->return->transactions);
             $user->setTransactions($transactions);
             $this->session->set("auth", $user);
             return true;
         }
         return false;
     }
+
+
 
     public function loadCustomerInfo() {
         $config = $this->di->get("config");
@@ -234,7 +220,7 @@ class RestPlugin extends Plugin
 
     }
 
-    public function addCustomer($loginName, $password, $firstname, $lastname, $phone) {
+    public function addCustomer($loginName, $password, $firstname, $lastname, $phone, $address) {
         $config = $this->di->get("config");
         /**
          * @var $user User
@@ -248,6 +234,7 @@ class RestPlugin extends Plugin
                 "firstname" => $firstname,
                 "lastname" => $lastname,
                 "phone" => $phone,
+                "address" => $address,
                 "role" => $config->roles->customers
             )
         );
@@ -289,7 +276,64 @@ class RestPlugin extends Plugin
             return false;
         }
 
-        return $this->depotFromStdClass($res->depot);
+        $depot = $this->depotFromStdClass($res->depot);
+        $depot->setUser($this->customerFromStdClass($res, false));
+        $depot->setOwnedStocks($this->ownedStocksFromStdClass($res->ownedStocks, $depot));
+
+        return $depot;
+    }
+
+    public function getStocks($stock)
+    {
+        $config = $this->di->get("config");
+        /**
+         * @var $user User
+         */
+        $user = $this->session->get('auth');
+
+        $res = self::callAPI("GET", "stock/$stock", $user->getLoginName(), $user->getPassword());
+        $res = $this->stdClassFromJson($res);
+        if($res === false) {
+            return false;
+        }
+
+        return $this->stocksFromStdClass($res);
+
+    }
+
+    public function buyStock($shares, $symbol, $depot)
+    {
+        return $this->stockTransaction($shares, $symbol, $depot, 0);
+    }
+
+    public function sellStock($shares, $symbol, $depot)
+    {
+        return $this->stockTransaction($shares, $symbol, $depot, 1);
+    }
+
+    public function addDepot($loginName, $budget)
+    {
+        $config = $this->di->get("config");
+        /**
+         * @var $user User
+         */
+        $user = $this->session->get('auth');
+        $res = self::callAPI("POST", "depot", $user->getLoginName(), $user->getPassword(),
+            array(
+                "budget" => $budget,
+                "loginName" => $loginName
+            )
+        );
+        $res = $this->stdClassFromJson($res);
+        if($res === false) {
+            return false;
+        }
+
+        /** @var Depot $depot */
+        $depot =  $this->depotFromStdClass($res->depot);
+        $depot->setUser($this->getCustomer($loginName));
+        $depot->setOwnedStocks(array());
+        return $depot;
     }
 
     private function stdClassFromJson($cRes) {
@@ -312,7 +356,7 @@ class RestPlugin extends Plugin
         return $customers;
     }
 
-    private function customerFromStdClass($cust) {
+    private function customerFromStdClass($cust, $getDepots = true) {
         $customer = new User();
         $customer->setLoginName($cust->user->loginNr);
         $customer->setBankId($cust->user->bankId);
@@ -322,8 +366,10 @@ class RestPlugin extends Plugin
         $customer->setPhone($cust->user->phone);
         $customer->setBudget($cust->customer->budget);
         $customer->setExtId($cust->customer->id);
-        foreach ($cust->depots as $value) {
-            $customer->addDepot($this->depotFromStdClass($value, $customer));
+        if($getDepots === true) {
+            foreach ($cust->depots as $value) {
+                $customer->addDepot($this->depotFromStdClass($value, $customer));
+            }
         }
         return $customer;
     }
@@ -339,7 +385,97 @@ class RestPlugin extends Plugin
         return $depot;
     }
 
-    private function ownedStocksFromStdClass($ownedStocks) {
-
+    private function ownedStocksFromStdClass($ownedStocks, $depot) {
+        $ret = array();
+        foreach ($ownedStocks as $ownedStock) {
+            $ownst = new OwnedStock
+            (
+                $ownedStock->id,
+                $ownedStock->stockSymbol,
+                $ownedStock->pricePerShare,
+                $ownedStock->shares,
+                $depot
+            );
+            $ret[] = $ownst;
+        }
+        return $ret;
     }
+
+    private function stockFromStdClass($stock) {
+        $retStock = new Stock(
+            $stock->id,
+            $stock->companyName,
+            $stock->lastTradePrice,
+            $stock->lastTradeTime,
+            $stock->stockExchange,
+            $stock->symbol,
+            $stock->floatShares,
+            $stock->marketCapitalization
+        );
+        return $retStock;
+    }
+
+    private function stocksFromStdClass($stocks) {
+        $retStocks = array();
+        foreach ($stocks as $stock) {
+            $retStocks[] = $this->stockFromStdClass($stock);
+        }
+        return $retStocks;
+    }
+
+    private function stockTransaction($shares, $symbol, $depot, $direction) {
+        $config = $this->di->get("config");
+        /**
+         * @var $user User
+         */
+        $user = $this->session->get('auth');
+
+        $res = self::callAPI("POST", "stock", $user->getLoginName(), $user->getPassword(),
+            array(
+                "shares" => $shares,
+                "direction" => $direction,
+                "symbol" => $symbol,
+                "depotId" => $depot
+            )
+        );
+
+        $res = $this->stdClassFromJson($res);
+        if($res === false) {
+            return false;
+        }
+
+        $transaction = $this->transactionFromStdClass($res);
+        return $transaction;
+    }
+
+    private function transactionsFromStdClass($cRes) {
+        $transactions = array();
+        /**
+         * @var $transaction \stdClass
+         */
+        foreach ($cRes as $transaction) {
+            $transactions[] = $this->transactionFromStdClass($transaction);
+        }
+
+        return $transactions;
+    }
+
+    private function transactionFromStdClass($transaction) {
+        return new Transaction(
+            $transaction->id,
+            $transaction->stockSymbol,
+            $transaction->shares,
+            $transaction->pricePerShare,
+            $transaction->direction,
+            $transaction->customerId,
+            $transaction->employeeId,
+            $transaction->bankId,
+            $transaction->depotId,
+            $transaction->timestamp
+        );
+    }
+
+
+
+
 }

@@ -20,7 +20,7 @@ class Depot
     private $user;
 
     /**
-     * @var OwnedStock
+     * @var array(OwnedStock)
      */
     private $ownedStocks;
 
@@ -46,19 +46,45 @@ class Depot
     }
 
     /**
-     * @return OwnedStock
+     * @return array(OwnedStock)
      */
-    public function getOwnedStocks()
+    public function getOwnedStocks($symbol = false)
     {
-        return $this->ownedStocks;
+        if($symbol === false) {
+            return $this->ownedStocks;
+        } else {
+            $retArr = array();
+            /** @var OwnedStock $ownedStock */
+            foreach ($this->ownedStocks as $ownedStock) {
+                if($ownedStock->getStockSymbol() === $symbol) {
+                    $retArr[] = $ownedStock;
+                }
+            }
+            return $retArr;
+        }
     }
 
     /**
-     * @param OwnedStock $ownedStocks
+     * @param array(OwnedStock) $ownedStocks
      */
     public function setOwnedStocks($ownedStocks)
     {
         $this->ownedStocks = $ownedStocks;
+    }
+
+    /**
+     * @param $symbol string the symbol to get all shares owned
+     * @return int returns all summed up shares from owned stocks with the given symbol
+     */
+    public function getOwnedStocksShares($symbol) {
+        $ret = 0;
+        /** @var OwnedStock $ownedStock */
+        foreach ($this->ownedStocks as $ownedStock) {
+            if($ownedStock->getStockSymbol() === $symbol) {
+                $ret += $ownedStock->getShares();
+            }
+        }
+        return $ret;
     }
 
     /**

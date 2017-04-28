@@ -99,4 +99,16 @@ class Customer extends \Phalcon\Mvc\Model
     {
         $this->budget = $budget;
     }
+
+    public function changeBudget($difference) {
+        if($difference < 0 && $this->budget + $difference < 0) {
+            return false;
+        } else {
+            $this->budget += $difference;
+            if($this->save() === false){
+                return false;
+            }
+            return true;
+        }
+    }
 }

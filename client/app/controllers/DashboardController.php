@@ -35,24 +35,62 @@ class DashboardController extends ControllerBase
          */
         $server = $this->getDI()->get("server");
 
+        if($this->request->isGet()) {
+            $search = $this->request->get("search");
+            $depot = $this->request->get("depot");
+            $stock = $this->request->get("stock");
+            $new = $this->request->get("new");
 
-        $search = $this->request->get("search");
-        $depot = $this->request->get("depot");
+            if($loginName === false) {
+                $customers = $server->getCustomers();
+                $this->view->customers = $customers;
+            } else if($loginName !== false && !isset($search) && !isset($depot)) {
+                $customer = $server->getCustomer($loginName);
+                $this->view->customer = $customer;
+            } else if($loginName !== false && isset($search)) {
+                $customers = $server->findCustomers($search);
+                $this->view->customers = $customers;
+            } else if($loginName !== false && isset($depot) && empty($depot) && isset($new) && empty($new)) {
+                $customer = $server->getCustomer($loginName);
+                $this->view->newDepot = true;
+                $this->view->customer = $customer;
+            } else if($loginName !== false && isset($depot) && !isset($stock)) {
+                $depot = $server->getDepot($depot, $loginName);
+                $this->view->depot = $depot;
+            } else if($loginName !== false && isset($depot) && isset($stock) && empty($stock) ) {
+                $depot = $server->getDepot($depot, $loginName);
+                $this->view->depot = $depot;
+                $this->view->searchStocks = true;
+            } else if($loginName !== false && isset($depot) && isset($stock) && !empty($stock) ) {
+                $depot = $server->getDepot($depot, $loginName);
+                $this->view->depot = $depot;
+                $this->view->searchStocks = true;
 
-        if($loginName === false) {
-            $customers = $server->getCustomers();
-            $this->view->customers = $customers;
-        } else if($loginName !== false && !isset($search) && !isset($depot)) {
-            $customer = $server->getCustomer($loginName);
-            $this->view->customer = $customer;
-        } else if($loginName !== false && isset($search)) {
-            $customers = $server->findCustomers($search);
-            $this->view->customers = $customers;
-        } else if($loginName !== false && isset($depot)) {
-            $depot = $server->getDepot($depot, $loginName);
-            $this->view->depot = $depot;
+                $stocks = $server->getStocks($stock);
+                $this->view->stocks = $stocks;
+            }
+        } else if($this->request->isPost()) {
+            $newDepot = $this->request->getPost("newDepot");
+            if(empty($newDepot)) {
+                $depot = $this->request->getPost("depot", null, null, true);
+                $direction = $this->request->getPost("direction", null, null, true);
+                $shares = $this->request->getPost("shares", null, null, true);
+                $symbol = $this->request->getPost("symbol", null, null, true);
+                $transaction = false;
+                if($direction === "buy") {
+                    $transaction = $server->buyStock($shares, $symbol, $depot);
+                } else if($direction === "sell") {
+                    $transaction = $server->sellStock($shares, $symbol, $depot);
+                }
+                $this->view->transaction = $transaction;
+            } else {
+                $budget = $this->request->getPost("budget");
+                $depot = $server->addDepot($loginName, $budget);
+                $this->view->depot = $depot;
+            }
+
+
         }
-
     }
 
     public function addCustomerAction() {
@@ -63,11 +101,13 @@ class DashboardController extends ControllerBase
             $password = $this->request->getPost("password");
             $firstname = $this->request->getPost("firstname");
             $lastname = $this->request->getPost("lastname");
+            $address = $this->request->getPost("address");
             $phone = $this->request->getPost("phone");
 
-            if(!empty($loginName) && !empty($password) && !empty($firstname) && !empty($lastname)) {
+            if(!empty($loginName) && !empty($password) && !empty($firstname) && !empty($lastname) && !empty($address)) {
+                /** @var RestPlugin $server */
                 $server = $this->getDI()->get("server");
-                $res = $server->addCustomer($loginName, $password, $firstname, $lastname, $phone);
+                $res = $server->addCustomer($loginName, $password, $firstname, $lastname, $phone, $address);
                 if(isset($res->success)) {
                     $this->dispatcher->forward(array(
                         "controller" => "dashboard",

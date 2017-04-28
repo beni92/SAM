@@ -41,7 +41,7 @@ class Depot extends \Phalcon\Mvc\Model
         $this->hasMany(
             "ownedStocks",
             "Sam\\Server\\Models\\OwnedStock",
-            "id",
+            "depotId",
             array("alias" => "OwnedStocks")
         );
     }

@@ -3,6 +3,7 @@ namespace Sam\Server\Controllers;
 
 use Sam\Server\Models\Customer;
 use Sam\Server\Models\Depot;
+use Sam\Server\Models\OwnedStock;
 use Sam\Server\Models\User;
 use Sam\Server\Plugins\AuthenticationPlugin;
 
@@ -32,7 +33,9 @@ class DepotController extends ControllerBase
         if(empty($depot)) {
             return json_encode(array("error" => "Request error", "code" => "42"));
         }
-        $ownedStocks = $depot->getOwnedStocks();
+
+        $ownedStocks = OwnedStock::find(array("depotId = :id:", "bind" => array("id" => $depot->getId())));
+
         /**
          * @var $customer Customer
          */
@@ -59,7 +62,41 @@ class DepotController extends ControllerBase
     }
 
     public function postAction() {
+        /**
+         * gets the configuration object
+         */
+        $config = $this->getDI()->get('config');
+        /*
+         * gets the authenticated user
+         */
+        $auth = $this->session->get("auth");
 
+        $loginName = $this->request->getPost("loginName");
+
+        /** @var User $user */
+        $user = User::findFirst(array("loginNr = :ln:", "bind" => array("ln" => $loginName)));
+        $budget = $this->request->getPost("budget");
+
+        if(AuthenticationPlugin::isAllowedUser($user, $auth, $loginName, $config) === true) {
+            if(!isset($budget) || empty($budget) || !is_numeric($budget)) {
+                return json_encode(array("error" => "request invalid", "code" => "90", "budget" => $budget));
+            }
+            /** @var Customer $customer */
+            $customer = Customer::findFirst(array("userId = :id:", "bind" => array("id" => $user->getId())));
+
+            if($customer->changeBudget(-1 * $budget) === false) {
+                return json_encode(array("error" => "request invalid", "code" => "93"));
+            }
+
+            $depot = new Depot();
+            $depot->setCustomerId($customer->getId());
+            $depot->setBudget($budget);
+            if($depot->save() === false) {
+                return json_encode(array("error" => "request invalid", "code" => "91"));
+            }
+            return json_encode(array("depot" => $depot));
+        }
+        return json_encode(array("error" => "request invalid", "code" => "92"));
     }
 
 }

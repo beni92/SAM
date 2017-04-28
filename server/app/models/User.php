@@ -25,6 +25,8 @@ class User extends \Phalcon\Mvc\Model
 
     private $createdByEmployeeId;
 
+    private $address;
+
     public function initialize() {
         $this->setSource("User");
 
@@ -187,6 +189,22 @@ class User extends \Phalcon\Mvc\Model
     public function setCreatedByEmployeeId($createdByEmployeeId)
     {
         $this->createdByEmployeeId = $createdByEmployeeId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param mixed $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
     }
 
 }

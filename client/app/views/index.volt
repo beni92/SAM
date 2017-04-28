@@ -7,11 +7,12 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         {{ get_title() }}
         {{ assets.outputCss() }}
+        {{ assets.outputJs() }}
     </head>
     <body>
         <div class="container">
             {{ content() }}
         </div>
-        {{ assets.outputJs() }}
+
     </body>
 </html>

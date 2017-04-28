@@ -101,6 +101,7 @@ class UserController extends ControllerBase
             $lastname = $this->request->getPost("lastname");
             $phone = $this->request->getPost("phone");
             $role = $this->request->getPost("role");
+            $address = $this->request->getPost("address");
             $password = $this->request->getPost("password");
             $createdBy = $auth['user']->getId();
 
@@ -112,6 +113,7 @@ class UserController extends ControllerBase
             $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
             $user->setFirstname($firstname);
             $user->setLastname($lastname);
+            $user->setAddress($address);
             $user->setPhone($phone);
             $user->setLoginNr($loginNr);
             $user->setCreatedByEmployeeId($createdBy);
