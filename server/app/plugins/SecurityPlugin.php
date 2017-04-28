@@ -46,7 +46,7 @@ class SecurityPlugin extends Plugin
 
             $customerResources = array(
                 'customer' => array("get"),
-                'depot' => array("get"),
+                'depot' => array("get", "post"),
                 'stock' => array("get"),
                 'ownedstock' => array("get"),
                 'transaction' => array("get"),
@@ -58,14 +58,14 @@ class SecurityPlugin extends Plugin
             }
 
             $employeeResources = array(
-                'customer' => array("get", "post"),
+                'customer' => array("get"),
                 'depot' => array("get", "post"),
                 'stock' => array("get"),
-                'ownedstock' => array("get", "post"),
+                'ownedstock' => array("get"),
                 'transaction' => array("get"),
                 'user' => array("get", "post"),
-                'bank' => array("get", "post"),
-                'employee' => array("get", "post")
+                'bank' => array("get"),
+                'employee' => array("get")
             );
 
             foreach ($employeeResources as $resource => $actions) {

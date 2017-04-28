@@ -86,7 +86,7 @@ class Stock
     /**
      * @return string
      */
-    public function getCompanyName(): string
+    public function getCompanyName()
     {
         return $this->companyName;
     }
@@ -102,7 +102,7 @@ class Stock
     /**
      * @return float
      */
-    public function getLastTradePrice(): float
+    public function getLastTradePrice()
     {
         return $this->lastTradePrice;
     }
@@ -118,7 +118,7 @@ class Stock
     /**
      * @return string
      */
-    public function getLastTradeTime(): string
+    public function getLastTradeTime()
     {
         return $this->lastTradeTime;
     }
@@ -134,7 +134,7 @@ class Stock
     /**
      * @return string
      */
-    public function getStockExchange(): string
+    public function getStockExchange()
     {
         return $this->stockExchange;
     }
@@ -150,7 +150,7 @@ class Stock
     /**
      * @return string
      */
-    public function getSymbol(): string
+    public function getSymbol()
     {
         return $this->symbol;
     }
@@ -166,7 +166,7 @@ class Stock
     /**
      * @return float
      */
-    public function getFloatShares(): float
+    public function getFloatShares()
     {
         return $this->floatShares;
     }
@@ -182,7 +182,7 @@ class Stock
     /**
      * @return float
      */
-    public function getMarketCapitalization(): float
+    public function getMarketCapitalization()
     {
         return $this->marketCapitalization;
     }

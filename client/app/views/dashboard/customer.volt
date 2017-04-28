@@ -1,12 +1,13 @@
 {% if customers is defined %}
     <h1>Customers</h1>
-    {% if customers|length > 0 %}
-        {{ form("dashboard/customer/search", "method":"GET") }}
+    {{ form("dashboard/customer/search", "method":"GET") }}
         <label for="search">Search</label>
         {{ text_field("search", "placeholder":"Search ...") }}
         <input type="hidden" class="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}">
         {{ submit_button("Find") }}
-        {{ end_form() }}
+    {{ end_form() }}
+    {% if customers|length > 0 %}
+
     <ul>
         {% for customer in customers %}
             <li><a href="{{ url('dashboard/customer/'~customer.getLoginName()) }}">{{ customer.getFirstname() }} {{ customer.getLastname() }}</a></li>
@@ -124,8 +125,8 @@
     <h2>Find Stocks</h2>
     {{ form('dashboard/customer/' ~ depot.getUser().getLoginName(), "method":"GET") }}
     <label for="stock">Search</label>
-    {{ text_field("stock", "placeholder":"Search ...") }}
     <input type="hidden" class="hidden" name="depot" value="{{ depot.getId() }}">
+    {{ text_field("stock", "placeholder":"Search ...") }}
     <input type="hidden" class="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}">
     {{ submit_button("Find") }}
     {{ end_form() }}

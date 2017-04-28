@@ -10,6 +10,9 @@
     <label for="lastname">Surname</label>
     {{ text_field("lastname", "size":45, "placeholder":"Surname ...") }}
 
+    <label for="address">Address</label>
+    {{ text_field("address", "size":45, "placeholder":"Address ...") }}
+
     <label for="phone">Phone</label>
     {{ text_field("phone", "size":45, "placeholder":"Phone ...") }}
 

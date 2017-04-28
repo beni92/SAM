@@ -42,15 +42,25 @@ class DashboardController extends ControllerBase
             $new = $this->request->get("new");
 
             if($loginName === false) {
+                /*
+                 *  Shows all Customers
+                 */
                 $customers = $server->getCustomers();
                 $this->view->customers = $customers;
             } else if($loginName !== false && !isset($search) && !isset($depot)) {
+                /*
+                 * shows a single customer
+                 */
                 $customer = $server->getCustomer($loginName);
                 $this->view->customer = $customer;
             } else if($loginName !== false && isset($search)) {
+                /*
+                 * searches for customers and views the list
+                 */
                 $customers = $server->findCustomers($search);
                 $this->view->customers = $customers;
             } else if($loginName !== false && isset($depot) && empty($depot) && isset($new) && empty($new)) {
+
                 $customer = $server->getCustomer($loginName);
                 $this->view->newDepot = true;
                 $this->view->customer = $customer;
@@ -106,7 +116,7 @@ class DashboardController extends ControllerBase
 
             if(!empty($loginName) && !empty($password) && !empty($firstname) && !empty($lastname) && !empty($address)) {
                 /** @var RestPlugin $server */
-                $server = $this->getDI()->get("server");
+                $server = $this->di->get("server");
                 $res = $server->addCustomer($loginName, $password, $firstname, $lastname, $phone, $address);
                 if(isset($res->success)) {
                     $this->dispatcher->forward(array(

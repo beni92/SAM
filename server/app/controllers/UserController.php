@@ -32,6 +32,7 @@ class UserController extends ControllerBase
         $auth = $this->session->get("auth");
         /**
          * get the requested user by its loginNr
+         * SELECT * FROM USER WHERE loginNr = $loginNr
          * @var $user User
          */
         $user = User::findFirst(array("loginNr = :lnr:", "bind" => array("lnr" => $loginNr)));
@@ -120,7 +121,7 @@ class UserController extends ControllerBase
 
             if($user->save() === false) {
                 $this->db->rollback();
-                return json_encode(array("error" => "user could not be created", "code" => 00, "user" => $user));
+                return json_encode(array("error" => "user could not be created", "code" => 00));
             }
 
             if($role == $config->roles->customers) {
