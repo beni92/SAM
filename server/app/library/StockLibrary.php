@@ -25,14 +25,6 @@ use Phalcon\Mvc\Model\Transaction\Manager as TxManager;
  */
 class StockLibrary
 {
-    const USER = "bic4b17_04";
-    const PASS = 'Jeingo4fi';
-    const AGENT = "ABC";
-    const WSDL = "http://edu.dedisys.org/ds-finance/ws/TradingService?wsdl";
-
-
-
-
     /**
      *
      *
@@ -371,12 +363,13 @@ class StockLibrary
      * @return \SoapClient SoapClient
      */
     private static function getSoapClient() {
+        $config = \Phalcon\Di::getDefault()->get("config");
         $client = new \SoapClient(
-            self::WSDL,
+            $config->exchange->wsdl,
             [
-                'login' => self::USER,
-                'password' => self::PASS,
-                'user_agent' => self::AGENT
+                'login' => $config->exchange->login,
+                'password' => $config->exchange->password,
+                'user_agent' => $config->exchange->user_agent
             ]
         );
         return $client;

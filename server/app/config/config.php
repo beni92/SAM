@@ -8,21 +8,21 @@ defined('APP_PATH') || define('APP_PATH', BASE_PATH . '/app');
 
 return new \Phalcon\Config([
     'database' => [
-        'adapter'     => 'Mysql',
-        'host'        => getenv('MYSQL_HOST'),
-        'username'    => getenv('MYSQL_USER'),
-        'password'    => getenv('MYSQL_PASSWORD'),
-        'dbname'      => getenv('MYSQL_DATABASE'),
-        'charset'     => 'utf8mb4',
+        'adapter'        => 'Mysql',
+        'host'           => getenv('MYSQL_HOST'),
+        'username'       => getenv('MYSQL_USER'),
+        'password'       => getenv('MYSQL_PASSWORD'),
+        'dbname'         => getenv('MYSQL_DATABASE'),
+        'charset'        => 'utf8mb4',
     ],
     /*
     'database' => [
-        'adapter'     => 'Mysql',
-        'host'        => "localhost:13306",
-        'username'    => "root",
-        'password'    => "root",
-        'dbname'      => "phalcon",
-        'charset'     => 'utf8mb4',
+        'adapter'        => 'Mysql',
+        'host'           => "localhost:13306",
+        'username'       => "root",
+        'password'       => "root",
+        'dbname'         => "phalcon",
+        'charset'        => 'utf8mb4',
     ],*/
 
     'application' => [
@@ -38,8 +38,15 @@ return new \Phalcon\Config([
     ],
 
     'roles' => [
-        'guests' => 'Guests',
-        'customers' => 'Customers',
-        'employees' => 'Employees'
+        'guests'        => 'Guests',
+        'customers'     => 'Customers',
+        'employees'     => 'Employees'
+    ],
+
+    'exchange' => [
+        'wsdl'          => getenv('EXCHANGE_WSDL'),
+        'login'         => getenv('EXCHANGE_LOGIN'),
+        'password'      => getenv('EXCHANGE_PASSWORD'),
+        'user_agent'    => getenv('EXCHANGE_USER_AGENT')
     ]
 ]);
