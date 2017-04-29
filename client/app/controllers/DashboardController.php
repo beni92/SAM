@@ -9,6 +9,7 @@
 namespace Sam\Client\Controllers;
 
 
+use Sam\Client\Models\OwnedStock;
 use Sam\Client\Models\User;
 use Sam\Client\Plugins\RestPlugin;
 
@@ -22,10 +23,20 @@ class DashboardController extends ControllerBase
 
     public function indexAction() {
 
+        $config = $this->di->get("config");
+        /** @var User $auth */
+        $auth = $this->session->get("auth");
+        if($auth->getRole() === $config->roles->customers) {
+            $this->response->redirect('dashboard/customer/' . $auth->getLoginName());
+        }
+
         $this->view->user = $this->session->get("auth");
+
+
     }
 
     public function customerAction($loginName = false) {
+        $config = $this->di->get("config");
         /**
          * @var $user User
          */
@@ -40,68 +51,196 @@ class DashboardController extends ControllerBase
             $depot = $this->request->get("depot");
             $stock = $this->request->get("stock");
             $new = $this->request->get("new");
+            $budget = $this->request->get("budget");
 
             if($loginName === false) {
                 /*
-                 *  Shows all Customers
+                 * only employees may access the list view
                  */
-                $customers = $server->getCustomers();
-                $this->view->customers = $customers;
-            } else if($loginName !== false && !isset($search) && !isset($depot)) {
+                if($user->getRole() === $config->roles->employees) {
+                    /*
+                     *  Shows all Customers
+                     */
+                    $this->view->pick("dashboard/listCustomers");
+                    $customers = $server->getCustomers();
+                    $this->view->customers = $customers;
+                } else {
+                    $this->dispatcher->forward(array(
+                        "controller"=>"error",
+                        "action" => "show401"
+                    ));
+                }
+
+            } else if($loginName !== false && !isset($search) && !isset($depot) && !isset($budget)) {
                 /*
                  * shows a single customer
                  */
+                $this->view->pick("dashboard/showCustomer");
                 $customer = $server->getCustomer($loginName);
                 $this->view->customer = $customer;
+                $this->view->auth = $this->session->get("auth");
             } else if($loginName !== false && isset($search)) {
                 /*
                  * searches for customers and views the list
                  */
-                $customers = $server->findCustomers($search);
-                $this->view->customers = $customers;
+                if($user->getRole() === $config->roles->employees) {
+                    $this->view->pick("dashboard/listCustomers");
+                    $customers = $server->findCustomers($search);
+                    $this->view->customers = $customers;
+                } else {
+                    $this->dispatcher->forward(array(
+                        "controller"=>"error",
+                        "action" => "show401"
+                    ));
+                }
             } else if($loginName !== false && isset($depot) && empty($depot) && isset($new) && empty($new)) {
-
+                /*
+                 * loads the page to add a depot
+                 */
+                $this->view->pick("dashboard/addDepot");
                 $customer = $server->getCustomer($loginName);
                 $this->view->newDepot = true;
                 $this->view->customer = $customer;
             } else if($loginName !== false && isset($depot) && !isset($stock)) {
+                /*
+                 * loads the selected depot
+                 */
+                $this->view->pick("dashboard/showDepot");
                 $depot = $server->getDepot($depot, $loginName);
+                $ownedStocks = array();
+                /** @var OwnedStock $ownedStock */
+                if(!empty($depot)) {
+                    $res = $depot->getOwnedStocks(false, true);
+                    /** @var OwnedStock $stock */
+                    foreach ($res as $stock) {
+                        $stocksBySymbol = $depot->getOwnedStocks($stock->getStockSymbol());
+                        $ret = new OwnedStock(-1, $stock->getStockSymbol(), 0, 0, $depot);
+                        foreach ($stocksBySymbol as $ownedStock) {
+                            $ret->setPricePerShare($ret->getPricePerShare() + $ownedStock->getPricePerShare());
+                            $ret->setShares($ret->getShares() + $ownedStock->getShares());
+                        }
+                        $ret->setPricePerShare($ret->getPricePerShare() / count($stocksBySymbol));
+                        $ownedStocks[] = $ret;
+                    }
+                }
+
+
+                $this->view->stocks = $ownedStocks;
                 $this->view->depot = $depot;
             } else if($loginName !== false && isset($depot) && isset($stock) && empty($stock) ) {
+                /*
+                 * loads the search page for stocks
+                 */
+                $this->view->pick("dashboard/searchStocks");
                 $depot = $server->getDepot($depot, $loginName);
                 $this->view->depot = $depot;
                 $this->view->searchStocks = true;
             } else if($loginName !== false && isset($depot) && isset($stock) && !empty($stock) ) {
+                /*
+                 * loads the search page for stocks with results
+                 */
+                $this->view->pick("dashboard/searchStocks");
                 $depot = $server->getDepot($depot, $loginName);
                 $this->view->depot = $depot;
                 $this->view->searchStocks = true;
 
                 $stocks = $server->getStocks($stock);
                 $this->view->stocks = $stocks;
+            } else if($loginName !== false && isset($budget)) {
+                /*
+                 * loads the view to change the budget
+                 */
+                $this->view->pick("dashboard/changeBudget");
+                $customer = $server->getCustomer($loginName);
+                $this->view->customer = $customer;
             }
         } else if($this->request->isPost()) {
+
             $newDepot = $this->request->getPost("newDepot");
-            if(empty($newDepot)) {
+            $changeBudget = $this->request->getPost("changeBudget");
+
+            /*
+             * if the param $newDepot is not set (empty) and changeBudget is not set (empty)
+             * then either sell or buy is the action
+             */
+            if(empty($newDepot) && empty($changeBudget)) {
+                /*
+                 * gets all paramaters needed for a transaction
+                 */
                 $depot = $this->request->getPost("depot", null, null, true);
                 $direction = $this->request->getPost("direction", null, null, true);
                 $shares = $this->request->getPost("shares", null, null, true);
                 $symbol = $this->request->getPost("symbol", null, null, true);
+                $ownedStockId = $this->request->getPost("ownedStockId");
+
                 $transaction = false;
+                $this->view->pick("dashboard/searchStocks");
                 if($direction === "buy") {
+
                     $transaction = $server->buyStock($shares, $symbol, $depot);
+                    $depot = $server->getDepot($depot, $loginName);
+                    $this->view->depot = $depot;
+                    $this->view->searchStocks = true;
+
+                    $stocks = $server->getStocks($symbol);
+                    $this->view->stocks = $stocks;
                 } else if($direction === "sell") {
-                    $transaction = $server->sellStock($shares, $symbol, $depot);
+                    if(empty($ownedStockId)) {
+                       $ownedStockId = false;
+                    }
+                    $transaction = $server->sellStock($shares, $symbol, $depot, $ownedStockId);
+                    $depot = $server->getDepot($depot, $loginName);
+                    $this->view->depot = $depot;
+                    $this->view->searchStocks = true;
+
+                    $stocks = $server->getStocks($symbol);
+                    $this->view->stocks = $stocks;
                 }
+
                 $this->view->transaction = $transaction;
-            } else {
+            } else if(empty($changeBudget)){
                 $budget = $this->request->getPost("budget");
                 $depot = $server->addDepot($loginName, $budget);
-                $this->view->depot = $depot;
+                if(!empty($depot)) {
+                    $this->view->pick("dashboard/showDepot");
+                    $this->view->depot = $depot;
+                } else {
+                    $this->view->pick("dashboard/addDepot");
+                    $customer = $server->getCustomer($loginName);
+                    $this->view->newDepot = true;
+                    $this->view->customer = $customer;
+                }
+            } else if(!empty($changeBudget)) {
+                $cash = $this->request->getPost("cash");
+                $success = $server->changeBudget($loginName, $cash);
+
+                if($success === true) {
+                    $this->view->pick("dashboard/showCustomer");
+                    $customer = $server->getCustomer($loginName);
+                    $this->view->customer = $customer;
+                } else {
+
+                    $this->view->pick("dashboard/changeBudget");
+                    $customer = $server->getCustomer($loginName);
+                    $this->view->customer = $customer;
+                }
             }
-
-
         }
     }
+
+    public function bankAction() {
+        /**
+         * @var $user User
+         */
+        $user = $this->session->get("auth");
+        /**
+         * @var $server RestPlugin
+         */
+        $server = $this->getDI()->get("server");
+        $bank = $server->getBank();
+        $this->view->bank = $bank;
+    }
+
 
     public function addCustomerAction() {
         if($this->request->isGet()) {

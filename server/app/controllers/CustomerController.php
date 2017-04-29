@@ -77,7 +77,31 @@ class CustomerController extends ControllerBase
             return json_encode(array("error"=>"Request error", "code" => "53"));
         }
     }
-    public function postAction() {
 
+    public function postAction() {
+        $value = $this->request->getPost("value");
+        $loginName = $this->request->getPost("loginName");
+
+        /** @var User $user */
+        $user = User::findFirst(array("loginNr = :ln:", "bind" => array("ln" => $loginName)));
+        if(empty($user)) {
+            return json_encode(array("error" => "Error in request", "code"=> "81"));
+        }
+
+        /** @var Customer $customer */
+        $customer = Customer::findFirst(array("userId = :id:", "bind" => array("id" => $user->getId())));
+        if(empty($customer)) {
+            return json_encode(array("error" => "Error in request", "code"=> "82"));
+        }
+
+        if(AuthenticationPlugin::isAllowedUser($user, $this->session->get("auth"), $loginName, $this->di->get("config"))) {
+            if($customer->changeBudget($value) === false) {
+                return json_encode(array("error" => "Error changing budget", "code"=> "83"));
+            } else {
+                return json_encode(array("success" => "Budget changed successfully"));
+            }
+        } else {
+            return json_encode(array("error" => "Error changing budget", "code"=> "84"));
+        }
     }
 }

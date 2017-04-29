@@ -77,6 +77,10 @@ class StockLibrary
         if(($auth["role"] === $config->roles->customers && $auth["user"]->getId() === $depot->getCustomerId()) ||
                 ($auth["role"] === $config->roles->employees && $auth["user"]->User->getBankId() === $user->getBankId())) {
 
+            if($shares <= 0) {
+                return false;
+            }
+
             /**
              * get the bank of the authenticated user
              * @var $bank Bank
@@ -283,6 +287,10 @@ class StockLibrary
                 ($auth["role"] == $config->roles->customers && $auth["user"]->getId() == $depot->getCustomerId()) ||
                 ($auth["role"] == $config->roles->employees && $auth["user"]->User->getBankId() == $user->getBankId())
             )) {
+
+            if($shares <= 0) {
+                return false;
+            }
             /**
              * @var $bank Bank
              */

@@ -29,6 +29,9 @@ class Depot
      */
     private $budget;
 
+    /** @var  double */
+    private $value;
+
     /**
      * @return int
      */
@@ -48,15 +51,30 @@ class Depot
     /**
      * @return array(OwnedStock)
      */
-    public function getOwnedStocks($symbol = false)
+    public function getOwnedStocks($symbol = false, $singular = false)
     {
-        if($symbol === false) {
+        if($symbol === false && $singular === false) {
             return $this->ownedStocks;
-        } else {
+        } else if($symbol !== false && $singular === false) {
             $retArr = array();
             /** @var OwnedStock $ownedStock */
             foreach ($this->ownedStocks as $ownedStock) {
                 if($ownedStock->getStockSymbol() === $symbol) {
+                    $retArr[] = $ownedStock;
+                }
+            }
+            return $retArr;
+        } else {
+            $retArr = array();
+            foreach ($this->ownedStocks as $ownedStock) {
+                $searched = $ownedStock->getStockSymbol();
+                $neededObject = array_filter(
+                    $retArr,
+                    function ($e) use (&$searched) {
+                        return $e->getStockSymbol() == $searched;
+                    }
+                );
+                if(empty($neededObject)) {
                     $retArr[] = $ownedStock;
                 }
             }
@@ -117,6 +135,22 @@ class Depot
     public function setUser(User $user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return float
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param float $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
     }
 
 

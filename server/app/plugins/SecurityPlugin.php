@@ -45,7 +45,7 @@ class SecurityPlugin extends Plugin
             }
 
             $customerResources = array(
-                'customer' => array("get"),
+                'customer' => array("get", "post"),
                 'depot' => array("get", "post"),
                 'stock' => array("get"),
                 'ownedstock' => array("get"),
@@ -58,7 +58,7 @@ class SecurityPlugin extends Plugin
             }
 
             $employeeResources = array(
-                'customer' => array("get"),
+                'customer' => array("get", "post"),
                 'depot' => array("get", "post"),
                 'stock' => array("get"),
                 'ownedstock' => array("get"),

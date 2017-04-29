@@ -13,6 +13,7 @@
         <div class="container">
             {{ content() }}
         </div>
+        <a href="javascript:history.back()">Back</a>
 
     </body>
 </html>

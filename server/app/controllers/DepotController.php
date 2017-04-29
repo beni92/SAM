@@ -1,9 +1,11 @@
 <?php
 namespace Sam\Server\Controllers;
 
+use Sam\Server\Libraries\StockLibrary;
 use Sam\Server\Models\Customer;
 use Sam\Server\Models\Depot;
 use Sam\Server\Models\OwnedStock;
+use Sam\Server\Models\Stock;
 use Sam\Server\Models\User;
 use Sam\Server\Plugins\AuthenticationPlugin;
 
@@ -36,6 +38,7 @@ class DepotController extends ControllerBase
 
         $ownedStocks = OwnedStock::find(array("depotId = :id:", "bind" => array("id" => $depot->getId())));
 
+
         /**
          * @var $customer Customer
          */
@@ -55,7 +58,15 @@ class DepotController extends ControllerBase
         }
 
         if(AuthenticationPlugin::isAllowedUser($user, $auth, $user->getLoginNr(), $config)) {
-            return json_encode(array("depot" => $depot, "customer" => $customer, "user" => $user, "ownedStocks" => $ownedStocks));
+            $value = 0;
+            /** @var OwnedStock $ownedStock */
+            foreach ($ownedStocks as $ownedStock) {
+                /** @var Stock $stock */
+                $stock = StockLibrary::getStocksBySymbols(array($ownedStock->getStockSymbol()))[0];
+                $value += $stock->getLastTradePrice() * $ownedStock->getShares();
+            }
+
+            return json_encode(array("depot" => $depot, "customer" => $customer, "user" => $user, "ownedStocks" => $ownedStocks, "value" => $value));
         } else {
             return json_encode(array("error" => "not authorised", "code" => "40"));
         }

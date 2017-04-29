@@ -2,6 +2,7 @@
 namespace Sam\Client\Plugins;
 
 use Phalcon\Mvc\User\Plugin;
+use Sam\Client\Models\Bank;
 use Sam\Client\Models\Depot;
 use Sam\Client\Models\OwnedStock;
 use Sam\Client\Models\Stock;
@@ -146,8 +147,6 @@ class RestPlugin extends Plugin
         return false;
     }
 
-
-
     public function loadCustomerInfo() {
         $config = $this->di->get("config");
         /**
@@ -216,6 +215,11 @@ class RestPlugin extends Plugin
         $loadedUser->setRole($config->roles->customers);
 
 
+        foreach ($loadedUser->getDepots() as $depot) {
+            $res = $this->getDepot($depot->getId(), $loadedUser->getLoginName());
+            $depot->setValue($res->getValue());
+        }
+
         return $loadedUser;
 
     }
@@ -279,6 +283,7 @@ class RestPlugin extends Plugin
         $depot = $this->depotFromStdClass($res->depot);
         $depot->setUser($this->customerFromStdClass($res, false));
         $depot->setOwnedStocks($this->ownedStocksFromStdClass($res->ownedStocks, $depot));
+        $depot->setValue($res->value);
 
         return $depot;
     }
@@ -291,7 +296,7 @@ class RestPlugin extends Plugin
          */
         $user = $this->session->get('auth');
 
-        $res = self::callAPI("GET", "stock/$stock", $user->getLoginName(), $user->getPassword());
+        $res = self::callAPI("GET", "stock/both/$stock", $user->getLoginName(), $user->getPassword());
         $res = $this->stdClassFromJson($res);
         if($res === false) {
             return false;
@@ -306,9 +311,9 @@ class RestPlugin extends Plugin
         return $this->stockTransaction($shares, $symbol, $depot, 0);
     }
 
-    public function sellStock($shares, $symbol, $depot)
+    public function sellStock($shares, $symbol, $depot, $owendStockId = false)
     {
-        return $this->stockTransaction($shares, $symbol, $depot, 1);
+        return $this->stockTransaction($shares, $symbol, $depot, 1, $owendStockId);
     }
 
     public function addDepot($loginName, $budget)
@@ -336,11 +341,53 @@ class RestPlugin extends Plugin
         return $depot;
     }
 
+    public function changeBudget($loginName, $value)
+    {
+        $config = $this->di->get("config");
+        /**
+         * @var $user User
+         */
+        $user = $this->session->get('auth');
+        $res = self::callAPI("POST", "customer", $user->getLoginName(), $user->getPassword(),
+            array(
+                "value" => $value,
+                "loginName" => $loginName
+            )
+        );
+        $res = $this->stdClassFromJson($res);
+        if($res === false) {
+            return false;
+        }
+
+        if(isset($res->success)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getBank() {
+        $config = $this->di->get("config");
+        /**
+         * @var $user User
+         */
+        $user = $this->session->get('auth');
+
+        $res = self::callAPI("GET", "bank", $user->getLoginName(), $user->getPassword());
+        $res = $this->stdClassFromJson($res);
+        if($res === false) {
+            return false;
+        }
+
+        return $this->bankFromStdClass($res);
+    }
+
     private function stdClassFromJson($cRes) {
+        $cRes = json_decode($cRes);
         if (empty($cRes) || $cRes === null || isset($cRes->error)) {
             return false;
         } else {
-            return json_decode($cRes);
+            return $cRes;
         }
     }
 
@@ -423,7 +470,7 @@ class RestPlugin extends Plugin
         return $retStocks;
     }
 
-    private function stockTransaction($shares, $symbol, $depot, $direction) {
+    private function stockTransaction($shares, $symbol, $depot, $direction, $ownedStockId = false) {
         $config = $this->di->get("config");
         /**
          * @var $user User
@@ -435,7 +482,8 @@ class RestPlugin extends Plugin
                 "shares" => $shares,
                 "direction" => $direction,
                 "symbol" => $symbol,
-                "depotId" => $depot
+                "depotId" => $depot,
+                "ownedStockId" => $ownedStockId
             )
         );
 
@@ -475,7 +523,8 @@ class RestPlugin extends Plugin
         );
     }
 
-
-
-
+    private function bankFromStdClass($res)
+    {
+        return new Bank($res->id, $res->name, $res->volume);
+    }
 }

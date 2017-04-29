@@ -82,17 +82,17 @@ class OwnedStock
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getShares(): int
+    public function getShares()
     {
         return $this->shares;
     }
 
     /**
-     * @param int $shares
+     * @param float $shares
      */
-    public function setShares(int $shares)
+    public function setShares($shares)
     {
         $this->shares = $shares;
     }

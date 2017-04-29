@@ -123,7 +123,7 @@ $di->setShared('router', function() {
         "action" => "post"
     ));
 
-    $router->addGet("/bank/{id}", array(
+    $router->addGet("/bank", array(
         "controller" => "bank",
         "action" => "get"
     ));

@@ -55,16 +55,19 @@ class IndexController extends ControllerBase
             $server = $this->di->get("server");
 
             if($server->login($username, $password) === true) {
-                $this->dispatcher->forward(array(
+                $this->response->redirect("dashboard");
+                /*$this->dispatcher->forward(array(
                     "controller" => "dashboard",
                     "action" => "index"
-                ));
+                ));*/
                 return;
             } else {
+                $this->response->redirect("");
+                /*
                 $this->dispatcher->forward(array(
                     "controller" => "index",
                     "action" => "index"
-                ));
+                ));*/
                 return;
             }
         }
@@ -77,10 +80,11 @@ class IndexController extends ControllerBase
 
     public function logoutAction() {
         $this->session->destroy(true);
-        $this->dispatcher->forward(array(
+        $this->response->redirect("");
+        /*$this->dispatcher->forward(array(
             "controller" => "index",
             "action" => "index"
-        ));
+        ));*/
     }
 
 }

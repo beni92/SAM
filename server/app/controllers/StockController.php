@@ -21,6 +21,33 @@ class StockController extends ControllerBase
             return json_encode(StockLibrary::getStocksBySymbols(explode(":", $symbol)));
         } else if($symbol && $param == "history") {
             return json_encode(StockLibrary::getStockHistoryBySymbol($symbol));
+        } else if($symbol && $param == "both") {
+
+            $stocks = StockLibrary::getStockByCompanyName($symbol);
+            $stock = StockLibrary::getStocksBySymbols(explode(":", $symbol));
+
+            /*
+             * if a stock is found over symbol and company name
+             * add stock to stocks
+             */
+            if(count($stocks) > 0 && !empty($stock)) {
+                $found = false;
+                foreach ($stocks as $inStock) {
+                    if($inStock->getId() === $stock->getId()) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if($found === false) {
+                    $stocks[] = $stock;
+                }
+                return json_encode($stocks);
+            } else if(count($stocks) > 0) {
+                return json_encode($stocks);
+            } else {
+                return json_encode($stock);
+            }
+
         } else {
             return json_encode(StockLibrary::getStockByCompanyName($param));
         }
@@ -33,6 +60,7 @@ class StockController extends ControllerBase
         $shares = $this->request->getPost("shares");
         $symbol = $this->request->getPost("symbol");
         $depotId = $this->request->getPost("depotId");
+        $ownedStockId = $this->request->getPost("ownedStockId");
         /*
          * $direction = 0 => buy
          * $direction = 1 => sell
@@ -43,7 +71,11 @@ class StockController extends ControllerBase
             return json_encode($transaction);
 
         } else if($direction == 1) {
-            $ownedStocks = OwnedStock::find(array("depotId = :id: and stockSymbol = :symbol:", "bind" => array("id" => $depotId, "symbol" => $symbol)));
+            if(empty($ownedStockId)) {
+                $ownedStocks = OwnedStock::find(array("depotId = :id: and stockSymbol = :symbol:", "bind" => array("id" => $depotId, "symbol" => $symbol)));
+            } else {
+                $ownedStocks = OwnedStock::find(array("depotId = :depotId: and stockSymbol = :symbol: and id = :id:" , "bind" => array("depotId" => $depotId, "symbol" => $symbol, "id" => $ownedStockId)));
+            }
             /*
              * a decrementing counter of the shares left to sell
              */

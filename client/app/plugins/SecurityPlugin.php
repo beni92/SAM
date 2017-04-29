@@ -77,7 +77,7 @@ class SecurityPlugin extends Plugin {
 
         //create customer resources
         $customerRes = [
-            "dashboard" => ["index"],
+            "dashboard" => ["index", "customer"],
 
         ];
 
@@ -87,7 +87,7 @@ class SecurityPlugin extends Plugin {
 
         //create employee resources
         $employeeRes = [
-            "dashboard" => ["index", "customer", "addCustomer"]
+            "dashboard" => ["index", "customer", "addCustomer", "bank"]
         ];
 
         foreach ($employeeRes as $key => $value) {
