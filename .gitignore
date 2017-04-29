@@ -2,6 +2,7 @@ prod.env
 **/info.php
 **/adminer.php
 **/vendor/
+**/webgrind/
 
 .idea/*
 !.idea/php.xml
