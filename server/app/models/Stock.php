@@ -1,5 +1,6 @@
 <?php
 namespace Sam\Server\Models;
+
 /**
  * Created by PhpStorm.
  * User: www-data
@@ -22,11 +23,13 @@ class Stock extends \Phalcon\Mvc\Model
 
     private $floatShares;
 
-    public function initialize() {
+    public function initialize()
+    {
         $this->setSource("Stock");
     }
 
-    public static function findBySymbol($symbol) {
+    public static function findBySymbol($symbol)
+    {
         return Stock::findFirst(
             array(
                 "symbol = :symbol:",
@@ -37,9 +40,9 @@ class Stock extends \Phalcon\Mvc\Model
         );
     }
 
-    public function createNew() {
-        if($this->create === false) {
-
+    public function createNew()
+    {
+        if ($this->create === false) {
         } else {
             return true;
         }
@@ -156,8 +159,4 @@ class Stock extends \Phalcon\Mvc\Model
     {
         $this->floatShares = $floatShares;
     }
-
-
-
-
 }

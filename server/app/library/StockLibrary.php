@@ -35,27 +35,28 @@ class StockLibrary
      * @param $config \stdClass the configuration of the program
      * @return bool|Transaction if an error happens false is returned else the transaction is returned
      */
-    public static function buy($symbol, $shares, $depotId, $auth, $config) {
+    public static function buy($symbol, $shares, $depotId, $auth, $config)
+    {
 
         /*
          * if one of the below is missing return false
          */
-        if(empty($auth) || empty($config)) {
+        if (empty($auth) || empty($config)) {
             return false;
         }
         /** @var Depot $depot */
         $depot = Depot::findFirst(array("id = :id:", "bind" => array("id" => $depotId)));
-        if(empty($depot)) {
+        if (empty($depot)) {
             return false;
         }
         /** @var Customer $customer */
         $customer = $depot->Customer;
-        if(empty($customer)) {
+        if (empty($customer)) {
             return false;
         }
         /** @var User $user */
         $user = $customer->User;
-        if(empty($user)) {
+        if (empty($user)) {
             return false;
         }
 
@@ -66,10 +67,9 @@ class StockLibrary
          * or
          * if an employee who is from the same bank as the customer is logged in
          */
-        if(($auth["role"] === $config->roles->customers && $auth["user"]->getId() === $depot->getCustomerId()) ||
+        if (($auth["role"] === $config->roles->customers && $auth["user"]->getId() === $depot->getCustomerId()) ||
                 ($auth["role"] === $config->roles->employees && $auth["user"]->User->getBankId() === $user->getBankId())) {
-
-            if($shares <= 0) {
+            if ($shares <= 0) {
                 return false;
             }
 
@@ -88,9 +88,9 @@ class StockLibrary
             /*
              * checks if the search for the stock was successful
              */
-            if(!$stocks || count($stocks) != 1) {
+            if (!$stocks || count($stocks) != 1) {
                 return false;
-            }else {
+            } else {
                 /**
                  * @var $stock Stock
                  */
@@ -104,14 +104,14 @@ class StockLibrary
             /*
              * checks if the depot has enough budget
              */
-            if($depot->getBudget() - $preCalculatedPrice < 0) {
+            if ($depot->getBudget() - $preCalculatedPrice < 0) {
                 return false;
             }
 
             /*
              * checks if the bank has enough budget
              */
-            if($bank->getVolume() - $preCalculatedPrice < 0) {
+            if ($bank->getVolume() - $preCalculatedPrice < 0) {
                 return false;
             }
 
@@ -120,14 +120,14 @@ class StockLibrary
              */
             $boughtPrice = self::getSoapClient()->buy(array("symbol"=>$symbol, "shares"=>$shares))->return;
 
-            if(!$boughtPrice) {
+            if (!$boughtPrice) {
                 return false;
             }
 
             /*
              * changes the budget of the depot from the customer
              */
-            if($depot->changeBudget(-($boughtPrice * $shares)) === false) {
+            if ($depot->changeBudget(-($boughtPrice * $shares)) === false) {
                 /*
                  * sell the stocks if there was not enough budget
                  */
@@ -138,7 +138,7 @@ class StockLibrary
             /*
              * changes the budget of the bank
              */
-            if($bank->changeVolume(-($boughtPrice * $shares)) === false) {
+            if ($bank->changeVolume(-($boughtPrice * $shares)) === false) {
                 /*
                  * sell the stocks if there was not enough budget
                  */
@@ -158,7 +158,7 @@ class StockLibrary
              * if something with the persisting is going right
              * sell these things again
              */
-            if($ownedStock->save() === false) {
+            if ($ownedStock->save() === false) {
                 /*
                  * sell the stocks if there is an error on save
                  * (should never happen)
@@ -180,13 +180,13 @@ class StockLibrary
             $transaction->setBankId($auth["user"]->User->getBankId());
             $transaction->setDirection(0);                          //direction for buy = 0
             $transaction->setCustomerId($customer->getId());
-            if($auth["role"] === $config->roles->employees) {
+            if ($auth["role"] === $config->roles->employees) {
                 $transaction->setEmployeeId($auth['user']->getId());
             }
             /*
              * saves the transaction in the database
              */
-            if($transaction->save() === false) {
+            if ($transaction->save() === false) {
                 return false;
             }
             return $transaction;
@@ -199,9 +199,10 @@ class StockLibrary
      * @param $name string a part of the name of the company to search in the stock exchange
      * @return array<Stock>
      */
-    public static function getStockByCompanyName($name) {
+    public static function getStockByCompanyName($name)
+    {
         $res = self::getSoapClient()->findStockQuotesByCompanyName(array("partOfCompanyName"=>$name));
-        if(isset($res->return)) {
+        if (isset($res->return)) {
             $stocks = self::quotesToStocks($res->return);
         } else {
             $stocks = array();
@@ -209,9 +210,10 @@ class StockLibrary
         return $stocks;
     }
 
-    public static function getStockHistoryBySymbol($symbol) {
+    public static function getStockHistoryBySymbol($symbol)
+    {
         $res = self::getSoapClient()->getStockQuoteHistory(array("symbol" => $symbol));
-        if(isset($res->return)) {
+        if (isset($res->return)) {
             return $res->return;
         } else {
             return array();
@@ -223,9 +225,10 @@ class StockLibrary
      * @param $symbols array of symbols
      * @return array of stocks
      */
-    public static function getStocksBySymbols($symbols) {
+    public static function getStocksBySymbols($symbols)
+    {
         $res = self::getSoapClient()->getStockQuotes(array("symbols" => $symbols));
-        if(isset($res->return)) {
+        if (isset($res->return)) {
             $stocks = self::quotesToStocks($res->return);
         } else {
             $stocks = array();
@@ -240,28 +243,29 @@ class StockLibrary
      * @param $auth \stdClass the authentication of the logged in user
      * @return bool|Transaction
      */
-    public static function sell($ownedStock, $shares, $auth, $config) {
+    public static function sell($ownedStock, $shares, $auth, $config)
+    {
         /*
          * if one of the below is missing return false
          */
-        if(empty($auth) || empty($config)) {
+        if (empty($auth) || empty($config)) {
             return false;
         }
         /**
          * @var $depot Depot
          */
         $depot = $ownedStock->Depot;
-        if(empty($depot)) {
+        if (empty($depot)) {
             return false;
         }
         /** @var Customer $customer */
         $customer = $depot->Customer;
-        if(empty($customer)) {
+        if (empty($customer)) {
             return false;
         }
         /** @var User $user */
         $user = $customer->User;
-        if(empty($user)) {
+        if (empty($user)) {
             return false;
         }
 
@@ -275,12 +279,11 @@ class StockLibrary
          * or
          * if an employee who is from the same bank as the customer is logged in
          */
-        if($depot && (
+        if ($depot && (
                 ($auth["role"] == $config->roles->customers && $auth["user"]->getId() == $depot->getCustomerId()) ||
                 ($auth["role"] == $config->roles->employees && $auth["user"]->User->getBankId() == $user->getBankId())
             )) {
-
-            if($shares <= 0) {
+            if ($shares <= 0) {
                 return false;
             }
             /**
@@ -292,7 +295,7 @@ class StockLibrary
              * if there are less shares in the owned stock then in the invoice
              * only sell the available amount
              */
-            if($ownedStock->getShares() < $shares) {
+            if ($ownedStock->getShares() < $shares) {
                 $shares = $ownedStock->getShares();
             }
             try {
@@ -323,7 +326,7 @@ class StockLibrary
                 $transaction->setBankId($bank->getId());
                 $transaction->setDirection(1);                          //direction for sell = 1
                 $transaction->setCustomerId($customer->getId());
-                if($auth["role"] === $config->roles->employees) {
+                if ($auth["role"] === $config->roles->employees) {
                     $transaction->setEmployeeId($auth['user']->getId());
                 }
                 /*
@@ -341,7 +344,7 @@ class StockLibrary
                  * else
                  * the owned stock with the reduced amount of shares is saved
                  */
-                if($ownedStock->getShares() == 0) {
+                if ($ownedStock->getShares() == 0) {
                     $ownedStock->delete();
                 } else {
                     $ownedStock->save();
@@ -349,10 +352,8 @@ class StockLibrary
 
                 return $transaction;
             } catch (\Exception $ex) {
-
                 return false;
             }
-
         } else {
             return false;
         }
@@ -362,7 +363,8 @@ class StockLibrary
      * creates a soap client and returns it
      * @return \SoapClient SoapClient
      */
-    private static function getSoapClient() {
+    private static function getSoapClient()
+    {
         $config = \Phalcon\Di::getDefault()->get("config");
         $client = new \SoapClient(
             $config->exchange->wsdl,
@@ -380,7 +382,8 @@ class StockLibrary
      * symbol, companyName, floatShares, lastTradePrice, marketCapitalization, stockExchange, lastTradeTime
      * @return array
      */
-    private static function quotesToStocks($quotes) {
+    private static function quotesToStocks($quotes)
+    {
         $stocks = array();
 
         /*
@@ -402,9 +405,9 @@ class StockLibrary
          */
         $dbTransaction = $manager->get();
 
-        if($quotes) {
-            if(is_array($quotes)) {
-                foreach($quotes as $row) {
+        if ($quotes) {
+            if (is_array($quotes)) {
+                foreach ($quotes as $row) {
                     /*
                      * here we create the stock instance and save it in the database
                      */
@@ -433,7 +436,8 @@ class StockLibrary
      * @param $dbTransaction TransactionInterface the open transaction in which this data set is saved to the db
      * @return Stock returns an instance of a Stock
      */
-    private static function quoteToStock($quote, $dbTransaction) {
+    private static function quoteToStock($quote, $dbTransaction)
+    {
         /*
          * the Stock
          */
@@ -455,18 +459,21 @@ class StockLibrary
         /*
          * sets the floatShares (if given)(optional)
          */
-        if(isset($quote->floatShares))
+        if (isset($quote->floatShares)) {
             $stock->setFloatShares($quote->floatShares);
+        }
         /*
          * sets the lastTradePrice (if given)(optional)
          */
-        if(isset($quote->lastTradePrice))
+        if (isset($quote->lastTradePrice)) {
             $stock->setLastTradePrice($quote->lastTradePrice);
+        }
         /*
          * sets the marketCapitalization (if given)(optional)
          */
-        if(isset($quote->marketCapitalization))
+        if (isset($quote->marketCapitalization)) {
             $stock->setMarketCapitalization($quote->marketCapitalization);
+        }
         /*
          * sets the stock exchange(not optional)
          */
@@ -474,15 +481,16 @@ class StockLibrary
         /*
          * sets the floatShares (if given)(optional)
          */
-        if(isset($quote->lastTradeTime))
+        if (isset($quote->lastTradeTime)) {
             $stock->setLastTradeTime($quote->lastTradeTime);
+        }
         /*
          * save the stock to the db.
          * If an error occurs the transaction is rolled back
          * isn't actually saved here. It is not persisted until the commit of the
          * transaction is made
          */
-        if($stock->save() === false) {
+        if ($stock->save() === false) {
             $dbTransaction->rollback("Saving Stock failed");
         }
         return $stock;
@@ -496,18 +504,17 @@ class StockLibrary
      * @param $boughtPrice double the price of one share
      * @param $depot Depot the depot of the customer
      */
-    private static function resell($symbol, $shares, $boughtPrice, $depot, $difference = true) {
+    private static function resell($symbol, $shares, $boughtPrice, $depot, $difference = true)
+    {
         $soldPrice = self::getSoapClient()->sell(array("symbol"=>$symbol, "shares"=>$shares));
         /*
          * @todo how should we handle the price difference
          */
-        if($difference === true) {
+        if ($difference === true) {
             $depot->setBudget($depot->getBudget() + ($soldPrice * $shares - $boughtPrice * $shares));
             $depot->save();
         } else {
             $depot->changeBudget($soldPrice * $shares);
         }
     }
-
 }
-

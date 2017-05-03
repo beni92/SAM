@@ -139,7 +139,6 @@ class TransactionMigration_302 extends Migration
      */
     public function up()
     {
-
     }
 
     /**
@@ -149,7 +148,5 @@ class TransactionMigration_302 extends Migration
      */
     public function down()
     {
-
     }
-
 }

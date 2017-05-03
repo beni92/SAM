@@ -19,7 +19,8 @@ class OwnedStock extends \Phalcon\Mvc\Model
 
     private $depotId;
 
-    public function initialize(){
+    public function initialize()
+    {
         $this->setSource("OwnedStock");
 
         $this->hasOne(
@@ -116,7 +117,4 @@ class OwnedStock extends \Phalcon\Mvc\Model
     {
         $this->depotId = $depotId;
     }
-
-
-
 }

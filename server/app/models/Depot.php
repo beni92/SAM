@@ -26,7 +26,8 @@ class Depot extends \Phalcon\Mvc\Model
      */
     private $budget;
 
-    public function initialize() {
+    public function initialize()
+    {
         $this->setSource("Depot");
 
 
@@ -110,17 +111,16 @@ class Depot extends \Phalcon\Mvc\Model
         $this->budget = $budget;
     }
 
-    public function changeBudget($difference) {
-        if($difference < 0 && $this->budget + $difference < 0) {
+    public function changeBudget($difference)
+    {
+        if ($difference < 0 && $this->budget + $difference < 0) {
             return false;
         } else {
             $this->budget += $difference;
-            if($this->save() === false){
+            if ($this->save() === false) {
                 return false;
             }
             return true;
         }
     }
-
-
 }

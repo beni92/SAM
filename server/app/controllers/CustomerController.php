@@ -23,7 +23,6 @@ class CustomerController extends ControllerBase
 
     public function getAction($loginNr = false, $param = false)
     {
-
         $config = $this->di->get("config");
         $auth = $this->session->get("auth");
         if (!empty($loginNr) && empty($param)) {
@@ -31,10 +30,10 @@ class CustomerController extends ControllerBase
              * @var $user User
              */
             $user = User::findFirst(array("loginNr = :id:", 'bind' => array("id" => $loginNr)));
-            if(empty($user)){
+            if (empty($user)) {
                 return json_encode(array("error"=>"Request error", "code" => "51"));
             }
-            if(AuthenticationPlugin::isAllowedUser($user, $auth, $loginNr, $config)) {
+            if (AuthenticationPlugin::isAllowedUser($user, $auth, $loginNr, $config)) {
                 /**
                  * @var $customer Customer
                  */
@@ -45,8 +44,8 @@ class CustomerController extends ControllerBase
             } else {
                 return json_encode(array("error"=>"Request error", "code" => "52"));
             }
-        } else if($auth["role"] === $config->roles->employees) {
-            if(!empty($param) && $param === "find") {
+        } elseif ($auth["role"] === $config->roles->employees) {
+            if (!empty($param) && $param === "find") {
                 $users = User::find(array("bankId = :id: and (firstname like :q: or lastname like :q: or loginNr like :q:)", "bind" => array("id" => $auth["user"]->User->getBankId(), "q" => "%$loginNr%")));
             } else {
                 $users = User::find(array("bankId = :id:", "bind" => array("id" => $auth["user"]->User->getBankId())));
@@ -57,7 +56,7 @@ class CustomerController extends ControllerBase
              * @var $user User
              */
             foreach ($users as $key => $user) {
-                if($user->isCustomer()) {
+                if ($user->isCustomer()) {
                     $customers[] = Customer::findFirst(array("userId = :id:", 'bind' => array("id" => $user->getId())));
                 }
             }
@@ -72,30 +71,30 @@ class CustomerController extends ControllerBase
                 $ret["customers"][] = array("user" => $user, "customer" => $customer, "depots" => $depots);
             }
             return json_encode($ret);
-
         } else {
             return json_encode(array("error"=>"Request error", "code" => "53"));
         }
     }
 
-    public function postAction() {
+    public function postAction()
+    {
         $value = $this->request->getPost("value");
         $loginName = $this->request->getPost("loginName");
 
         /** @var User $user */
         $user = User::findFirst(array("loginNr = :ln:", "bind" => array("ln" => $loginName)));
-        if(empty($user)) {
+        if (empty($user)) {
             return json_encode(array("error" => "Error in request", "code"=> "81"));
         }
 
         /** @var Customer $customer */
         $customer = Customer::findFirst(array("userId = :id:", "bind" => array("id" => $user->getId())));
-        if(empty($customer)) {
+        if (empty($customer)) {
             return json_encode(array("error" => "Error in request", "code"=> "82"));
         }
 
-        if(AuthenticationPlugin::isAllowedUser($user, $this->session->get("auth"), $loginName, $this->di->get("config"))) {
-            if($customer->changeBudget($value) === false) {
+        if (AuthenticationPlugin::isAllowedUser($user, $this->session->get("auth"), $loginName, $this->di->get("config"))) {
+            if ($customer->changeBudget($value) === false) {
                 return json_encode(array("error" => "Error changing budget", "code"=> "83"));
             } else {
                 return json_encode(array("success" => "Budget changed successfully"));

@@ -9,7 +9,6 @@ namespace Sam\Server\Models;
  */
 class Bank extends \Phalcon\Mvc\Model
 {
-
     private $id;
 
     private $name;
@@ -21,7 +20,8 @@ class Bank extends \Phalcon\Mvc\Model
      */
     private $transactions;
 
-    public function initialize() {
+    public function initialize()
+    {
         $this->setSource("Bank");
 
         $this->hasMany(
@@ -81,16 +81,16 @@ class Bank extends \Phalcon\Mvc\Model
         $this->volume = $volume;
     }
 
-    public function changeVolume($difference) {
-        if($difference < 0 && $this->volume + $difference < 0) {
+    public function changeVolume($difference)
+    {
+        if ($difference < 0 && $this->volume + $difference < 0) {
             return false;
         } else {
             $this->volume += $difference;
-            if($this->save() === false) {
+            if ($this->save() === false) {
                 return false;
             }
             return true;
         }
     }
-
 }

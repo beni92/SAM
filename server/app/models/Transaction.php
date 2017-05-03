@@ -72,7 +72,8 @@ class Transaction extends \Phalcon\Mvc\Model
     private $timestamp;
 
 
-    public function initialize() {
+    public function initialize()
+    {
         $this->setSource("Transaction");
 
         $this->hasOne(
@@ -109,7 +110,6 @@ class Transaction extends \Phalcon\Mvc\Model
             "id",
             array("alias" => "Depot")
         );
-
     }
 
     /**
@@ -271,6 +271,4 @@ class Transaction extends \Phalcon\Mvc\Model
     {
         $this->timestamp = $timestamp;
     }
-
-
 }

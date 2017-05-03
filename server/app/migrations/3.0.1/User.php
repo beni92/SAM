@@ -136,7 +136,6 @@ class UserMigration_301 extends Migration
      */
     public function up()
     {
-
     }
 
     /**
@@ -146,7 +145,5 @@ class UserMigration_301 extends Migration
      */
     public function down()
     {
-
     }
-
 }

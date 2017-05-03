@@ -101,7 +101,6 @@ class OwnedstockMigration_302 extends Migration
      */
     public function up()
     {
-
     }
 
     /**
@@ -111,7 +110,5 @@ class OwnedstockMigration_302 extends Migration
      */
     public function down()
     {
-
     }
-
 }

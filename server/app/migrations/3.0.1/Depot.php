@@ -82,7 +82,6 @@ class DepotMigration_301 extends Migration
      */
     public function up()
     {
-
     }
 
     /**
@@ -92,7 +91,5 @@ class DepotMigration_301 extends Migration
      */
     public function down()
     {
-
     }
-
 }

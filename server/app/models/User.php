@@ -27,7 +27,8 @@ class User extends \Phalcon\Mvc\Model
 
     private $address;
 
-    public function initialize() {
+    public function initialize()
+    {
         $this->setSource("User");
 
         $this->hasOne(
@@ -45,18 +46,20 @@ class User extends \Phalcon\Mvc\Model
         );
     }
 
-    public function isEmployee() {
+    public function isEmployee()
+    {
         $res = Employee::findFirst(array("userId = :id:", 'bind' => array("id" => $this->id)));
-        if(!empty($res)) {
+        if (!empty($res)) {
             return true;
         } else {
             return false;
         }
     }
 
-    public function isCustomer() {
+    public function isCustomer()
+    {
         $res = Customer::findFirst(array("userId = :id:", 'bind' => array("id" => $this->id)));
-        if(!empty($res)) {
+        if (!empty($res)) {
             return true;
         } else {
             return false;
@@ -206,5 +209,4 @@ class User extends \Phalcon\Mvc\Model
     {
         $this->address = $address;
     }
-
 }

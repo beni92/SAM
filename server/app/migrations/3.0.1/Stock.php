@@ -110,7 +110,6 @@ class StockMigration_301 extends Migration
      */
     public function up()
     {
-
     }
 
     /**
@@ -120,7 +119,5 @@ class StockMigration_301 extends Migration
      */
     public function down()
     {
-
     }
-
 }

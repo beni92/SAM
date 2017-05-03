@@ -1,5 +1,6 @@
 <?php
 namespace Sam\Server\Controllers;
+
 use Sam\Server\Libraries\StockLibrary;
 use Sam\Server\Models\OwnedStock;
 use Sam\Server\Models\User;
@@ -19,13 +20,13 @@ class StockController extends ControllerBase
     }
 
 
-    public function getAction($param, $symbol = false) {
-        if($symbol && $param === "symbol") {
+    public function getAction($param, $symbol = false)
+    {
+        if ($symbol && $param === "symbol") {
             return json_encode(StockLibrary::getStocksBySymbols(explode(":", $symbol)));
-        } else if($symbol && $param == "history") {
+        } elseif ($symbol && $param == "history") {
             return json_encode(StockLibrary::getStockHistoryBySymbol($symbol));
-        } else if($symbol && $param == "both") {
-
+        } elseif ($symbol && $param == "both") {
             $stocks = StockLibrary::getStockByCompanyName($symbol);
             $stock = StockLibrary::getStocksBySymbols(explode(":", $symbol));
 
@@ -33,30 +34,30 @@ class StockController extends ControllerBase
              * if a stock is found over symbol and company name
              * add stock to stocks
              */
-            if(count($stocks) > 0 && !empty($stock)) {
+            if (count($stocks) > 0 && !empty($stock)) {
                 $found = false;
                 foreach ($stocks as $inStock) {
-                    if($inStock->getId() === $stock->getId()) {
+                    if ($inStock->getId() === $stock->getId()) {
                         $found = true;
                         break;
                     }
                 }
-                if($found === false) {
+                if ($found === false) {
                     $stocks[] = $stock;
                 }
                 return json_encode($stocks);
-            } else if(count($stocks) > 0) {
+            } elseif (count($stocks) > 0) {
                 return json_encode($stocks);
             } else {
                 return json_encode($stock);
             }
-
         } else {
             return json_encode(StockLibrary::getStockByCompanyName($param));
         }
     }
 
-    public function postAction() {
+    public function postAction()
+    {
         $config = $this->di->get("config");
 
         $direction = $this->request->getPost("direction");
@@ -70,18 +71,17 @@ class StockController extends ControllerBase
         $user = $auth["user"]->User;
 
 
-        if(AuthenticationPlugin::isAllowedUser($user, $auth, $user->getLoginNr(), $config)) {
+        if (AuthenticationPlugin::isAllowedUser($user, $auth, $user->getLoginNr(), $config)) {
             /*
          * $direction = 0 => buy
          * $direction = 1 => sell
          */
-            if($direction == 0) {
+            if ($direction == 0) {
                 //pps = price per share
                 $transaction = StockLibrary::buy($symbol, $shares, $depotId, $this->session->get("auth"), $config);
                 return json_encode($transaction);
-
-            } else if($direction == 1) {
-                if(empty($ownedStockId)) {
+            } elseif ($direction == 1) {
+                if (empty($ownedStockId)) {
                     $ownedStocks = OwnedStock::find(array("depotId = :id: and stockSymbol = :symbol:", "bind" => array("id" => $depotId, "symbol" => $symbol)));
                 } else {
                     $ownedStocks = OwnedStock::find(array("depotId = :depotId: and stockSymbol = :symbol: and id = :id:" , "bind" => array("depotId" => $depotId, "symbol" => $symbol, "id" => $ownedStockId)));
@@ -107,7 +107,7 @@ class StockController extends ControllerBase
                  * if the customer tries to sell more stocks then he ownes
                  * an error is returned
                  */
-                if($maxToSell < $shares) {
+                if ($maxToSell < $shares) {
                     return json_encode(array("error" => "not enough shares owned"));
                 }
                 /*
@@ -123,7 +123,7 @@ class StockController extends ControllerBase
                 /*
                  * as long as restToSell is bigger than 0 shares are going to sold
                  */
-                while($restToSell > 0) {
+                while ($restToSell > 0) {
                     /** @var OwnedStock $ownedStock */
                     $ownedStock = $ownedStocks[$counter];
 
@@ -133,7 +133,7 @@ class StockController extends ControllerBase
                      * else
                      * only the the amount of shares which are left to sell (restToSel) are sold and restToSell is set to 0
                      */
-                    if($restToSell >= $ownedStock->getShares()) {
+                    if ($restToSell >= $ownedStock->getShares()) {
                         $restToSell -=$ownedStock->getShares();
                         $transactions[] = StockLibrary::sell($ownedStock, $ownedStock->getShares(), $this->session->get("auth"), $config);
                     } else {

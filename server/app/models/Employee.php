@@ -2,6 +2,7 @@
 namespace Sam\Server\Models;
 
 use Sam\Server\Models\User;
+
 /**
  * Created by PhpStorm.
  * User: www-data
@@ -14,7 +15,8 @@ class Employee extends \Phalcon\Mvc\Model
 
     private $userId;
 
-    public function initialize() {
+    public function initialize()
+    {
         $this->setSource("Employee");
 
         $this->hasOne(
@@ -57,8 +59,4 @@ class Employee extends \Phalcon\Mvc\Model
     {
         $this->userId = $userId;
     }
-
-
-
-
 }

@@ -8,6 +8,7 @@ use Phalcon\Events\Event;
 use Phalcon\Mvc\User\Plugin;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Acl\Adapter\Memory as AclList;
+
 /**
  * SecurityPlugin
  *
@@ -88,24 +89,24 @@ class SecurityPlugin extends Plugin
              */
             foreach ($roles as $role) {
                 foreach ($publicResources as $resource => $actions) {
-                    foreach ($actions as $action){
+                    foreach ($actions as $action) {
                         $acl->allow($role->getName(), $resource, $action);
                     }
                 }
 
                 //Grants Access for customerResources to customers and employees
-                if($role->getName() == 'Customers' || $role->getName() == 'Employees') {
+                if ($role->getName() == 'Customers' || $role->getName() == 'Employees') {
                     foreach ($customerResources as $resource => $actions) {
-                        foreach ($actions as $action){
+                        foreach ($actions as $action) {
                             $acl->allow($role->getName(), $resource, $action);
                         }
                     }
                 }
 
                 //Grants Access for employeeResources to employees only
-                if($role->getName() == 'Employees') {
+                if ($role->getName() == 'Employees') {
                     foreach ($employeeResources as $resource => $actions) {
-                        foreach ($actions as $action){
+                        foreach ($actions as $action) {
                             $acl->allow($role->getName(), $resource, $action);
                         }
                     }
@@ -127,11 +128,11 @@ class SecurityPlugin extends Plugin
     public function beforeDispatch(Event $event, Dispatcher $dispatcher)
     {
         $auth = $this->session->get('auth');
-        if(!$auth) {
+        if (!$auth) {
             $role = 'Guests';
-        } else if($auth['role'] == 'Customers') {
+        } elseif ($auth['role'] == 'Customers') {
             $role = 'Customers';
-        } else if($auth['role'] == 'Employees') {
+        } elseif ($auth['role'] == 'Employees') {
             $role = 'Employees';
         } else {
             $role = 'Guests';

@@ -21,7 +21,8 @@ class UserController extends ControllerBase
     }
 
 
-    public function getAction($loginNr, $param = false) {
+    public function getAction($loginNr, $param = false)
+    {
         /**
          * gets the configuration object
          */
@@ -40,8 +41,8 @@ class UserController extends ControllerBase
         /*
          * checks if the authenticated user is allowed to access the data
          */
-        if(AuthenticationPlugin::isAllowedUser($user, $auth, $loginNr, $config) === true) {
-            if(!empty($param)) {
+        if (AuthenticationPlugin::isAllowedUser($user, $auth, $loginNr, $config) === true) {
+            if (!empty($param)) {
                 switch ($param) {
                     /*
                      * if the param is role return the role of the user and as additional return value add the id
@@ -62,17 +63,17 @@ class UserController extends ControllerBase
             } else {
                 return json_encode($user);
             }
-        }
-        else {
+        } else {
             /*
              * if the user is not authenticated return the an error message with not authenticated
              */
-            if($auth === false || $auth["role"] != $config->roles->customers || $auth["role"] != $config->roles->employees)
+            if ($auth === false || $auth["role"] != $config->roles->customers || $auth["role"] != $config->roles->employees) {
                 return json_encode(array("error" => "not authenticated", "code" => "11"));
+            }
             /*
              * checks if the problem is that the user is not allowed to access the data
              */
-            if(AuthenticationPlugin::isAllowedUser($user, $auth, $loginNr, $config) === false) {
+            if (AuthenticationPlugin::isAllowedUser($user, $auth, $loginNr, $config) === false) {
                 return json_encode(array("error" => "not authorised", "code" => "12"));
             }
 
@@ -84,7 +85,8 @@ class UserController extends ControllerBase
     }
 
 
-    public function postAction() {
+    public function postAction()
+    {
         /**
          * gets the configuration object
          */
@@ -95,8 +97,7 @@ class UserController extends ControllerBase
         $auth = $this->session->get("auth");
 
 
-        if(AuthenticationPlugin::isAllowedEmployee($auth, $auth['user']->user->getBankId(), $config) === true) {
-
+        if (AuthenticationPlugin::isAllowedEmployee($auth, $auth['user']->user->getBankId(), $config) === true) {
             $loginNr = $this->request->getPost("loginName");
             $firstname = $this->request->getPost("firstname");
             $lastname = $this->request->getPost("lastname");
@@ -119,23 +120,23 @@ class UserController extends ControllerBase
             $user->setLoginNr($loginNr);
             $user->setCreatedByEmployeeId($createdBy);
 
-            if($user->save() === false) {
+            if ($user->save() === false) {
                 $this->db->rollback();
                 return json_encode(array("error" => "user could not be created", "code" => 00));
             }
 
-            if($role == $config->roles->customers) {
+            if ($role == $config->roles->customers) {
                 $customer = new Customer();
                 $customer->setUserId($user->getId());
                 $customer->setBudget(0);
-                if($customer->save() === false) {
+                if ($customer->save() === false) {
                     $this->db->rollback();
                     return json_encode(array("error" => "user could not be created", "code" => 01));
                 }
-            } else if($role == $config->roles->employees) {
+            } elseif ($role == $config->roles->employees) {
                 $employee = new Employee();
                 $employee->setUserId($user->getId());
-                if($employee->save() === false) {
+                if ($employee->save() === false) {
                     $this->db->rollback();
                     return json_encode(array("error" => "user could not be created", "code" => 02));
                 }
@@ -149,6 +150,5 @@ class UserController extends ControllerBase
         } else {
             return json_encode(array("error" => "only employees allowed to create user", "code" => 05));
         }
-
     }
 }

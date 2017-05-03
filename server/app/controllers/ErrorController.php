@@ -21,7 +21,8 @@ class ErrorController extends ControllerBase
     }
 
 
-    public function errorAction() {
+    public function errorAction()
+    {
         $this->response->setStatusCode(501);
         return json_encode(array("error" => "some error occured", "code" => "501"));
     }

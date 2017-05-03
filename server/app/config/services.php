@@ -31,7 +31,7 @@ $di->setShared('url', function () {
 });
 
 
-$di->set('dispatcher', function() {
+$di->set('dispatcher', function () {
     $eventsManager = new EventsManager();
 
     $eventsManager->attach("dispatch:beforeDispatch", new AuthenticationPlugin);
@@ -102,12 +102,12 @@ $di->setShared('modelsMetadata', function () {
     return new MetaDataAdapter();
 });
 
-$di->setShared('router', function() {
+$di->setShared('router', function () {
     $router = new \Phalcon\Mvc\Router(false);
     $router->setUriSource($router::URI_SOURCE_SERVER_REQUEST_URI);
 
 
-    $router->add("/",array(
+    $router->add("/", array(
         "controller" => "error",
         "action" => "error"
     ));

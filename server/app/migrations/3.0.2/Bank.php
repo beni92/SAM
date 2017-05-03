@@ -69,7 +69,6 @@ class BankMigration_302 extends Migration
      */
     public function up()
     {
-
     }
 
     /**
@@ -79,7 +78,5 @@ class BankMigration_302 extends Migration
      */
     public function down()
     {
-
     }
-
 }

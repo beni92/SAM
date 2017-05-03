@@ -19,7 +19,8 @@ class AuthenticationPlugin extends \Phalcon\Mvc\User\Plugin
      * @param $basicAuth array the basic authentication header from the request
      * @return bool|array returns false when user not found or not authenticated if user authenticated returns the user
      */
-    private function authenticateUser($basicAuth=[]) {
+    private function authenticateUser($basicAuth=[])
+    {
         $config = $this->getDI()->get('config');
 
         $user = User::findFirst([
@@ -27,13 +28,13 @@ class AuthenticationPlugin extends \Phalcon\Mvc\User\Plugin
             'bind' => ["loginNr" => "".$basicAuth['username'].""]]
         );
 
-        if($user) {
-            if(password_verify($basicAuth['password'], $user->getPassword()) === true) {
+        if ($user) {
+            if (password_verify($basicAuth['password'], $user->getPassword()) === true) {
                 $employee = Employee::findFirst([
                         'userId = :id:',
                         'bind' => ["id" => $user->getId()]]
                 );
-                if($employee) {
+                if ($employee) {
                     return array("user" => $employee, "role" => $config->roles->employees);
                 }
 
@@ -41,10 +42,9 @@ class AuthenticationPlugin extends \Phalcon\Mvc\User\Plugin
                         'userId = :id:',
                         'bind' => ["id" => $user->getId()]]
                 );
-                if($customer) {
+                if ($customer) {
                     return array("user" => $customer, "role" => $config->roles->customers);
                 }
-
             }
         }
 
@@ -59,8 +59,9 @@ class AuthenticationPlugin extends \Phalcon\Mvc\User\Plugin
      * @param $loginNr int
      * @return bool if the user is allowed to access data true is returned else false
      */
-    public static function isAllowedUser($user, $auth, $loginNr, $config, $bankId = false) {
-        if(!empty($auth) && (($auth["role"] == $config->roles->customers && $auth["user"]->user->getLoginNr() == $loginNr) ||
+    public static function isAllowedUser($user, $auth, $loginNr, $config, $bankId = false)
+    {
+        if (!empty($auth) && (($auth["role"] == $config->roles->customers && $auth["user"]->user->getLoginNr() == $loginNr) ||
                 (!empty($user) && self::isAllowedEmployee($auth, $user->getBankId(), $config)) ||
                 (!empty($bankId) && self::isAllowedEmployee($auth, $bankId, $config)))) {
             return true;
@@ -76,8 +77,9 @@ class AuthenticationPlugin extends \Phalcon\Mvc\User\Plugin
      * @param $bankId int
      * @return bool returns true if an employee is authorised to do sth
      */
-    public static function isAllowedEmployee($auth, $bankId, $config) {
-        if($auth["role"] == $config->roles->employees && $auth["user"]->user->getBankId() ==  $bankId){
+    public static function isAllowedEmployee($auth, $bankId, $config)
+    {
+        if ($auth["role"] == $config->roles->employees && $auth["user"]->user->getBankId() ==  $bankId) {
             return true;
         } else {
             return false;
@@ -96,7 +98,8 @@ class AuthenticationPlugin extends \Phalcon\Mvc\User\Plugin
      * @param \Phalcon\Events\Event $event
      * @param \Phalcon\Mvc\Dispatcher $dispatcher
      */
-    public function beforeDispatch(\Phalcon\Events\Event $event, \Phalcon\Mvc\Dispatcher $dispatcher) {
+    public function beforeDispatch(\Phalcon\Events\Event $event, \Phalcon\Mvc\Dispatcher $dispatcher)
+    {
         $auth = $this->request->getBasicAuth();
         $ret = $this->authenticateUser($auth);
         $this->session->set("auth", $ret);

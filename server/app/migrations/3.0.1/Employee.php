@@ -72,7 +72,6 @@ class EmployeeMigration_301 extends Migration
      */
     public function up()
     {
-
     }
 
     /**
@@ -82,7 +81,5 @@ class EmployeeMigration_301 extends Migration
      */
     public function down()
     {
-
     }
-
 }
