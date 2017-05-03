@@ -4,9 +4,6 @@ info:
   title: SAM Bank
 host: server.sam101.amq.space
 basePath: /
-schemes:
-  - http
-  - https
 paths:
   /init:
     get:
@@ -18,7 +15,7 @@ paths:
       responses:
         '200':
           description: Ok
-        '400':
+        '501':
           description: Error
   /bank:
     get:
@@ -32,7 +29,7 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/Bank'
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -54,7 +51,7 @@ paths:
       responses:
         '200':
           description: Ok
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -75,7 +72,7 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/User'
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -96,7 +93,7 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/User'
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -104,7 +101,7 @@ paths:
     post:
       tags:
         - customer
-      summary: Add a new customer
+      summary: Change the customer's budget
       consumes:
         - application/x-www-form-urlencoded
       produces:
@@ -118,7 +115,7 @@ paths:
       responses:
         '200':
           description: Ok
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -131,7 +128,7 @@ paths:
       responses:
         '200':
           description: Ok
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -152,7 +149,7 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/Customer'
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -173,7 +170,7 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/Customer'
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -194,7 +191,7 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/Employee'
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -216,7 +213,7 @@ paths:
       responses:
         '200':
           description: Ok
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -241,7 +238,7 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/Depot'
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -263,7 +260,7 @@ paths:
       responses:
         '200':
           description: Ok
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -284,7 +281,7 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/Stock'
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -310,28 +307,7 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/Stock'
-        '400':
-          description: Error
-      security:
-        - basicAuth: []
-  '/transaction/{id}':
-    get:
-      tags:
-        - transaction
-      summary: Find the transaction by id
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: id
-          required: true
-          type: string
-      responses:
-        '200':
-          description: Ok
-          schema:
-            $ref: '#/definitions/Transaction'
-        '400':
+        '501':
           description: Error
       security:
         - basicAuth: []
@@ -429,25 +405,4 @@ definitions:
       floatShares:
         type: number
       direction:
-        type: number
-  Transaction:
-    type: object
-    properties:
-      id:
-        type: number
-      symbol:
-        type: string
-      shares:
-        type: number
-      pricePerShare:
-        type: number
-      direction:
-        type: number
-      customerId:
-        type: number
-      employeeId:
-        type: number
-      bankId:
-        type: number
-      depotId:
         type: number
