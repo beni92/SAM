@@ -14,5 +14,6 @@ class ControllerBase extends Controller
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, api_key, Authorization');
         $this->response->setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH, OPTIONS');
+        $this->response->sendHeaders();
     }
 }

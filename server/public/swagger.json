@@ -1,0 +1,785 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "SAM Bank"
+  },
+  "host": "server.sam101.amq.space",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/init": {
+      "get": {
+        "tags": [
+          "init"
+        ],
+        "summary": "Create demo data",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/bank": {
+      "get": {
+        "tags": [
+          "bank"
+        ],
+        "summary": "Find your bank and volume",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Bank"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Add a new user",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/user/{loginNr}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Find the user by username",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "loginNr",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/user/{loginNr}/role": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Find the user role",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "loginNr",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/customer": {
+      "post": {
+        "tags": [
+          "customer"
+        ],
+        "summary": "Add a new customer",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "customer"
+        ],
+        "summary": "List all customers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/customer/{loginNr}": {
+      "get": {
+        "tags": [
+          "customer"
+        ],
+        "summary": "Find the customer by username",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "loginNr",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/customer/{loginNr}/find": {
+      "get": {
+        "tags": [
+          "customer"
+        ],
+        "summary": "Find the customer by username or name",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "loginNr",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/employee/{loginNr}": {
+      "get": {
+        "tags": [
+          "employee"
+        ],
+        "summary": "Find the employee by username",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "loginNr",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Employee"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/depot": {
+      "post": {
+        "tags": [
+          "depot"
+        ],
+        "summary": "Add a new depot",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Depot"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/depot/{loginNr}/{id}": {
+      "get": {
+        "tags": [
+          "depot"
+        ],
+        "summary": "Find the depot contents by username and depot id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "loginNr",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Depot"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/stock": {
+      "post": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Create a new stock record",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Stock"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/stock/{param}": {
+      "get": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Find stock by company name",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "param",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Stock"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/stock/{param}/{symbol}": {
+      "get": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Find stock by company symbol",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "param",
+            "required": true,
+            "type": "string",
+            "description": "Valid values: symbol, history, both"
+          },
+          {
+            "in": "path",
+            "name": "symbol",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Stock"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/transaction/{id}": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Find the transaction by id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/transaction/{param}/{amount}/{id}": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Find the transaction by amount",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "param",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "amount",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "loginNr": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "bankId": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "createdByEmployeeId": {
+          "type": "number"
+        }
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "userId": {
+          "type": "number"
+        },
+        "depots": {
+          "type": "string"
+        },
+        "budget": {
+          "type": "number"
+        }
+      }
+    },
+    "Bank": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "volume": {
+          "type": "number"
+        }
+      }
+    },
+    "Depot": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "ownedStocks": {
+          "$ref": "#/definitions/OwnedStock"
+        },
+        "customerId": {
+          "type": "number"
+        },
+        "budget": {
+          "type": "number"
+        }
+      }
+    },
+    "Employee": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "userId": {
+          "type": "number"
+        }
+      }
+    },
+    "OwnedStock": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "stockSymbol": {
+          "type": "string"
+        },
+        "pricePerShare": {
+          "type": "number"
+        },
+        "shares": {
+          "type": "number"
+        },
+        "depotId": {
+          "type": "number"
+        }
+      }
+    },
+    "Stock": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string"
+        },
+        "lastTradePrice": {
+          "type": "number"
+        },
+        "lastTradeTime": {
+          "type": "string"
+        },
+        "stockExchange": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        },
+        "marketCapitalization": {
+          "type": "number"
+        },
+        "floatShares": {
+          "type": "number"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "symbol": {
+          "type": "string"
+        },
+        "shares": {
+          "type": "number"
+        },
+        "pricePerShare": {
+          "type": "number"
+        },
+        "direction": {
+          "type": "number"
+        },
+        "customerId": {
+          "type": "number"
+        },
+        "employeeId": {
+          "type": "number"
+        },
+        "bankId": {
+          "type": "number"
+        },
+        "depotId": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
