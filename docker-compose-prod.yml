@@ -28,7 +28,7 @@ services:
       --acme
       --acme.entrypoint=https
       --acme.email=amq@users.noreply.github.com
-      --acme.storage=acme.json
+      --acme.storage=/acme/acme.json
       --acme.ondemand=false
       --acme.onhostrule=true
     ports:
@@ -38,7 +38,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /dev/null:/traefik.toml
-      - acme:/etc/traefik/acme
+      - acme:/acme
 
   client:
     build: ./client
