@@ -48,7 +48,6 @@ paths:
       parameters:
         - in: body
           name: body
-          description: User object
           required: true
           schema:
             $ref: '#/definitions/User'
@@ -211,7 +210,6 @@ paths:
       parameters:
         - in: body
           name: body
-          description: User object
           required: true
           schema:
             $ref: '#/definitions/Depot'
@@ -251,7 +249,7 @@ paths:
     post:
       tags:
         - stock
-      summary: Create a new stock record
+      summary: Sell or buy stock
       consumes:
         - application/x-www-form-urlencoded
       produces:
@@ -259,7 +257,6 @@ paths:
       parameters:
         - in: body
           name: body
-          description: User object
           required: true
           schema:
             $ref: '#/definitions/Stock'
@@ -325,35 +322,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: path
-          name: id
-          required: true
-          type: string
-      responses:
-        '200':
-          description: Ok
-          schema:
-            $ref: '#/definitions/Transaction'
-        '400':
-          description: Error
-      security:
-        - basicAuth: []
-  '/transaction/{param}/{amount}/{id}':
-    get:
-      tags:
-        - transaction
-      summary: Find the transaction by amount
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: param
-          required: true
-          type: string
-        - in: path
-          name: amount
-          required: true
-          type: string
         - in: path
           name: id
           required: true
@@ -459,6 +427,8 @@ definitions:
       marketCapitalization:
         type: number
       floatShares:
+        type: number
+      direction:
         type: number
   Transaction:
     type: object
