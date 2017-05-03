@@ -27,8 +27,4 @@ class BankController extends ControllerBase
             return json_encode(array("error" => "request error", "code" => "70"));
         }
     }
-
-    public function postAction() {
-
-    }
 }

@@ -74,7 +74,8 @@ class SecurityPlugin extends Plugin
 
             //Public area resources
             $publicResources = array(
-                'index'      => array('index')
+                'index'      => array('index', 'init'),
+                'error'      => array("error")
             );
 
             foreach ($publicResources as $resource => $actions) {

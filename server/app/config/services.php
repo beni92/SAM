@@ -106,23 +106,23 @@ $di->setShared('router', function() {
     $router = new \Phalcon\Mvc\Router(false);
     $router->setUriSource($router::URI_SOURCE_SERVER_REQUEST_URI);
 
+
+    $router->add("/",array(
+        "controller" => "error",
+        "action" => "error"
+    ));
+
     /*
      * add routes
      */
-
     $router->addGet("/init", array(
         "controller" => "index",
-        "action" => "index"
+        "action" => "init"
     ));
 
     /*
      * Bank Controller
      */
-    $router->addPost("/bank", array(
-        "controller" => "bank",
-        "action" => "post"
-    ));
-
     $router->addGet("/bank", array(
         "controller" => "bank",
         "action" => "get"
@@ -172,11 +172,6 @@ $di->setShared('router', function() {
     /*
      * Employee Controller
      */
-    $router->addPost("/employee", array(
-        "controller" => "employee",
-        "action" => "post"
-    ));
-
     $router->addGet("/employee/{id}", array(
         "controller" => "employee",
         "action" => "get"
@@ -196,19 +191,6 @@ $di->setShared('router', function() {
     ));
 
     /*
-     * OwnedStock Controller
-     */
-    $router->addPost("/ownedstock", array(
-        "controller" => "ownedstock",
-        "action" => "post"
-    ));
-
-    $router->addGet("/ownedstock/{id}", array(
-        "controller" => "ownedstock",
-        "action" => "get"
-    ));
-
-    /*
      * Stock Controller
      */
     $router->addPost("/stock", array(
@@ -224,23 +206,6 @@ $di->setShared('router', function() {
     $router->addGet("/stock/{param}", array(
         "controller" => "stock",
         "action" => "get"
-    ));
-    /*
-     * Transaction Controller
-     */
-    $router->addPost("/transaction", array(
-        "controller" => "transaction",
-        "action" => "post"
-    ));
-
-    $router->addGet("/transaction/{id}", array(
-        "controller" => "transaction",
-        "action" => "get"
-    ));
-
-    $router->addGet("/transaction/{param}/{amount}/{id}", array(
-        "controller" => "transaction",
-        "action" => "getParam"
     ));
 
     return $router;

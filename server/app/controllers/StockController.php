@@ -2,6 +2,9 @@
 namespace Sam\Server\Controllers;
 use Sam\Server\Libraries\StockLibrary;
 use Sam\Server\Models\OwnedStock;
+use Sam\Server\Models\User;
+use Sam\Server\Plugins\AuthenticationPlugin;
+
 /**
  * Created by PhpStorm.
  * User: www-data
@@ -61,81 +64,90 @@ class StockController extends ControllerBase
         $symbol = $this->request->getPost("symbol");
         $depotId = $this->request->getPost("depotId");
         $ownedStockId = $this->request->getPost("ownedStockId");
-        /*
+
+        $auth = $this->session->get("auth");
+        /** @var User $user */
+        $user = $auth["user"]->User;
+
+
+        if(AuthenticationPlugin::isAllowedUser($user, $auth, $user->getLoginNr(), $config)) {
+            /*
          * $direction = 0 => buy
          * $direction = 1 => sell
          */
-        if($direction == 0) {
-            //pps = price per share
-            $transaction = StockLibrary::buy($symbol, $shares, $depotId, $this->session->get("auth"), $config);
-            return json_encode($transaction);
+            if($direction == 0) {
+                //pps = price per share
+                $transaction = StockLibrary::buy($symbol, $shares, $depotId, $this->session->get("auth"), $config);
+                return json_encode($transaction);
 
-        } else if($direction == 1) {
-            if(empty($ownedStockId)) {
-                $ownedStocks = OwnedStock::find(array("depotId = :id: and stockSymbol = :symbol:", "bind" => array("id" => $depotId, "symbol" => $symbol)));
-            } else {
-                $ownedStocks = OwnedStock::find(array("depotId = :depotId: and stockSymbol = :symbol: and id = :id:" , "bind" => array("depotId" => $depotId, "symbol" => $symbol, "id" => $ownedStockId)));
-            }
-            /*
-             * a decrementing counter of the shares left to sell
-             */
-            $restToSell = $shares;
-            $counter = 0;
-            /*
-             * the maximum of owned shares
-             */
-            $maxToSell = 0;
-
-
-            /**
-             * adds all shares of the owned stocks
-             * @var OwnedStock $ownedStock */
-            foreach ($ownedStocks as $ownedStock) {
-                $maxToSell += $ownedStock->getShares();
-            }
-            /*
-             * if the customer tries to sell more stocks then he ownes
-             * an error is returned
-             */
-            if($maxToSell < $shares) {
-                return json_encode(array("error" => "not enough shares owned"));
-            }
-            /*
-             * every ownedStock creates its own transaction
-             * if in this depot are 3 owned stocks of each 10 shares
-             * and the customer wants to sell 25 shares
-             * there are going to be 3 transactions.
-             * in the first transaction 10 will be sold
-             * in the second transaction 10 will be sold
-             * and in the third transaction 5 shares will be sold
-             */
-            $transactions = array();
-            /*
-             * as long as restToSell is bigger than 0 shares are going to sold
-             */
-            while($restToSell > 0) {
-                /** @var OwnedStock $ownedStock */
-                $ownedStock = $ownedStocks[$counter];
-
-                /*
-                 * if the the owned stock of the current iteration has more or equal shares then
-                 * rest to sell, all the shares of the shares of the ownedStock are sold
-                 * else
-                 * only the the amount of shares which are left to sell (restToSel) are sold and restToSell is set to 0
-                 */
-                if($restToSell >= $ownedStock->getShares()) {
-                    $restToSell -=$ownedStock->getShares();
-                    $transactions[] = StockLibrary::sell($ownedStock, $ownedStock->getShares(), $this->session->get("auth"), $config);
+            } else if($direction == 1) {
+                if(empty($ownedStockId)) {
+                    $ownedStocks = OwnedStock::find(array("depotId = :id: and stockSymbol = :symbol:", "bind" => array("id" => $depotId, "symbol" => $symbol)));
                 } else {
-                    $transactions[] = StockLibrary::sell($ownedStock, $restToSell, $this->session->get("auth"), $config);
-                    $restToSell = 0;
+                    $ownedStocks = OwnedStock::find(array("depotId = :depotId: and stockSymbol = :symbol: and id = :id:" , "bind" => array("depotId" => $depotId, "symbol" => $symbol, "id" => $ownedStockId)));
                 }
-                $counter++;
-            }
+                /*
+                 * a decrementing counter of the shares left to sell
+                 */
+                $restToSell = $shares;
+                $counter = 0;
+                /*
+                 * the maximum of owned shares
+                 */
+                $maxToSell = 0;
 
-            return json_encode($transactions);
-        } else {
-            return json_encode(array("error"=>"Wrong direction!"));
+
+                /**
+                 * adds all shares of the owned stocks
+                 * @var OwnedStock $ownedStock */
+                foreach ($ownedStocks as $ownedStock) {
+                    $maxToSell += $ownedStock->getShares();
+                }
+                /*
+                 * if the customer tries to sell more stocks then he ownes
+                 * an error is returned
+                 */
+                if($maxToSell < $shares) {
+                    return json_encode(array("error" => "not enough shares owned"));
+                }
+                /*
+                 * every ownedStock creates its own transaction
+                 * if in this depot are 3 owned stocks of each 10 shares
+                 * and the customer wants to sell 25 shares
+                 * there are going to be 3 transactions.
+                 * in the first transaction 10 will be sold
+                 * in the second transaction 10 will be sold
+                 * and in the third transaction 5 shares will be sold
+                 */
+                $transactions = array();
+                /*
+                 * as long as restToSell is bigger than 0 shares are going to sold
+                 */
+                while($restToSell > 0) {
+                    /** @var OwnedStock $ownedStock */
+                    $ownedStock = $ownedStocks[$counter];
+
+                    /*
+                     * if the the owned stock of the current iteration has more or equal shares then
+                     * rest to sell, all the shares of the shares of the ownedStock are sold
+                     * else
+                     * only the the amount of shares which are left to sell (restToSel) are sold and restToSell is set to 0
+                     */
+                    if($restToSell >= $ownedStock->getShares()) {
+                        $restToSell -=$ownedStock->getShares();
+                        $transactions[] = StockLibrary::sell($ownedStock, $ownedStock->getShares(), $this->session->get("auth"), $config);
+                    } else {
+                        $transactions[] = StockLibrary::sell($ownedStock, $restToSell, $this->session->get("auth"), $config);
+                        $restToSell = 0;
+                    }
+                    $counter++;
+                }
+
+                return json_encode($transactions);
+            } else {
+                return json_encode(array("error"=>"Wrong direction!"));
+            }
         }
+        return json_encode(array("error"=>"Not authenticated"));
     }
 }

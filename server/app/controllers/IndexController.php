@@ -17,7 +17,7 @@ class IndexController extends ControllerBase
     }
 
 
-    public function indexAction($init = "init")
+    public function initAction($init = "init")
     {
         if($init == "init") {
             $this->db->begin();
@@ -111,6 +111,13 @@ class IndexController extends ControllerBase
         }
 
         return json_encode("{}");
+    }
+
+    public function indexAction() {
+        $this->dispatcher->forward(array(
+            "controller" => "error",
+            "action" => "error"
+        ));
     }
 }
 

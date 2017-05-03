@@ -89,6 +89,7 @@ class RestPlugin extends Plugin
         $user->setLastname($res->lastname);
         $user->setId($res->id);
         $user->setPhone($res->phone);
+        $user->setAddress($res->address);
 
         /*
          * request to get the role of the user
@@ -413,6 +414,7 @@ class RestPlugin extends Plugin
         $customer->setPhone($cust->user->phone);
         $customer->setBudget($cust->customer->budget);
         $customer->setExtId($cust->customer->id);
+        $customer->setAddress($cust->user->address);
         if($getDepots === true) {
             foreach ($cust->depots as $value) {
                 $customer->addDepot($this->depotFromStdClass($value, $customer));
