@@ -37,7 +37,7 @@ class EmployeeController extends ControllerBase
             }
             $employee = Employee::findFirst(array("userId = :id:",  "bind" => array("id" => $user->getId())));
 
-            if(empty($user)) {
+            if(empty($employee)) {
                 return json_encode(array("error" => "Invalid request", "code" => "103"));
             }
             $transactions = Transaction::find(array("employeeId = :id:", "order" => "timestamp", "limit" => "10", "bind" => array("id" => $employee->getId())));
