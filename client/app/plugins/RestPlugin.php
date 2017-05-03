@@ -17,7 +17,6 @@ use Sam\Client\Models\User;
  */
 class RestPlugin extends Plugin
 {
-
     private function callAPI($method, $urlExtend, $username, $password, $data = false)
     {
         $config = $this->getDI()->get("config");
@@ -26,20 +25,21 @@ class RestPlugin extends Plugin
 
         $curl = curl_init();
 
-        switch ($method)
-        {
+        switch ($method) {
             case "POST":
                 curl_setopt($curl, CURLOPT_POST, 1);
 
-                if ($data)
+                if ($data) {
                     curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                }
                 break;
             case "PUT":
                 curl_setopt($curl, CURLOPT_PUT, 1);
                 break;
             default:
-                if ($data)
+                if ($data) {
                     $url = sprintf("%s?%s", $url, http_build_query($data));
+                }
         }
 
         // Optional Authentication:
@@ -56,7 +56,8 @@ class RestPlugin extends Plugin
         return $result;
     }
 
-    public function login($loginName, $password) {
+    public function login($loginName, $password)
+    {
         /*
          * get the config
          */
@@ -74,7 +75,7 @@ class RestPlugin extends Plugin
          * check if error is set in the json object
          */
         $res = $this->stdClassFromJson($res);
-        if($res === false) {
+        if ($res === false) {
             return false;
         }
 
@@ -102,7 +103,7 @@ class RestPlugin extends Plugin
          *
          * else decode the json to a stdclass object
          */
-        if(!$newRes || $newRes === null || isset($newRes->error)) {
+        if (!$newRes || $newRes === null || isset($newRes->error)) {
             return false;
         } else {
             $newRes = json_decode($newRes);
@@ -118,13 +119,15 @@ class RestPlugin extends Plugin
          */
         $this->session->set("auth", $user);
 
-        if($user->getRole() == $config->roles->customers)
+        if ($user->getRole() == $config->roles->customers) {
             return $this->loadCustomerInfo();
-        else
+        } else {
             return $this->loadEmployeeInfo();
+        }
     }
 
-    public function loadEmployeeInfo() {
+    public function loadEmployeeInfo()
+    {
         $config = $this->di->get("config");
         /**
          * @var $user User
@@ -132,11 +135,11 @@ class RestPlugin extends Plugin
         $user = $this->session->get('auth');
 
 
-        if($user->getRole() == $config->roles->employees) {
+        if ($user->getRole() == $config->roles->employees) {
             $eRes = self::callAPI("GET", "employee/" . $user->getExtId(), $user->getLoginName(), $user->getPassword());
 
             $eRes = $this->stdClassFromJson($eRes);
-            if($eRes === false) {
+            if ($eRes === false) {
                 return false;
             }
 
@@ -148,7 +151,8 @@ class RestPlugin extends Plugin
         return false;
     }
 
-    public function loadCustomerInfo() {
+    public function loadCustomerInfo()
+    {
         $config = $this->di->get("config");
         /**
          * @var $user User
@@ -156,11 +160,11 @@ class RestPlugin extends Plugin
         $user = $this->session->get('auth');
 
 
-        if($user->getRole() == $config->roles->customers) {
+        if ($user->getRole() == $config->roles->customers) {
             $cRes = self::callAPI("GET", "customer/" . $user->getLoginName(), $user->getLoginName(), $user->getPassword());
 
             $cRes = $this->stdClassFromJson($cRes);
-            if($cRes === false) {
+            if ($cRes === false) {
                 return false;
             }
             $user->setBudget($cRes->return->customer->budget);
@@ -181,14 +185,15 @@ class RestPlugin extends Plugin
          */
         $user = $this->session->get('auth');
 
-        if($user->getRole() === $config->roles->employees) {
+        if ($user->getRole() === $config->roles->employees) {
             $cRes = self::callAPI("GET", "customer/", $user->getLoginName(), $user->getPassword());
             return $this->customersFromJson($cRes);
         }
         return false;
     }
 
-    public function getCustomer($loginName) {
+    public function getCustomer($loginName)
+    {
         $config = $this->di->get("config");
         /**
          * @var $user User
@@ -197,13 +202,13 @@ class RestPlugin extends Plugin
 
         $res = self::callAPI("GET", "user/$loginName", $user->getLoginName(), $user->getPassword());
         $res = $this->stdClassFromJson($res);
-        if($res === false) {
+        if ($res === false) {
             return false;
         }
 
         $cRes = self::callAPI("GET", "customer/$loginName", $user->getLoginName(), $user->getPassword());
         $cRes = $this->stdClassFromJson($cRes);
-        if($cRes === false) {
+        if ($cRes === false) {
             return false;
         }
 
@@ -222,10 +227,10 @@ class RestPlugin extends Plugin
         }
 
         return $loadedUser;
-
     }
 
-    public function addCustomer($loginName, $password, $firstname, $lastname, $phone, $address) {
+    public function addCustomer($loginName, $password, $firstname, $lastname, $phone, $address)
+    {
         $config = $this->di->get("config");
         /**
          * @var $user User
@@ -249,14 +254,14 @@ class RestPlugin extends Plugin
 
     public function findCustomers($search)
     {
-        if(!empty($search)) {
+        if (!empty($search)) {
             $config = $this->di->get("config");
             /**
              * @var $user User
              */
             $user = $this->session->get('auth');
 
-            if($user->getRole() === $config->roles->employees) {
+            if ($user->getRole() === $config->roles->employees) {
                 $cRes = self::callAPI("GET", "customer/$search/find", $user->getLoginName(), $user->getPassword());
                 return $this->customersFromJson($cRes);
             } else {
@@ -277,7 +282,7 @@ class RestPlugin extends Plugin
 
         $res = self::callAPI("GET", "depot/$loginName/$depotId", $user->getLoginName(), $user->getPassword());
         $res = $this->stdClassFromJson($res);
-        if($res === false) {
+        if ($res === false) {
             return false;
         }
 
@@ -299,12 +304,11 @@ class RestPlugin extends Plugin
 
         $res = self::callAPI("GET", "stock/both/$stock", $user->getLoginName(), $user->getPassword());
         $res = $this->stdClassFromJson($res);
-        if($res === false) {
+        if ($res === false) {
             return false;
         }
 
         return $this->stocksFromStdClass($res);
-
     }
 
     public function buyStock($shares, $symbol, $depot)
@@ -331,7 +335,7 @@ class RestPlugin extends Plugin
             )
         );
         $res = $this->stdClassFromJson($res);
-        if($res === false) {
+        if ($res === false) {
             return false;
         }
 
@@ -356,18 +360,19 @@ class RestPlugin extends Plugin
             )
         );
         $res = $this->stdClassFromJson($res);
-        if($res === false) {
+        if ($res === false) {
             return false;
         }
 
-        if(isset($res->success)) {
+        if (isset($res->success)) {
             return true;
         } else {
             return false;
         }
     }
 
-    public function getBank() {
+    public function getBank()
+    {
         $config = $this->di->get("config");
         /**
          * @var $user User
@@ -376,14 +381,15 @@ class RestPlugin extends Plugin
 
         $res = self::callAPI("GET", "bank", $user->getLoginName(), $user->getPassword());
         $res = $this->stdClassFromJson($res);
-        if($res === false) {
+        if ($res === false) {
             return false;
         }
 
         return $this->bankFromStdClass($res);
     }
 
-    private function stdClassFromJson($cRes) {
+    private function stdClassFromJson($cRes)
+    {
         $cRes = json_decode($cRes);
         if (empty($cRes) || $cRes === null || isset($cRes->error)) {
             return false;
@@ -392,9 +398,10 @@ class RestPlugin extends Plugin
         }
     }
 
-    private function customersFromJson($cRes) {
+    private function customersFromJson($cRes)
+    {
         $cRes = $this->stdClassFromJson($cRes);
-        if($cRes === false) {
+        if ($cRes === false) {
             return false;
         }
         $customers = array();
@@ -404,7 +411,8 @@ class RestPlugin extends Plugin
         return $customers;
     }
 
-    private function customerFromStdClass($cust, $getDepots = true) {
+    private function customerFromStdClass($cust, $getDepots = true)
+    {
         $customer = new User();
         $customer->setLoginName($cust->user->loginNr);
         $customer->setBankId($cust->user->bankId);
@@ -415,7 +423,7 @@ class RestPlugin extends Plugin
         $customer->setBudget($cust->customer->budget);
         $customer->setExtId($cust->customer->id);
         $customer->setAddress($cust->user->address);
-        if($getDepots === true) {
+        if ($getDepots === true) {
             foreach ($cust->depots as $value) {
                 $customer->addDepot($this->depotFromStdClass($value, $customer));
             }
@@ -423,10 +431,11 @@ class RestPlugin extends Plugin
         return $customer;
     }
 
-    private function depotFromStdClass($dep, $user = false) {
+    private function depotFromStdClass($dep, $user = false)
+    {
         $depot = new Depot();
         $depot->setId($dep->id);
-        if(!empty($user)) {
+        if (!empty($user)) {
             $depot->setUser($user);
         }
 
@@ -434,11 +443,11 @@ class RestPlugin extends Plugin
         return $depot;
     }
 
-    private function ownedStocksFromStdClass($ownedStocks, $depot) {
+    private function ownedStocksFromStdClass($ownedStocks, $depot)
+    {
         $ret = array();
         foreach ($ownedStocks as $ownedStock) {
-            $ownst = new OwnedStock
-            (
+            $ownst = new OwnedStock(
                 $ownedStock->id,
                 $ownedStock->stockSymbol,
                 $ownedStock->pricePerShare,
@@ -450,7 +459,8 @@ class RestPlugin extends Plugin
         return $ret;
     }
 
-    private function stockFromStdClass($stock) {
+    private function stockFromStdClass($stock)
+    {
         $retStock = new Stock(
             $stock->id,
             $stock->companyName,
@@ -464,7 +474,8 @@ class RestPlugin extends Plugin
         return $retStock;
     }
 
-    private function stocksFromStdClass($stocks) {
+    private function stocksFromStdClass($stocks)
+    {
         $retStocks = array();
         foreach ($stocks as $stock) {
             $retStocks[] = $this->stockFromStdClass($stock);
@@ -472,7 +483,8 @@ class RestPlugin extends Plugin
         return $retStocks;
     }
 
-    private function stockTransaction($shares, $symbol, $depot, $direction, $ownedStockId = false) {
+    private function stockTransaction($shares, $symbol, $depot, $direction, $ownedStockId = false)
+    {
         $config = $this->di->get("config");
         /**
          * @var $user User
@@ -490,7 +502,7 @@ class RestPlugin extends Plugin
         );
 
         $res = $this->stdClassFromJson($res);
-        if($res === false) {
+        if ($res === false) {
             return false;
         }
 
@@ -498,7 +510,8 @@ class RestPlugin extends Plugin
         return $transaction;
     }
 
-    private function transactionsFromStdClass($cRes) {
+    private function transactionsFromStdClass($cRes)
+    {
         $transactions = array();
         /**
          * @var $transaction \stdClass
@@ -510,7 +523,8 @@ class RestPlugin extends Plugin
         return $transactions;
     }
 
-    private function transactionFromStdClass($transaction) {
+    private function transactionFromStdClass($transaction)
+    {
         return new Transaction(
             $transaction->id,
             $transaction->stockSymbol,

@@ -14,7 +14,7 @@ use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 
-$di->set('dispatcher', function() {
+$di->set('dispatcher', function () {
     $eventsManager = new EventsManager();
 
     $eventsManager->attach("dispatch:beforeDispatch", new SecPlugin);
@@ -50,7 +50,7 @@ $di->setShared('url', function () {
 /*
  * initializes the Rest Plugin
  */
-$di->setShared('server', function() {
+$di->setShared('server', function () {
     $restPlugin = new RestPlugin;
     /*
      * returns an instance of the rest plugin
@@ -58,7 +58,7 @@ $di->setShared('server', function() {
     return $restPlugin;
 });
 
-$di->setShared('router', function() {
+$di->setShared('router', function () {
     $router = new \Phalcon\Mvc\Router();
     $router->setUriSource($router::URI_SOURCE_SERVER_REQUEST_URI);
 

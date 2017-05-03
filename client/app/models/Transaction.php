@@ -8,7 +8,6 @@
 
 namespace Sam\Client\Models;
 
-
 class Transaction
 {
     /**
@@ -270,8 +269,4 @@ class Transaction
     {
         $this->timestamp = $timestamp;
     }
-
-
-
-
 }

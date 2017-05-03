@@ -1,5 +1,6 @@
 <?php
 namespace Sam\Client\Models;
+
 /**
  * Created by PhpStorm.
  * User: www-data
@@ -78,6 +79,4 @@ class Bank
     {
         $this->volume = $volume;
     }
-
-
 }

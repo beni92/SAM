@@ -7,12 +7,13 @@ class ControllerBase extends Controller
 {
     public function beforeExecuteRoute()
     {
-        if(!$this->dispatcher->getPreviousActionName()){
+        if (!$this->dispatcher->getPreviousActionName()) {
             $this->init();
         }
     }
 
-    private function init() {
+    private function init()
+    {
         $this->tag->prependTitle(
             'SAM - '
         );
@@ -23,22 +24,23 @@ class ControllerBase extends Controller
     }
 
 
-    protected function initialize() {
-
+    protected function initialize()
+    {
     }
 
-    protected function preRequisits($forward = true) {
+    protected function preRequisits($forward = true)
+    {
         $success = false;
-        if($this->request->isPost()) {
-            if($this->security->checkToken()) {
+        if ($this->request->isPost()) {
+            if ($this->security->checkToken()) {
                 $success = true;
             }
         }
 
-        if($success === true) {
+        if ($success === true) {
             return true;
         } else {
-            if($forward === true) {
+            if ($forward === true) {
                 $this->dispatcher->forward(
                     [
                         "controller" => "error",
@@ -49,5 +51,4 @@ class ControllerBase extends Controller
             return false;
         }
     }
-
 }

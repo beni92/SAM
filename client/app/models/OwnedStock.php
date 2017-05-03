@@ -128,6 +128,4 @@ class OwnedStock
     {
         $this->id = $id;
     }
-
-
 }

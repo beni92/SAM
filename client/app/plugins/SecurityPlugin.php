@@ -13,27 +13,28 @@ use Phalcon\Acl\Adapter\Memory as AclList;
 use Phalcon\Acl\Resource;
 use Sam\Client\Models\User;
 
-class SecurityPlugin extends Plugin {
-
-    public function beforeDispatch(Event $event, Dispatcher $dispatcher) {
+class SecurityPlugin extends Plugin
+{
+    public function beforeDispatch(Event $event, Dispatcher $dispatcher)
+    {
         /**
          * @var $auth User
          */
         $auth = $this->session->get("auth");
         $config = $this->di->get("config");
         //$this->session->destroy();
-        if(!$auth) {
+        if (!$auth) {
             $role = $config->roles->guests;
-        } else if($auth->getRole() == $config->roles->employees){
+        } elseif ($auth->getRole() == $config->roles->employees) {
             $role = $config->roles->employees;
-        } else if($auth->getRole() == $config->roles->customers){
+        } elseif ($auth->getRole() == $config->roles->customers) {
             $role = $config->roles->customers;
         } else {
             $role = $config->roles->guests;
         }
 
-        $controller	= $dispatcher->getControllerName();
-        $action 	= $dispatcher->getActionName();
+        $controller    = $dispatcher->getControllerName();
+        $action    = $dispatcher->getActionName();
 
         $acl = $this->getAcl($config);
 
@@ -41,7 +42,7 @@ class SecurityPlugin extends Plugin {
             $dispatcher->forward(
                 [
                     "controller" => "error",
-                    "action"	 => "show404"
+                    "action"     => "show404"
                 ]
             );
             return;
@@ -51,11 +52,11 @@ class SecurityPlugin extends Plugin {
 
         $allowed = $acl->isAllowed($role, $controller, $action);
 
-        if(!$allowed) {
+        if (!$allowed) {
             $dispatcher->forward(
                 [
                     "controller" => "error",
-                    "action"	 => "show401"
+                    "action"     => "show401"
                 ]
             );
             $this->session->destroy();
@@ -63,8 +64,8 @@ class SecurityPlugin extends Plugin {
         }
     }
 
-    private function getAcl($config) {
-
+    private function getAcl($config)
+    {
         $acl = new AclList();
 
         $acl->setDefaultAction(Acl::DENY);
@@ -122,7 +123,7 @@ class SecurityPlugin extends Plugin {
              * customers and employees (everyone but not guests)
              * have access to the customerRes
              */
-            if($role->getName() != $config->roles->guests) {
+            if ($role->getName() != $config->roles->guests) {
                 foreach ($customerRes as $resource => $actions) {
                     foreach ($actions as $action) {
                         $acl->allow($role->getName(), $resource, $action);
@@ -133,7 +134,7 @@ class SecurityPlugin extends Plugin {
             /*
              * only employee have access to the employee resources
              */
-            if($role->getName() == $config->roles->employees) {
+            if ($role->getName() == $config->roles->employees) {
                 foreach ($employeeRes as $resource => $actions) {
                     foreach ($actions as $action) {
                         $acl->allow($role->getName(), $resource, $action);
@@ -143,5 +144,4 @@ class SecurityPlugin extends Plugin {
         }
         return $acl;
     }
-
 }

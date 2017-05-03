@@ -77,11 +77,11 @@ class User
         $this->setTransactions(array());
     }
 
-    public function login($username, $password) {
-        if(!empty($username) && !empty($password)) {
+    public function login($username, $password)
+    {
+        if (!empty($username) && !empty($password)) {
             $this->setLoginName($username);
             $this->setPassword($password);
-
         }
     }
 
@@ -292,6 +292,4 @@ class User
     {
         $this->address = $address;
     }
-
-
 }

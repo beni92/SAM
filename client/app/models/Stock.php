@@ -8,7 +8,6 @@
 
 namespace Sam\Client\Models;
 
-
 class Stock
 {
     /** @var  int */
@@ -194,7 +193,4 @@ class Stock
     {
         $this->marketCapitalization = $marketCapitalization;
     }
-
-
-
 }

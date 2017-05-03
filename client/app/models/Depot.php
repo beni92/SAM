@@ -53,13 +53,13 @@ class Depot
      */
     public function getOwnedStocks($symbol = false, $singular = false)
     {
-        if($symbol === false && $singular === false) {
+        if ($symbol === false && $singular === false) {
             return $this->ownedStocks;
-        } else if($symbol !== false && $singular === false) {
+        } elseif ($symbol !== false && $singular === false) {
             $retArr = array();
             /** @var OwnedStock $ownedStock */
             foreach ($this->ownedStocks as $ownedStock) {
-                if($ownedStock->getStockSymbol() === $symbol) {
+                if ($ownedStock->getStockSymbol() === $symbol) {
                     $retArr[] = $ownedStock;
                 }
             }
@@ -74,7 +74,7 @@ class Depot
                         return $e->getStockSymbol() == $searched;
                     }
                 );
-                if(empty($neededObject)) {
+                if (empty($neededObject)) {
                     $retArr[] = $ownedStock;
                 }
             }
@@ -94,11 +94,12 @@ class Depot
      * @param $symbol string the symbol to get all shares owned
      * @return int returns all summed up shares from owned stocks with the given symbol
      */
-    public function getOwnedStocksShares($symbol) {
+    public function getOwnedStocksShares($symbol)
+    {
         $ret = 0;
         /** @var OwnedStock $ownedStock */
         foreach ($this->ownedStocks as $ownedStock) {
-            if($ownedStock->getStockSymbol() === $symbol) {
+            if ($ownedStock->getStockSymbol() === $symbol) {
                 $ret += $ownedStock->getShares();
             }
         }
@@ -152,6 +153,4 @@ class Depot
     {
         $this->value = $value;
     }
-
-
 }
